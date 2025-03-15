@@ -1,0 +1,9 @@
+import type { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  appId: 'com.alarma.dev',
+  appName: 'Alarma-v1',
+  webDir: 'dist/front-end-capacitor-v1.0.0/browser'
+};
+
+export default config;

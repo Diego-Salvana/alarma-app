@@ -1,1 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
+@use './scss/variables';
+@use 'primeicons/primeicons.css';
+@use 'sass:map';
+
+*,
+*::after,
+*::before {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+}
+
+html,
+body {
+   min-height: 100vh;
+   overflow-x: hidden;
+}
+
+html {
+   font-family: Inter var;
+   font-size: 14px;
+   background-color: variables.$bg-light;
+
+   &.my-app-dark {
+      background-color: var(--p-primary-inverse-color);
+   }
+
+   @media (min-width: map.get(variables.$layout-breakpoints, 'xl')) {
+      font-size: 16px;
+   }
+}
+
+ol,
+ul {
+   list-style: none;
+}

@@ -1,0 +1,20 @@
+// @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+   font-family: Inter var;
+   src: url('../assets/fonts/Inter-VariableFont_opsz-wght.ttf');
+}
+
+// Layout - Breakpoint prefix	Minimum width
+$layout-breakpoints: (
+   'sm': 640px, // @media (min-width: 640px)
+   'md': 768px, // @media (min-width: 768px)
+   'lg': 1024px, // @media (min-width: 1024px)
+   'xl': 1280px, // @media (min-width: 1280px)
+   '2xl': 1536px, // @media (min-width: 1536px)
+);
+
+// Background colors
+$bg-light: #f3f3f3;
