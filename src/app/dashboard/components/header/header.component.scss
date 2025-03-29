@@ -1,0 +1,17 @@
+@use '../../../../scss/variables';
+@use '../../dashboard.component.scss';
+@use 'sass:map';
+
+.header-text {
+   color: #ffffff;
+}
+
+.br {
+   @extend %hide-side-nav;
+   border-right: 1px solid var(--p-zinc-700);
+}
+
+.show {
+   @extend %show-side-nav;
+   width: 18rem;
+}

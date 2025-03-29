@@ -1,0 +1,59 @@
+<h4 class="text-muted-color tracking-wide mb-3">PERFIL</h4>
+
+<section class="mb-4">
+  <p-card styleClass="mb-8">
+    <ng-template #content>
+      <ul class="list-card">
+        <li>
+          <span class="font-normal block  mb-2">Email: </span>
+          <span class="m-4 ">{{ 'testpepe@gmail.com' }}</span>
+        </li>
+        <li>
+          <span class="font-normal block  mb-1">Nombre Titular: </span>
+          <span class="m-4 ">{{ 'Pepe' }}</span>
+          <app-btn-edit-card (click)="showDialog('profile', 'name')" />
+        </li>
+        <li>
+          <span class="font-normal block  mb-1">Apellido Titular: </span>
+          <span class="m-4 ">{{ 'Test' }}</span>
+          <app-btn-edit-card (click)="showDialog('profile', 'lastname')" />
+        </li>
+        <li>
+          <span class="font-normal block  mb-1">Teléfono: </span>
+          <span class="m-4 ">{{ '0341-155999999' }}</span>
+          <app-btn-edit-card (click)="showDialog('profile', 'phone')" />
+        </li>
+      </ul>
+
+      <div class="mt-6 md:max-w-xs">
+        <p-button label="Cambiar contraseña" styleClass="w-full" (onClick)="showDialog('password')" />
+      </div>
+    </ng-template>
+  </p-card>
+</section>
+
+<h4 class="text-muted-color tracking-wide mb-3">SITIOS</h4>
+
+<section class="mb-4">
+  <p-card styleClass="mb-8">
+    <ng-template #content>
+      <ul class="list-card">
+        <li>
+          <span class="m-4">{{ 'Casa Principal' }}</span>
+          <app-btn-edit-card routerLink="./house/1" />
+        </li>
+        <li>
+          <span class="m-4">{{ 'Quinta Los Arces' }}</span>
+          <app-btn-edit-card routerLink="./house/1" />
+        </li>
+      </ul>
+    </ng-template>
+  </p-card>
+</section>
+
+<div class="mt-8 md:max-w-xs xl:hidden">
+  <p-button label="Cerrar Sesión" variant="outlined" styleClass="w-full" />
+</div>
+
+<app-modal-profile [visible]="visibleProfileModal" [profileProp]="profileProp" (visibleChange)="closeDialog()" />
+<app-modal-password [visible]="visiblePassModal" (visibleChange)="closeDialog()" />

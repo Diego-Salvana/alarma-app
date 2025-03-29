@@ -1,0 +1,16 @@
+<nav class="navbar fixed bottom-0 left-0 w-full border-0 border-t border-solid border-surface 
+  shadow-[0_-1px_2px_0_rgb(0_0_0_/_.05)] xl:hidden" [class.show]="!isHome()">
+  <div class="flex justify-around py-2 m-auto max-w-screen-sm bg-surface">
+    <p-button label="Principal" icon="pi pi-home" iconPos="top" variant="text" routerLink="/dashboard/hub"
+      routerLinkActive="active"/>
+
+    <p-button label="Historial" icon="pi pi-history" iconPos="top" variant="text" routerLink="/dashboard/history"
+      routerLinkActive="active" />
+
+    <p-button label="Perfil" icon="pi pi-user" iconPos="top" variant="text" routerLink="/dashboard/profile"
+      routerLinkActive="active" />
+
+    <p-button label="Ajustes" icon="pi pi-cog" iconPos="top" variant="text" routerLinkActive="active"
+      (onClick)="toggleDarkMode()" />
+  </div>
+</nav>

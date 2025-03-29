@@ -1,0 +1,55 @@
+@use '../../../../scss/variables';
+@use '../../dashboard.component.scss';
+
+.side-nav {
+  @extend %hide-side-nav;
+}
+
+.show {
+   @extend %show-side-nav;
+}
+
+nav {
+   @extend %nav-border-color;
+   border-right-width: 1px;
+   border-right-style: solid;
+}
+
+:host ::ng-deep {
+   .p-button-secondary {
+      background: variables.$bg-light;
+      border: 1px solid var(--p-button-secondary-border-color);
+      color: var(--p-button-secondary-color);
+      justify-content: flex-start;
+
+      .p-button-icon {
+         margin-right: 0.5rem;
+         padding-bottom: 1px;
+      }
+   }
+
+   .active .p-button-secondary {
+      @extend %btn-secondary-hover;
+   }
+}
+
+::ng-deep html.my-app-dark .side-nav {
+   .p-button-secondary {
+      background-color: var(--p-primary-inverse-color);
+      border-color: var(--p-primary-inverse-color);
+
+      &:hover {
+         @extend %btn-secondary-hover;
+      }
+   }
+
+   .active .p-button-secondary {
+      @extend %btn-secondary-hover;
+   }
+}
+
+.logout {
+   @extend %nav-border-color;
+   border-top-width: 1px;
+   border-top-style: solid;
+}

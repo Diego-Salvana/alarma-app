@@ -1,0 +1,66 @@
+@let houseProperty = houseProp();
+
+<div class="card flex justify-center">
+  <p-dialog [header]="headerText()" [modal]="true" [(visible)]="visible" styleClass="w-[95%] max-w-screen-sm">
+    <span class="p-text-secondary block mb-8">
+      {{ houseProperty === 'sensorName' ? 'Actualiza información del sensor' : 'Actualiza la información del sitio' }}
+    </span>
+
+    @switch (houseProperty) {
+      @case ('name') {
+        <div class="flex items-start gap-4 mb-4">
+          <label for="name" class="font-semibold w-24">Nombre del Sitio</label>
+          <div class="grow">
+            <input pInputText id="name" type="text" autocomplete="off" value="-" class="block w-full" />
+            <!-- <small>No coinciden las contraseñas</small> -->
+          </div>
+        </div>
+      }
+
+      @case ('street') {
+        <div class="flex items-start gap-4 mb-4">
+          <label for="street" class="font-semibold w-20 pt-2">Calle</label>
+          <div class="grow">
+            <input pInputText id="street" type="text" autocomplete="off" value="-" class="block w-full" />
+            <!-- <small>No coinciden las contraseñas</small> -->
+          </div>
+        </div>
+      }
+
+      @case ('number') {
+        <div class="flex items-start gap-4 mb-4">
+          <label for="number" class="font-semibold w-24 pt-2">Número</label>
+          <div class="grow">
+            <input pInputText id="number" type="text" autocomplete="off" value="-" class="block w-full" />
+            <!-- <small>No coinciden las contraseñas</small> -->
+          </div>
+        </div>
+      }
+
+      @case ('city') {
+        <div class="flex items-start gap-4 mb-4">
+          <label for="city" class="font-semibold w-24 pt-2">Ciudad</label>
+          <div class="grow">
+            <input pInputText id="city" type="text" autocomplete="off" value="-" class="block w-full" />
+            <!-- <small>No coinciden las contraseñas</small> -->
+          </div>
+        </div>
+      }
+
+      @case ('sensorName') {
+        <div class="flex items-start gap-4 mb-4">
+          <label for="sensorName" class="font-semibold w-24 pt-2">Nombre</label>
+          <div class="grow">
+            <input pInputText id="sensorName" type="text" autocomplete="off" value="-" class="block w-full" />
+            <!-- <small>No coinciden las contraseñas</small> -->
+          </div>
+        </div>
+      }
+    }
+
+    <ng-template #footer>
+      <p-button label="Cancelar" severity="secondary" (click)="close()" />
+      <p-button label="Guardar" (click)="close()" />
+    </ng-template>
+  </p-dialog>
+</div>

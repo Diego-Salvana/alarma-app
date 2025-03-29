@@ -1,0 +1,35 @@
+<p-card styleClass="mb-8">
+  <ng-template #content>
+    <ul class="list-card">
+      <li>
+        <span>SENSOR N°</span>
+        <span>1</span>
+      </li>
+      <li>
+        <span>Tipo: </span>
+        <span>Movimiento</span>
+      </li>
+      <li>
+        <span class="mr-4">Nombre del sensor</span>
+        <app-btn-edit-card (click)="showDialog()" />
+      </li>
+    </ul>
+  </ng-template>
+</p-card>
+
+<h4 class="text-muted-color tracking-wide mb-8">Historial de disparos</h4>
+
+<div>
+  <p-timeline [value]="events">
+    <ng-template #opposite let-event>
+      <small class="text-surface-500 dark:text-surface-400">{{ event.date }}</small>
+    </ng-template>
+
+    <ng-template #content let-event>
+      <span>{{ event.hour }}</span>
+    </ng-template>
+  </p-timeline>
+</div>
+
+<app-modal-house [visible]="visible" houseProp="sensorName" (visibleChange)="closeDialog()" />
+

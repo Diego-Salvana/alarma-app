@@ -1,0 +1,40 @@
+@use '../../scss/variables';
+@use 'sass:map';
+
+%list-card-extend {
+   display: flex;
+   flex-direction: column;
+   gap: variables.$gap-list-card;
+   font-weight: 600;
+}
+
+%nav-border-color {
+   border-color: var(--p-zinc-300);
+}
+
+::ng-deep html.my-app-dark {
+   %nav-border-color {
+      border-color: var(--p-content-border-color);
+   }
+}
+
+%btn-secondary-hover {
+   background-color: var(--p-button-secondary-hover-background);
+   border: 1px solid var(--p-button-secondary-hover-border-color);
+   color: var(--p-button-secondary-hover-color);
+}
+
+%btn-text-hover {
+   background: var(--p-button-text-primary-hover-background);
+   border-color: transparent;
+   color: var(--p-button-text-primary-color);
+}
+
+%hide-side-nav {
+   transform: translateX(-100%);
+   transition: all 0.2s ease-out;
+}
+
+%show-side-nav {
+   transform: translateX(0);
+}

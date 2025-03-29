@@ -1,0 +1,13 @@
+:host ::ng-deep .p-card {
+   overflow: hidden;
+
+   .p-card-body {
+      padding: 0;
+   }
+}
+
+.row {
+   &:last-child td {
+      border: 0;
+   }
+}

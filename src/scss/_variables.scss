@@ -18,3 +18,40 @@ $layout-breakpoints: (
 
 // Background colors
 $bg-light: #f3f3f3;
+
+// Sizing
+$header-height: 40px;
+$header-big-height: 45px;
+
+// Spacing
+$gap-list-card: 1rem;
+
+// Text colors
+$text-green: var(--p-emerald-600);
+$text-amber: var(--p-amber-600);
+$text-red: var(--p-red-600);
+
+// Class names
+.green-text {
+   color: $text-green !important;
+}
+
+.green-border {
+   border-color: $text-green !important;
+}
+
+.orange-text {
+   color: $text-amber !important;
+}
+
+.orange-border {
+   border-color: $text-amber !important;
+}
+
+.red-text {
+   color: $text-red !important;
+}
+
+.red-border {
+   border-color: $text-red !important;
+}

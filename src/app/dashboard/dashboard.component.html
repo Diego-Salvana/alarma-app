@@ -1,0 +1,13 @@
+<div>
+  <app-header />
+
+  <app-side-bar />
+
+  <div class="transition-all duration-200 ease-out" [class.xl:ml-72]="!isHome()">
+    <main class="p-4 mt-12 mb-20 lg:px-8 max-w-[1600px] m-auto">
+      <router-outlet />
+    </main>
+  </div>
+
+  <app-nav-bar />
+</div>

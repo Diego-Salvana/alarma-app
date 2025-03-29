@@ -1,0 +1,5 @@
+@use '../../dashboard.component.scss';
+
+.list-card {
+   @extend %list-card-extend;
+}

@@ -1,14 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { KeyFilterModule } from 'primeng/keyfilter';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ButtonModule, CardModule, KeyFilterModule, FormsModule, InputTextModule],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

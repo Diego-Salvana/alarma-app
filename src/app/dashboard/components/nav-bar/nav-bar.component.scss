@@ -1,0 +1,21 @@
+@use '../../dashboard.component.scss';
+
+:host ::ng-deep {
+   .active .p-button {
+      @extend %btn-text-hover;
+   }
+
+   .p-button-label {
+      font-size: 0.75rem;
+      font-weight: 400;
+   }
+}
+
+.navbar {
+   transform: translateY(100%);
+   transition: all 0.15s ease-out;
+}
+
+.show {
+   transform: translateY(0);
+}
