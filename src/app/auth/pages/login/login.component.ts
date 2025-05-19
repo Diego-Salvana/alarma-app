@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { markAllAsDirtyAndTouched } from '../../utils/form-validations';
-import { Login } from '../../interfaces/auth.interface';
-import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
+import { markAllAsDirtyAndTouched } from '../../utils';
+import { Login } from '../../interfaces';
+import { AuthService } from '../../services';
 
 @Component({
   selector: 'app-login',
@@ -56,7 +56,6 @@ export class LoginComponent implements OnInit {
         this.disabled.set(false);
         this.loginForm.enable();
         console.log(data);
-        // this.registerForm.reset();
 
         this.router.navigate(['/dashboard', 'home']);
       },

@@ -1,10 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HeaderComponent } from './components/header/header.component';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-import { SideBarComponent } from './components/side-bar/side-bar.component';
-import { ActiveRouteService } from './services/active-route.service';
 import { ConfirmationService } from 'primeng/api';
+import { HeaderComponent, NavBarComponent, SideBarComponent } from './components';
+import { ActiveRouteService } from './services';
 
 @Component({
   selector: 'app-dashboard',

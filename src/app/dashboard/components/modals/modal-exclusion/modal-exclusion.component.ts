@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, model, OnInit, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Sensor } from '../../../interfaces/data-models.interfaces';
+import { Sensor } from '../../../interfaces';
 
 @Component({
   selector: 'app-modal-exclusion',

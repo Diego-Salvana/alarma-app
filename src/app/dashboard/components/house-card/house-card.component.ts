@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
-import { House } from '../../interfaces/data-models.interfaces';
+import { House } from '../../interfaces';
 
 @Component({
   selector: 'app-house-card',

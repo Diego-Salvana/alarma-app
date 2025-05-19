@@ -1,4 +1,4 @@
-import { Direccion, Dispositivo, Estado } from '../../shared/interfaces/user.interfaces';
+import { Direccion, Dispositivo, Estado } from '../../shared/interfaces';
 
 export interface Login {
   email: string;

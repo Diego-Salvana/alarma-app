@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { HouseCardComponent } from '../../components/house-card/house-card.component';
-import { House } from '../../interfaces/data-models.interfaces';
+import { HouseCardComponent } from '../../components';
+import { House } from '../../interfaces';
 
 @Component({
   selector: 'app-home',

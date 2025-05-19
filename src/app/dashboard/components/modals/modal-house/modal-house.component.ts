@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input, model, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
-import { HouseProp, DataTransfer } from '../../../interfaces/modals.interfaces';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HouseProp, DataTransfer } from '../../../interfaces';
 
 @Component({
   selector: 'app-modal-house',

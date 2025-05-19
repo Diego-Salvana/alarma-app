@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, model, OnInit, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../../../auth/utils/form-validations';
-import { DataTransfer } from '../../../interfaces/modals.interfaces';
+import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../../../auth/utils';
+import { DataTransfer } from '../../../interfaces';
 
 @Component({
   selector: 'app-modal-password',

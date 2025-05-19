@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { SensorListComponent } from '../../components/sensor-list/sensor-list.component';
-import { ModalExclusionComponent } from '../../components/modals/modal-exclusion/modal-exclusion.component';
+import { SensorListComponent, ModalExclusionComponent } from '../../components';
 import { Sensor } from '../../interfaces/data-models.interfaces';
 
 @Component({

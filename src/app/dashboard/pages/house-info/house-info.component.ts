@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { BtnEditCardComponent } from '../../components/btn-edit-card/btn-edit-card.component';
-import { ModalHouseComponent } from '../../components/modals/modal-house/modal-house.component';
-import { HouseProp } from '../../interfaces/modals.interfaces';
+import { BtnEditCardComponent, ModalHouseComponent } from '../../components';
+import { HouseProp } from '../../interfaces';
 
 @Component({
   selector: 'app-house-info',

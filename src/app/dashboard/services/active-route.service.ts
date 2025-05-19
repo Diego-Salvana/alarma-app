@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
-import { Section } from '../interfaces/sections.interfaces';
+import { Section } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,6 @@ export class ActiveRouteService {
         default:
           if (url.includes('sensor')) this._activeSection.set('sensor');
           else if (url.includes('house')) this._activeSection.set('house');
-          break;
       }
     });
   }

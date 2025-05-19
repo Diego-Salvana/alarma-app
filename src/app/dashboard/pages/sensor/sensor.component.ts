@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
-import { BtnEditCardComponent } from '../../components/btn-edit-card/btn-edit-card.component';
-import { ModalHouseComponent } from '../../components/modals/modal-house/modal-house.component';
-import { HouseProp } from '../../interfaces/modals.interfaces';
+import { BtnEditCardComponent, ModalHouseComponent } from '../../components';
+import { HouseProp } from '../../interfaces';
 
 interface EventItem {
   status?: string;

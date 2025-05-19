@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputMaskModule } from 'primeng/inputmask';
 import { MessageService } from 'primeng/api';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../utils/form-validations';
-import { AuthService } from '../../services/auth.service';
-import { Register } from '../../interfaces/auth.interface';
+import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../utils';
+import { AuthService } from '../../services';
+import { Register } from '../../interfaces';
 
 @Component({
   selector: 'app-register',

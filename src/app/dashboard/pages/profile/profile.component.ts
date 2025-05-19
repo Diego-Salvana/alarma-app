@@ -2,9 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { BtnEditCardComponent } from '../../components/btn-edit-card/btn-edit-card.component';
-import { ModalPasswordComponent } from '../../components/modals/modal-password/modal-password.component';
-import { ModalProfileComponent } from '../../components/modals/modal-profile/modal-profile.component';
+import { BtnEditCardComponent, ModalPasswordComponent, ModalProfileComponent } from '../../components';
 import { ProfileProp } from '../../interfaces/modals.interfaces';
 
 type ModalType = 'password' | 'profile';
