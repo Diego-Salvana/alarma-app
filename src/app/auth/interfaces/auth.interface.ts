@@ -24,6 +24,11 @@ export interface LoginResponse {
   casas: HouseResponse[];
 }
 
+export interface InfoHouseResponse {
+  message: string;
+  data: HouseResponse[];
+}
+
 export interface HouseResponse {
   _id: string;
   nombre: string;

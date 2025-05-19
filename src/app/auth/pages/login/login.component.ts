@@ -47,8 +47,8 @@ export class LoginComponent implements OnInit {
     this.loginForm.disable();
 
     const loginBody: Partial<Login> = {
-      email: this.loginForm.value.username ?? undefined,
-      contrasena: this.loginForm.value.password ?? undefined
+      email: this.loginForm.value.username?.trim() ?? undefined,
+      contrasena: this.loginForm.value.password?.trim() ?? undefined
     };
     
     this.authService.loginUser(loginBody, this.loginForm.controls.rememberMe.value ?? false).subscribe({

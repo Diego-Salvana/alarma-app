@@ -51,11 +51,11 @@ export class RegisterComponent implements OnInit {
     this.registerForm.disable();
 
     const userBody: Partial<Register> = {
-      nombre: this.registerForm.value.name ?? undefined,
-      apellido: this.registerForm.value.lastname ?? undefined,
-      email: this.registerForm.value.email ?? undefined,
-      telefono: this.registerForm.value.phone ?? undefined,
-      contrasena: this.registerForm.value.password ?? undefined
+      nombre: this.registerForm.value.name?.trim() ?? undefined,
+      apellido: this.registerForm.value.lastname?.trim() ?? undefined,
+      email: this.registerForm.value.email?.trim() ?? undefined,
+      telefono: this.registerForm.value.phone?.trim() ?? undefined,
+      contrasena: this.registerForm.value.password?.trim() ?? undefined
     };
     
     this.authService.registerUser(userBody).subscribe({
@@ -63,7 +63,6 @@ export class RegisterComponent implements OnInit {
         this.disabled.set(false);
         this.registerForm.enable();
         console.log(data);
-        // this.registerForm.reset();
 
         this.router.navigate(['/dashboard', 'home']);
       },

@@ -1,7 +1,7 @@
 <h4 class="mb-4 text-muted-color tracking-wide">SITIOS</h4>
 
 <section class="flex flex-col gap-3">
-  @for (site of sites; track $index) {
+  @for (site of sites(); track $index) {
     <app-house-card [house]="site" />
   }
 </section>
