@@ -3,14 +3,14 @@
     <ul class="list-card">
       <li>
         <span>SENSOR N°</span>
-        <span>1</span>
+        <span>{{ sensorNumber }}</span>
       </li>
       <li>
         <span>Tipo: </span>
-        <span>Movimiento</span>
+        <span>{{ sensorType }}</span>
       </li>
       <li>
-        <span class="mr-4">Nombre del sensor</span>
+        <span class="mr-4">{{ sensorName }}</span>
         <app-btn-edit-card (click)="showDialog()" />
       </li>
     </ul>
@@ -31,5 +31,7 @@
   </p-timeline>
 </div>
 
-<app-modal-house [visible]="visible" houseProp="sensorName" (visibleChange)="closeDialog()" />
+@if (this.houseProp) {
+  <app-modal-house [visible]="visible" [houseProp]="houseProp" [propValue]="sensorName" (visibleChange)="closeDialog()" />
+}
 

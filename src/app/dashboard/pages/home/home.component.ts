@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { HouseCardComponent } from '../../components/house-card/house-card.component';
+import { House } from '../../interfaces/data-models.interfaces';
 
 @Component({
   selector: 'app-home',
@@ -9,5 +10,14 @@ import { HouseCardComponent } from '../../components/house-card/house-card.compo
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
-  cards: any[] = [1, 2, 4, 5, 6, 7, 8, 9];
+  sites: House[] = [
+    { id: 1, nombre: 'Casa Principal', direccion: 'Mendoza 2040', central: 'desactivada' },
+    { id: 2, nombre: 'Quinta los Arces', direccion: 'Ruta 120', central: 'activada' },
+    { id: 3, nombre: 'Casa Principal', direccion: 'Mendoza 2040', central: 'desactivada' },
+    { id: 4, nombre: 'Casa Principal', direccion: 'Mendoza 2040', central: 'desactivada' },
+    { id: 5, nombre: 'Casa Principal', direccion: 'Mendoza 2040', central: 'desactivada' },
+    { id: 6, nombre: 'Casa Principal', direccion: 'Mendoza 2040', central: 'desactivada' },
+    { id: 7, nombre: 'Casa Principal', direccion: 'Mendoza 2040', central: 'desactivada' },
+    { id: 8, nombre: 'Casa Principal', direccion: 'Mendoza 2040', central: 'desactivada' }
+  ];
 }

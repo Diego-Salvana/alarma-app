@@ -37,6 +37,7 @@ yarn-error.log
 testem.log
 /typings
 check-list.sql
+notas.sql
 
 # System files
 .DS_Store

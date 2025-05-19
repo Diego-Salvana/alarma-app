@@ -6,21 +6,21 @@
       <ul class="list-card">
         <li>
           <span class="font-normal block  mb-2">Email: </span>
-          <span class="m-4 ">{{ 'testpepe@gmail.com' }}</span>
+          <span class="m-4 ">{{ email }}</span>
         </li>
         <li>
           <span class="font-normal block  mb-1">Nombre Titular: </span>
-          <span class="m-4 ">{{ 'Pepe' }}</span>
+          <span class="m-4 ">{{ name }}</span>
           <app-btn-edit-card (click)="showDialog('profile', 'name')" />
         </li>
         <li>
           <span class="font-normal block  mb-1">Apellido Titular: </span>
-          <span class="m-4 ">{{ 'Test' }}</span>
+          <span class="m-4 ">{{ lastname }}</span>
           <app-btn-edit-card (click)="showDialog('profile', 'lastname')" />
         </li>
         <li>
           <span class="font-normal block  mb-1">Teléfono: </span>
-          <span class="m-4 ">{{ '0341-155999999' }}</span>
+          <span class="m-4 ">{{ phone }}</span>
           <app-btn-edit-card (click)="showDialog('profile', 'phone')" />
         </li>
       </ul>
@@ -38,14 +38,12 @@
   <p-card styleClass="mb-8">
     <ng-template #content>
       <ul class="list-card">
+        @for (house of houses; track $index) {
         <li>
-          <span class="m-4">{{ 'Casa Principal' }}</span>
-          <app-btn-edit-card routerLink="./house/1" />
+          <span class="m-4">{{ house.name }}</span>
+          <app-btn-edit-card routerLink="./house/{{ house.id }}" />
         </li>
-        <li>
-          <span class="m-4">{{ 'Quinta Los Arces' }}</span>
-          <app-btn-edit-card routerLink="./house/1" />
-        </li>
+        }
       </ul>
     </ng-template>
   </p-card>
@@ -55,5 +53,11 @@
   <p-button label="Cerrar Sesión" variant="outlined" styleClass="w-full" />
 </div>
 
-<app-modal-profile [visible]="visibleProfileModal" [profileProp]="profileProp" (visibleChange)="closeDialog()" />
+@if (this.profileProp) {
+<app-modal-profile [visible]="visibleProfileModal" [profileProp]="profileProp" [propValue]="propValue"
+  (visibleChange)="closeDialog()" />
+}
+
+@if (this.profileProp) {
 <app-modal-password [visible]="visiblePassModal" (visibleChange)="closeDialog()" />
+}

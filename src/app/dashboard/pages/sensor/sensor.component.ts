@@ -3,6 +3,7 @@ import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
 import { BtnEditCardComponent } from '../../components/btn-edit-card/btn-edit-card.component';
 import { ModalHouseComponent } from '../../components/modals/modal-house/modal-house.component';
+import { HouseProp } from '../../interfaces/modals.interfaces';
 
 interface EventItem {
   status?: string;
@@ -24,6 +25,10 @@ export class SensorComponent implements OnInit {
   @Input('sensor') sensorId!: string;
   events: EventItem[];
   visible = false;
+  houseProp!: HouseProp;
+  sensorNumber = 1;
+  sensorType = 'Movimiento';
+  sensorName = 'Comedor';
 
   constructor () {
     this.events = [
@@ -40,6 +45,7 @@ export class SensorComponent implements OnInit {
   
   showDialog () {
     this.visible = true;
+    this.houseProp = 'sensorName';
   }
   
   closeDialog () {

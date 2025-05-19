@@ -1,10 +1,10 @@
 <div class="card flex justify-center">
-  <p-dialog header="Exclusión" modal maximizable draggable="false" [(visible)]="visible"
+  <p-dialog header="Exclusión" modal maximizable draggable="false" [(visible)]="visible" [closable]="closable()"
     styleClass="w-[95%] max-w-screen-sm">
     <span class="p-text-secondary block mb-8">Deshabilita los sensores que desees y luego activa la alarma.</span>
 
-    <div class="mb-4">
-      <p-table [value]="sensors">
+    <form [formGroup]="exclusionForm" class="mb-4" (ngSubmit)="onSubmit()">
+      <p-table [value]="sensors()">
         <ng-template #body let-sensor>
           <tr class="row">
             <td>
@@ -12,18 +12,16 @@
               <span>{{ sensor.nombre }}</span>
             </td>
             <td class="!text-right md:!text-right !font-semibold !text-muted-color-emphasis">
-              <p-toggleswitch [ngModel]="sensor.estado" />
+              <p-toggle-switch [formControlName]="sensor.id" />
             </td>
           </tr>
         </ng-template>
       </p-table>
-    </div>
+    </form>
 
     <div class="text-center mt-8">
       <p-button id="btn-activate" label="Activar alarma" severity="danger" raised outlined icon="pi pi-lock"
-        styleClass="w-full sm:w-max sm:!px-16 red-text red-border" (click)="close()" />
-
-      <!-- <p-button label="Activar alarma" icon="pi pi-lock" styleClass="w-full !px-8" (click)="close()" /> -->
+        styleClass="w-full sm:w-max sm:!px-16 red-text red-border" [disabled]="disabled()" (onClick)="onSubmit()" />
     </div>
   </p-dialog>
 </div>

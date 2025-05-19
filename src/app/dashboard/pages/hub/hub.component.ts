@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SensorListComponent } from '../../components/sensor-list/sensor-list.component';
 import { ModalExclusionComponent } from '../../components/modals/modal-exclusion/modal-exclusion.component';
+import { Sensor } from '../../interfaces/data-models.interfaces';
 
 @Component({
   selector: 'app-hub',
@@ -12,6 +13,14 @@ import { ModalExclusionComponent } from '../../components/modals/modal-exclusion
 })
 export class HubComponent {
   visible = false;
+  sensors: Sensor[] = [
+    { id: 1, nombre: 'Comerdor', estado: true },
+    { id: 2, nombre: 'Patio', estado: false },
+    { id: 3, nombre: 'Garage', estado: true },
+    { id: 4, nombre: 'Sensor_4', estado: true },
+    { id: 5, nombre: 'Sensor_5', estado: true },
+    { id: 6, nombre: 'Sensor_6', estado: false }
+  ];
 
   showDialog () {
     this.visible = true;

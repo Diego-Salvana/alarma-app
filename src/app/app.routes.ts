@@ -11,5 +11,9 @@ export const routes: Routes = [
     loadComponent: () => import('./dashboard/dashboard.component').then(c => c.DashboardComponent),
     loadChildren: () => import('./dashboard/dashboard.routes').then(m => m.dashboardRoutes)
   },
+  {
+    path: 'verification',
+    loadComponent: () => import('./shared/pages/verification/verification.component').then(c => c.VerificationComponent)
+  },
   { path: '**', redirectTo: 'auth' }
 ];

@@ -14,25 +14,30 @@ import { HouseProp } from '../../interfaces/modals.interfaces';
 })
 export class HouseInfoComponent {
   visible = false;
-  houseProp?: HouseProp;
+  houseProp!: HouseProp;
+  propValue?: string;
+  houseName = 'CASA PRINCIPAL';
+  street = 'Av. Ayacucho';
+  number = '9999';
+  city = 'Rosario';
+  numberSensors = 10;
 
   showDialog (prop: HouseProp) {
     this.visible = true;
+    this.houseProp = prop;
 
     switch (prop) {
-      case 'name':
-        this.houseProp = 'name';
+      case 'houseName':
+        this.propValue = this.houseName;
         break;
       case 'street':
-        this.houseProp = 'street';
+        this.propValue = this.street;
         break;
       case 'number':
-        this.houseProp = 'number';
+        this.propValue = this.number;
         break;
       case 'city':
-        this.houseProp = 'city';
-        break;
-      default:
+        this.propValue = this.city;
         break;
     }
   }

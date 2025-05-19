@@ -38,3 +38,7 @@
 %show-side-nav {
    transform: translateX(0);
 }
+
+:host ::ng-deep .p-dialog-header {
+   min-height: 5rem;
+}

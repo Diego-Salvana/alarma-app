@@ -20,30 +20,36 @@ export class ProfileComponent {
   visiblePassModal = false;
   visibleProfileModal = false;
   profileProp?: ProfileProp;
+  propValue?: string;
+  email = 'testpepe@gmail.com';
+  name = 'Pepe';
+  lastname = 'Test';
+  phone = '0341-155999999';
+  houses = [{ id: 1, name: 'Casa principal' }, { id: 2, name: 'Quinta los Arces' }];
 
   showDialog (modal: ModalType, prop?: ProfileProp) {
     switch (modal) {
       case 'password':
         this.visiblePassModal = true;
+        this.profileProp = 'password';
         break;
       case 'profile':
         this.visibleProfileModal = true;
-        break;
-      default:
         break;
     }
 
     switch (prop) {
       case 'name':
         this.profileProp = 'name';
+        this.propValue = this.name;
         break;
       case 'lastname':
         this.profileProp = 'lastname';
+        this.propValue = this.lastname;
         break;
       case 'phone':
         this.profileProp = 'phone';
-        break;
-      default:
+        this.propValue = this.phone;
         break;
     }
   }

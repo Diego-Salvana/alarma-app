@@ -1,5 +1,5 @@
 <section class="p-4 sm:p-8">
-  <p-card styleClass="max-w-screen-sm m-auto">
+  <p-card styleClass="max-w-lg m-auto" class="max-w-xl">
     <div class="w-full py-6 px-2 sm:px-4">
       <div class="text-center mb-8">
         <img src="https://blocks.primeng.org/assets/images/blocks/logos/hyper.svg" alt="Logo" height="50" class="mb-4">
@@ -8,28 +8,34 @@
         <a routerLink="../register" class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Crear una</a>
       </div>
 
-      <form autocomplete="off">
+      <form [formGroup]="loginForm" autocomplete="off" (ngSubmit)="onSubmit()">
         <div class="mb-4">
           <label for="email" class="block font-medium mb-2">Email</label>
-          <input pInputText type="text" id="email" placeholder="Ingresa tu correo" class="w-full"/>
-          <!-- <small id="username-help">Enter your username to reset your password.</small> -->
+          <input pInputText type="text" id="email" placeholder="Ingresa tu correo" class="w-full"
+            formControlName="username" />
+          <small class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
+            Formato de correo no válido.
+          </small>
         </div>
 
         <div class="mb-4">
           <label for="password" class="block font-medium mb-2">Contraseña</label>
-          <p-password id="password" placeholder="Ingresa contraseña" toggleMask feedback="false" styleClass="w-full" />
-          <!-- <small id="username-help">Enter your username to reset your password.</small> -->
+          <p-password id="password" placeholder="Ingresa contraseña" toggleMask feedback="false" styleClass="w-full"
+            formControlName="password" />
+          <small class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
+            Mínimo 6 caracteres.
+          </small>
         </div>
 
         <div class="flex justify-between items-center mb-12">
           <div class="flex items-center">
-            <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2"></p-checkbox>
+            <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2" formControlName="rememberMe"></p-checkbox>
             <label for="rememberme">Recordarme</label>
           </div>
           <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">¿Olvidaste la contraseña?</a>
         </div>
 
-        <p-button label="Ingresar" styleClass="w-full" routerLink="/dashboard">
+        <p-button label="Ingresar" type="submit" [disabled]="disabled()" styleClass="w-full">
           <i class="pi pi-user absolute left-4"></i>
         </p-button>
       </form>

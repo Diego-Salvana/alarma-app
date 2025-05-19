@@ -1,3 +1,15 @@
-export type ProfileProp = 'name' | 'lastname' | 'phone';
+export type ProfileProp = 'name' | 'lastname' | 'phone' | 'password';
 
-export type HouseProp = 'name' | 'street' | 'number' | 'city' | 'sensorName';
+export type HouseProp = 'houseName' | 'street' | 'number' | 'city' | 'sensorName';
+
+export interface DataTransfer {
+  name?: string;
+  lastname?: string;
+  phone?: string;
+  houseName?: string;
+  street?: string;
+  number?: string;
+  city?: string;
+  sensorName?: string;
+  newPassword?: string | null;
+}

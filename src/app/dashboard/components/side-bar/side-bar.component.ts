@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ActiveRouteService } from '../../services/active-route.service';
@@ -12,7 +12,7 @@ import { ActiveRouteService } from '../../services/active-route.service';
 })
 export class SideBarComponent {
   private activeRouteService = inject(ActiveRouteService);
-  isHome = this.activeRouteService.isHome;
+  isHome = computed(() => this.activeRouteService.activeSection() === 'home');
   
   toggleDarkMode () {
     const htmlElement = document.querySelector('html');

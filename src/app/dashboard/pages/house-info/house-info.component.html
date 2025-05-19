@@ -1,35 +1,37 @@
-<h4 class="text-muted-color tracking-wide mb-3">{{ 'CASA PRINCIPAL' }}</h4>
+<h4 class="text-muted-color tracking-wide mb-3">{{ houseName }}</h4>
 
 <section class="mb-4">
   <p-card styleClass="mb-8">
     <ng-template #content>
       <div class="mb-6 md:max-w-xs">
-        <p-button label="Cambiar nombre" styleClass="w-full" (onClick)="showDialog('name')" />
+        <p-button label="Cambiar nombre" styleClass="w-full" (onClick)="showDialog('houseName')" />
       </div>
 
       <ul class="list-card">
         <li>
           <span class="font-normal">Calle: </span>
-          <span class="m-2 ">{{ 'Av. Ayacucho' }}</span>
+          <span class="m-2 ">{{ street }}</span>
           <app-btn-edit-card (click)="showDialog('street')" />
         </li>
         <li>
           <span class="font-normal">Número: </span>
-          <span class="m-2 ">{{ '9999' }}</span>
+          <span class="m-2 ">{{ number }}</span>
           <app-btn-edit-card (click)="showDialog('number')" />
         </li>
         <li>
           <span class="font-normal">Ciudad: </span>
-          <span class="m-2 ">{{ 'Rosario' }}</span>
+          <span class="m-2 ">{{ city }}</span>
           <app-btn-edit-card (click)="showDialog('city')" />
         </li>
         <li class="pt-2">
           <span class="font-normal">Cantidad de sensores: </span>
-          <span class="m-2 ">{{ '10' }}</span>
+          <span class="m-2 ">{{ numberSensors }}</span>
         </li>
       </ul>
     </ng-template>
   </p-card>
 </section>
 
-<app-modal-house [visible]="visible" [houseProp]="houseProp" (visibleChange)="closeDialog()" />
+@if (this.houseProp) {
+  <app-modal-house [visible]="visible" [houseProp]="houseProp" [propValue]="propValue" (visibleChange)="closeDialog()" />
+}
