@@ -21,3 +21,5 @@ export interface Dispositivo {
   estado: Estado;
   historial: Historial[];
 }
+
+export interface Sensor extends Dispositivo { }

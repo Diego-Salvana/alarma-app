@@ -10,10 +10,11 @@ import { MessageService } from 'primeng/api';
 import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../utils';
 import { AuthService } from '../../services';
 import { Register } from '../../interfaces';
+import { LogoComponent } from '../../components';
 
 @Component({
   selector: 'app-register',
-  imports: [InputTextModule, ButtonModule, CardModule, PasswordModule, RouterModule, InputMaskModule, ReactiveFormsModule],
+  imports: [InputTextModule, ButtonModule, CardModule, PasswordModule, RouterModule, InputMaskModule, ReactiveFormsModule, LogoComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

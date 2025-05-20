@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 import { HeaderComponent, NavBarComponent, SideBarComponent } from './components';
 import { ActiveRouteService } from './services';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterModule, HeaderComponent, NavBarComponent, SideBarComponent],
+  imports: [RouterModule, HeaderComponent, NavBarComponent, SideBarComponent, ToastModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

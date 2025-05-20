@@ -58,6 +58,7 @@ export class HeaderComponent {
         styleClass: '!px-6'
       },
       accept: () => {
+        localStorage.removeItem('token');
         this.router.navigate(['/auth']);
       }
     });

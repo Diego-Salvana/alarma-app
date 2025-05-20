@@ -10,10 +10,11 @@ import { MessageService } from 'primeng/api';
 import { markAllAsDirtyAndTouched } from '../../utils';
 import { Login } from '../../interfaces';
 import { AuthService } from '../../services';
+import { LogoComponent } from '../../components';
 
 @Component({
   selector: 'app-login',
-  imports: [CheckboxModule, InputTextModule, ButtonModule, CardModule, PasswordModule, ReactiveFormsModule, RouterLink],
+  imports: [CheckboxModule, InputTextModule, ButtonModule, CardModule, PasswordModule, ReactiveFormsModule, RouterLink, LogoComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

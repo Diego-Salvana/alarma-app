@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './auth/guards';
+import { dashboardGuard } from './dashboard/guards';
 
 export const routes: Routes = [
   {
@@ -11,7 +12,8 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () => import('./dashboard/dashboard.component').then(c => c.DashboardComponent),
-    loadChildren: () => import('./dashboard/dashboard.routes').then(m => m.dashboardRoutes)
+    loadChildren: () => import('./dashboard/dashboard.routes').then(m => m.dashboardRoutes),
+    canActivateChild: [dashboardGuard]
   },
   {
     path: 'verification',

@@ -1,13 +1,13 @@
 @let houseInfo = house();
 
-<p-card styleClass="hover:shadow-md cursor-pointer" routerLink="../hub">
+<p-card styleClass="hover:shadow-md cursor-pointer" (click)="goHouse()">
   <div class="flex items-center justify-center gap-4 w-max m-auto cards-container">
     <div class="flex flex-col justify-center items-center">
       <i class="pi pi-home home-icon" [class]="{ 'green-text': !isActivated, 'red-text': isActivated}"></i>
       <h5 class="text-base font-semibold">{{ houseInfo.nombre | uppercase }}</h5>
       <h6 class="text-sm leading-none font-medium mb-2">{{ houseInfo.direccion.calle }} {{ houseInfo.direccion.numero }}</h6>
       <p class="font-semibold" [class]="{ 'green-text': !isActivated, 'red-text': isActivated}">
-        {{ isActivated  ? 'Activada' : 'Desactivada' | titlecase  }}
+        {{ isActivated ? 'Activada' : 'Desactivada' | titlecase }}
       </p>
     </div>
 

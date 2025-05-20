@@ -1,21 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { HouseResponse } from '../../../auth/interfaces';
+import { HouseService } from '../../services';
 
 @Component({
   selector: 'app-house-card',
-  imports: [CommonModule, CardModule, RouterLink],
+  imports: [CommonModule, CardModule],
   templateUrl: './house-card.component.html',
   styleUrl: './house-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HouseCardComponent implements OnInit {
+  private houseService = inject(HouseService);
+  private router = inject(Router);
   house = input.required<HouseResponse>();
   isActivated!: boolean;
 
   ngOnInit () {
     this.isActivated = this.house().alarmaEncendida === 'On';
+  }
+
+  goHouse () {
+    this.houseService.currentHouse = this.house()._id;
+    this.router.navigate(['/dashboard', 'hub']);
   }
 }
