@@ -26,7 +26,12 @@ export interface LoginResponse {
 
 export interface InfoHouseResponse {
   message: string;
-  data: HouseResponse[];
+  data: HouseResponse;
+}
+
+export interface InfoHousesResponse {
+  message: string;
+  data: HouseResponse [];
 }
 
 export interface HouseResponse {

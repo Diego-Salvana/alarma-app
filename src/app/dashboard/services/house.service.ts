@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { HouseResponse, InfoHouseResponse } from '../../auth/interfaces';
+import { HouseResponse, InfoHouseResponse, InfoHousesResponse } from '../../auth/interfaces';
 import { map, Observable } from 'rxjs';
 
 @Injectable({
@@ -12,6 +12,25 @@ export class HouseService {
   currentHouse = '';
 
   getAll (): Observable<HouseResponse[]> {
-    return this.http.get<InfoHouseResponse>(`${this.baseUrl}/`).pipe(map(response => response.data));
+    return this.http.get<InfoHousesResponse>(`${this.baseUrl}`).pipe(map(response => response.data));
+  }
+
+  getHouse (): Observable<HouseResponse> {
+    let houseId: string;
+
+    if (this.currentHouse) {
+      houseId = this.currentHouse;
+    } else {
+      const token = localStorage.getItem('token') ?? '';
+
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        houseId = payload.hid;
+      } catch (e) {
+        throw new Error('Token no válido.');
+      }
+    }
+
+    return this.http.get<InfoHouseResponse>(`${this.baseUrl}/${houseId}`).pipe(map(response => response.data));
   }
 }

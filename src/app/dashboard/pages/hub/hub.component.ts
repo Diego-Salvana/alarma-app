@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SensorListComponent, ModalExclusionComponent } from '../../components';
 import { Sensor } from '../../interfaces';
+import { HouseService } from '../../services';
 
 @Component({
   selector: 'app-hub',
@@ -11,6 +12,7 @@ import { Sensor } from '../../interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HubComponent implements OnInit {
+  private houseService = inject(HouseService);
   visible = false;
   sensors: Sensor[] = [
     { id: 1, nombre: 'Comerdor', estado: true },
@@ -21,8 +23,13 @@ export class HubComponent implements OnInit {
     { id: 6, nombre: 'Sensor_6', estado: false }
   ];
 
-  ngOnInit (): void {
-    //
+  ngOnInit () {
+    console.log(this.houseService.currentHouse);
+    this.houseService.getHouse().subscribe({
+      next: (house) => {
+        console.log(house);
+      }
+    });
   }
 
   showDialog () {
