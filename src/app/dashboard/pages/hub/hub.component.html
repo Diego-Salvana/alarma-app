@@ -1,27 +1,47 @@
-<h4 class="text-muted-color tracking-wide mb-1">CASA PRINCIPAL</h4>
-<h6 class="text-sm leading-none font-medium text-muted-color mb-8">Ayacucho 3060</h6>
+@let _house = house();
+@let _noHouse = noHouse();
+@let _isActivated = isActivated();
+@let _sensors = sensors();
 
-<section class="mb-9">
-  <div class="flex flex-col justify-center items-center mb-8">
-    <i class="lock-item mb-4" [class]="'pi pi-lock-open green-text'"></i>
-    <h5 class="text-lg font-semibold">Estado de alarma</h5>
-    <p class="font-semibold" [class]="'green-text'">DESACTIVADA</p>
+@if (!_house && !_noHouse) {
+  <div class="text-center pt-8">
+    <h3>Cargando casa...</h3>
   </div>
-
-  <div class="grid grid-cols-3 gap-4 px-4 max-w-md m-auto">
-    <p-button id="disarm-btn" label="Desactivar" severity="success" variant="outlined" raised="true"
-      icon="pi pi-lock-open" iconPos="top" styleClass="w-full green-text green-border" class="action-btn" />
-    <p-button id="panic-btn" label="Pánico" severity="warn" variant="outlined" raised="true" icon="pi pi-volume-down"
-      iconPos="top" styleClass="w-full orange-text orange-border" class="action-btn" />
-    <p-button id="arm-btn" label="Activar" severity="danger" variant="outlined" raised="true" icon="pi pi-lock"
-      iconPos="top" styleClass="w-full red-text red-border" class="action-btn" (onClick)="showDialog()" />
+}
+@else if (!_house && _noHouse) {
+  <div class="text-center pt-8">
+    <h3>No se encontró la casa.</h3>
   </div>
-</section>
+}
+@else {
+  <h4 class="text-muted-color tracking-wide mb-1">{{ _house?.nombre | uppercase }}</h4>
+  <h6 class="text-sm leading-none font-medium text-muted-color mb-8">
+    {{ _house?.direccion?.calle | titlecase }} {{ _house?.direccion?.numero }}
+  </h6>
 
-<h4 class="text-muted-color tracking-wide mb-4">SENSORES</h4>
+  <section class="mb-9">
+    <div class="flex flex-col justify-center items-center mb-8">
+      <i class="lock-item mb-4" [ngClass]="_isActivated ? 'pi pi-lock red-text' : 'pi pi-lock-open green-text'"></i>
+      <h5 class="text-lg font-semibold">Estado de alarma</h5>
+      <p class="font-semibold" [ngClass]="_isActivated ? 'red-text' : 'green-text'">
+        {{ _isActivated ? 'ACTIVADA' : 'DESACTIVADA' }}</p>
+    </div>
+  
+    <div class="grid grid-cols-3 gap-4 px-4 max-w-md m-auto">
+      <p-button id="disarm-btn" label="Desactivar" severity="success" variant="outlined" raised="true"
+        icon="pi pi-lock-open" iconPos="top" styleClass="w-full green-text green-border" class="action-btn" />
+      <p-button id="panic-btn" label="Pánico" severity="warn" variant="outlined" raised="true" icon="pi pi-volume-down"
+        iconPos="top" styleClass="w-full orange-text orange-border" class="action-btn" />
+      <p-button id="arm-btn" label="Activar" severity="danger" variant="outlined" raised="true" icon="pi pi-lock"
+        iconPos="top" styleClass="w-full red-text red-border" class="action-btn" (onClick)="showDialog()" />
+    </div>
+  </section>
+  
+  <h4 class="text-muted-color tracking-wide mb-4">SENSORES</h4>
+  
+  <section>
+    <app-sensor-list [sensors]="_sensors" [isAlarmOn]="_isActivated" />
+  </section>
+}
 
-<section>
-  <app-sensor-list />
-</section>
-
-<app-modal-exclusion [visible]="visible" [sensors]="sensors" (visibleChange)="closeDialog()" />
+<app-modal-exclusion [visible]="visible" [sensors]="_sensors" (visibleChange)="closeDialog()" />

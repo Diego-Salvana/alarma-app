@@ -1,4 +1,4 @@
-import { Direccion, Dispositivo, Estado } from '../../shared/interfaces';
+import { Direccion, Sensor, Estado } from '../../shared/interfaces';
 
 export interface Login {
   email: string;
@@ -40,6 +40,11 @@ export interface HouseResponse {
   direccion: Direccion;
   alarmaEncendida: Estado;
   sonando?: boolean;
-  sensores?: Dispositivo[];
+  sensores?: Sensor[];
   token?: string;
+}
+
+export interface InfoSensorResponse {
+  message: string;
+  data: Sensor;
 }

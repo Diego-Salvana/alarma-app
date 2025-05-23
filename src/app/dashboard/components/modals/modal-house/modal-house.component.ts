@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, model, output } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
-import { HouseProp, DataTransfer } from '../../../interfaces';
+import { HouseProp, ModalDataTransfer } from '../../../interfaces';
 
 @Component({
   selector: 'app-modal-house',
@@ -15,31 +15,24 @@ import { HouseProp, DataTransfer } from '../../../interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalHouseComponent {
-  visible = model<boolean>(false);
+  visible = model(false);
+  submitEnd = input<boolean>(true); // Hacer requerido
   houseProp = input.required<HouseProp>();
   headerText = computed(() => this.houseProp() === 'sensorName' ? 'Datos de sensor' : 'Datos del sitio');
   propValue = input<string>();
-  disabled = signal(false);
-  closable = signal(true);
-  formControl!: FormControl;
-  private ef = effect(() => (this.formControl = new FormControl(this.propValue(), [Validators.required])));
+  formControl = new FormControl('', [Validators.required]);
+  changeValue = output<ModalDataTransfer>();
+
+  constructor () {
+    effect(() => (this.formControl.setValue(this.propValue() ?? '')));
+    effect(() => (this.submitEnd() ? this.formControl.enable() : this.formControl.disable()));
+  }
 
   onSubmit () {
     if (this.formControl.invalid) return;
 
-    this.disabled.set(true);
-    this.closable.set(false);
-
-    const data: DataTransfer = { [this.houseProp()]: this.formControl.value };
-
-    console.log('Data transfer', data);
-
-    // TODO: realizar petición
-    setTimeout(() => {
-      this.disabled.set(false);
-      this.closable.set(true);
-      this.close();
-    }, 1000);
+    const data: ModalDataTransfer = { [this.houseProp()]: this.formControl.value };
+    this.changeValue.emit(data);
   }
 
   close () {

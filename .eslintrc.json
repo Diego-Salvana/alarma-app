@@ -24,6 +24,7 @@
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/return-await": "off",
-    "@typescript-eslint/member-delimiter-style": "off"
+    "@typescript-eslint/member-delimiter-style": "off",
+    "@typescript-eslint/consistent-type-assertions": "off"
   }
 }

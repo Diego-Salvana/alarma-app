@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
-import { ProfileProp, DataTransfer } from '../../../interfaces';
+import { ProfileProp, ModalDataTransfer } from '../../../interfaces';
 
 @Component({
   selector: 'app-modal-profile',
@@ -29,7 +29,7 @@ export class ModalProfileComponent {
     this.disabled.set(true);
     this.closable.set(false);
 
-    const data: DataTransfer = { [this.profileProp()]: this.formControl.value };
+    const data: ModalDataTransfer = { [this.profileProp()]: this.formControl.value };
 
     console.log('Data transfer', data);
 

@@ -1,37 +1,52 @@
-<p-card styleClass="mb-8">
-  <ng-template #content>
-    <ul class="list-card">
-      <li>
-        <span>SENSOR N°</span>
-        <span>{{ sensorNumber }}</span>
-      </li>
-      <li>
-        <span>Tipo: </span>
-        <span>{{ sensorType }}</span>
-      </li>
-      <li>
-        <span class="mr-4">{{ sensorName }}</span>
-        <app-btn-edit-card (click)="showDialog()" />
-      </li>
-    </ul>
-  </ng-template>
-</p-card>
+@let _sensor = sensor();
+@let _noSensor = noSensor();
 
-<h4 class="text-muted-color tracking-wide mb-8">Historial de disparos</h4>
-
-<div>
-  <p-timeline [value]="events">
-    <ng-template #opposite let-event>
-      <small class="text-surface-500 dark:text-surface-400">{{ event.date }}</small>
+@if (!_sensor && !_noSensor) {
+  <div class="text-center pt-8">
+    <h3>Cargando sensor...</h3>
+  </div>
+}
+@else if (!_sensor && _noSensor) {
+  <div class="text-center pt-8">
+    <h3>No se encontró el sensor.</h3>
+  </div>
+}
+@else {
+  <p-card styleClass="mb-8">
+    <ng-template #content>
+      <ul class="list-card">
+        <li>
+          <span>SENSOR N°</span>
+          <span>{{ _sensor?.numeroSensor }}</span>
+        </li>
+        <li>
+          <span>Tipo: </span>
+          <span>{{ _sensor?.tipo | titlecase }}</span>
+        </li>
+        <li>
+          <span class="mr-4">{{ _sensor?.nombre | titlecase }}</span>
+          <app-btn-edit-card (click)="showDialog()" />
+        </li>
+      </ul>
     </ng-template>
+  </p-card>
 
-    <ng-template #content let-event>
-      <span>{{ event.hour }}</span>
-    </ng-template>
-  </p-timeline>
-</div>
+  <h4 class="text-muted-color tracking-wide mb-8">Historial de disparos</h4>
 
-@if (this.houseProp) {
-  <app-modal-house [visible]="visible" [houseProp]="houseProp" [propValue]="sensorName" (visibleChange)="closeDialog()" />
+  <div>
+    <p-timeline [value]="events">
+      <ng-template #opposite let-event>
+        <small class="text-surface-500 dark:text-surface-400">{{ event.date }}</small>
+      </ng-template>
+
+      <ng-template #content let-event>
+        <span>{{ event.hour }}</span>
+      </ng-template>
+    </p-timeline>
+  </div>
 }
 
+@if (this.houseProp) {
+  <app-modal-house [visible]="visible" [houseProp]="houseProp" [propValue]="_sensor?.nombre" [submitEnd]="submitedEnd()" 
+    (visibleChange)="closeDialog()" (changeValue)="onSubmit($event)" />
+}

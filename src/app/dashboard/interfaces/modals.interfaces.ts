@@ -2,7 +2,7 @@ export type ProfileProp = 'name' | 'lastname' | 'phone' | 'password';
 
 export type HouseProp = 'houseName' | 'street' | 'number' | 'city' | 'sensorName';
 
-export interface DataTransfer {
+export interface ModalDataTransfer {
   name?: string;
   lastname?: string;
   phone?: string;

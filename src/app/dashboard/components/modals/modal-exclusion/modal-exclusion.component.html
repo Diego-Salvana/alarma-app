@@ -3,7 +3,7 @@
     styleClass="w-[95%] max-w-screen-sm">
     <span class="p-text-secondary block mb-8">Deshabilita los sensores que desees y luego activa la alarma.</span>
 
-    <form [formGroup]="exclusionForm" class="mb-4" (ngSubmit)="onSubmit()">
+    <form [formGroup]="exclusionForm()" class="mb-4" (ngSubmit)="onSubmit()">
       <p-table [value]="sensors()">
         <ng-template #body let-sensor>
           <tr class="row">
@@ -12,7 +12,7 @@
               <span>{{ sensor.nombre }}</span>
             </td>
             <td class="!text-right md:!text-right !font-semibold !text-muted-color-emphasis">
-              <p-toggle-switch [formControlName]="sensor.id" />
+              <p-toggle-switch [formControlName]="sensor.numeroSensor" trueValue="On" falseValue="Off" />
             </td>
           </tr>
         </ng-template>

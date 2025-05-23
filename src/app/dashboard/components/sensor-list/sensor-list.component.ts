@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
+import { Sensor } from '../../../shared/interfaces';
 
 @Component({
   selector: 'app-sensor-list',
@@ -11,12 +12,6 @@ import { TableModule } from 'primeng/table';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SensorListComponent {
-  sensors = [
-    { nombre: 'Comerdor', estado: 'Activo' },
-    { nombre: 'Patio', estado: 'Inactivo' },
-    { nombre: 'Garage', estado: 'Activo' },
-    { nombre: 'Sensor 4', estado: 'Inactivo' },
-    { nombre: 'Sensor 5', estado: 'Activo' },
-    { nombre: 'Sensor 6', estado: 'Inactivo' }
-  ];
+  sensors = input.required<Sensor[]>();
+  isAlarmOn = input.required<boolean>();
 }

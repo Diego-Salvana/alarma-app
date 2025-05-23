@@ -4,7 +4,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../../../auth/utils';
-import { DataTransfer } from '../../../interfaces';
+import { ModalDataTransfer } from '../../../interfaces';
 
 @Component({
   selector: 'app-modal-password',
@@ -40,7 +40,7 @@ export class ModalPasswordComponent implements OnInit {
     this.disabled.set(true);
     this.closable.set(false);
   
-    const data: DataTransfer = { newPassword: this.passForm.controls.newPassword.value };
+    const data: ModalDataTransfer = { newPassword: this.passForm.controls.newPassword.value };
   
     console.log('Data transfer', data);
   

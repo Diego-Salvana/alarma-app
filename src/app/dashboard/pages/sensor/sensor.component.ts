@@ -1,8 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { TitleCasePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
 import { BtnEditCardComponent, ModalHouseComponent } from '../../components';
-import { HouseProp } from '../../interfaces';
+import { ModalDataTransfer, HouseProp } from '../../interfaces';
+import { SensorService } from '../../services';
+import { Sensor } from '../../../shared/interfaces';
+import { MessageService } from 'primeng/api';
 
 interface EventItem {
   status?: string;
@@ -15,19 +19,21 @@ interface EventItem {
 
 @Component({
   selector: 'app-sensor',
-  imports: [CardModule, TimelineModule, BtnEditCardComponent, ModalHouseComponent],
+  imports: [CardModule, TimelineModule, BtnEditCardComponent, ModalHouseComponent, TitleCasePipe],
   templateUrl: './sensor.component.html',
   styleUrl: './sensor.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SensorComponent implements OnInit {
-  @Input('sensor') sensorId!: string;
-  events: EventItem[];
+  private sensorService = inject(SensorService);
+  private messageService = inject(MessageService);
+  @Input() sensorNumber!: string;
+  sensor = signal<Sensor | null>(null);
+  noSensor = signal(false);
   visible = false;
   houseProp!: HouseProp;
-  sensorNumber = 1;
-  sensorType = 'Movimiento';
-  sensorName = 'Comedor';
+  submitedEnd = signal(true);
+  events: EventItem[];
 
   constructor () {
     this.events = [
@@ -38,8 +44,30 @@ export class SensorComponent implements OnInit {
     ];
   }
 
-  ngOnInit (): void {
-    //
+  ngOnInit () {
+    this.sensorService.getOne(this.sensorNumber).subscribe({
+      next: sensor => {
+        this.sensor.set(sensor);
+      },
+      error: e => {
+        this.noSensor.set(true);
+        this.messageService.add({ severity: 'contrast', summary: 'Error', detail: e.error.message });
+      }
+    });
+  }
+
+  onSubmit (data: ModalDataTransfer) {
+    this.submitedEnd.set(false);
+
+    this.sensorService.getOne(this.sensorNumber).subscribe(console.log);
+
+    setTimeout(() => {
+      this.visible = false;
+      this.submitedEnd.set(true);
+      console.log('Cerrando');
+    }, 2000);
+
+    console.log('dasd', data);
   }
   
   showDialog () {
