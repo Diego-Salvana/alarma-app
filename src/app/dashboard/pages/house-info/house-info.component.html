@@ -1,37 +1,55 @@
-<h4 class="text-muted-color tracking-wide mb-3">{{ houseName }}</h4>
+@let _house = house();
+@let _noHouse = noHouse();
 
-<section class="mb-4">
-  <p-card styleClass="mb-8">
-    <ng-template #content>
-      <div class="mb-6 md:max-w-xs">
-        <p-button label="Cambiar nombre" styleClass="w-full" (onClick)="showDialog('houseName')" />
-      </div>
+@if (!_house && !_noHouse) {
+  <div class="text-center pt-8">
+    <h3>Cargando casa...</h3>
+  </div>
+} 
+@else if (!_house && _noHouse) {
+  <div class="text-center pt-8">
+    <h3>No se encontró la casa.</h3>
+  </div>
+}
+@else {
+  <h4 class="text-muted-color tracking-wide mb-3">{{ _house?.nombre | uppercase }}</h4>
 
-      <ul class="list-card">
-        <li>
-          <span class="font-normal">Calle: </span>
-          <span class="m-2 ">{{ street }}</span>
-          <app-btn-edit-card (click)="showDialog('street')" />
-        </li>
-        <li>
-          <span class="font-normal">Número: </span>
-          <span class="m-2 ">{{ number }}</span>
-          <app-btn-edit-card (click)="showDialog('number')" />
-        </li>
-        <li>
-          <span class="font-normal">Ciudad: </span>
-          <span class="m-2 ">{{ city }}</span>
-          <app-btn-edit-card (click)="showDialog('city')" />
-        </li>
-        <li class="pt-2">
-          <span class="font-normal">Cantidad de sensores: </span>
-          <span class="m-2 ">{{ numberSensors }}</span>
-        </li>
-      </ul>
-    </ng-template>
-  </p-card>
-</section>
+  <section class="mb-4">
+    <p-card styleClass="mb-8">
+      <ng-template #content>
+        <div class="mb-6 md:max-w-xs">
+          <p-button label="Cambiar nombre" styleClass="w-full" (onClick)="showDialog('houseName')" />
+        </div>
+
+        <ul class="list-card">
+          <li>
+            <span class="font-normal">Calle: </span>
+            <span class="m-2 ">{{ _house?.direccion?.calle | titlecase }}</span>
+            <app-btn-edit-card (click)="showDialog('street')" />
+          </li>
+          <li>
+            <span class="font-normal">Número: </span>
+            <span class="m-2 ">{{ _house?.direccion?.numero }}</span>
+            <app-btn-edit-card (click)="showDialog('number')" />
+          </li>
+          <li>
+            <span class="font-normal">Ciudad: </span>
+            <span class="m-2 ">{{ _house?.direccion?.ciudad | titlecase }}</span>
+            <app-btn-edit-card (click)="showDialog('city')" />
+          </li>
+          <li class="pt-2">
+            <span class="font-normal">Cantidad de sensores: </span>
+            <span class="m-2 ">{{ _house?.sensores?.length }}</span>
+          </li>
+        </ul>
+      </ng-template>
+    </p-card>
+  </section>
+}
+
+
 
 @if (this.houseProp) {
-  <app-modal-house [visible]="visible" [houseProp]="houseProp" [propValue]="propValue" (visibleChange)="closeDialog()" />
+  <app-modal-house [visible]="visible" [houseProp]="houseProp" [propValue]="propValue" [submitEnd]="submitEnd()"
+    (visibleChange)="closeDialog()" (changeValue)="onSubmit($event)" />
 }

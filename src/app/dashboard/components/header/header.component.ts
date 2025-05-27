@@ -1,12 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
 import { ActiveRouteService } from '../../services';
+import { ModalLogoutComponent } from '../../../shared/components';
 
 @Component({
   selector: 'app-header',
-  imports: [ConfirmDialogModule],
+  imports: [ModalLogoutComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -14,13 +13,13 @@ import { ActiveRouteService } from '../../services';
 export class HeaderComponent {
   private router = inject(Router);
   private activeRouteService = inject(ActiveRouteService);
-  confirmationService = inject(ConfirmationService);
+  showDialog = signal(false);
   isHome = computed(() => this.activeRouteService.activeSection() === 'home');
 
   navigateTo () {
     switch (this.activeRouteService.activeSection()) {
       case 'home':
-        this.confirm();
+        this.showDialog.set(true);
         break;
       case 'hub':
         this.router.navigate(['dashboard', 'home']);
@@ -40,27 +39,7 @@ export class HeaderComponent {
     }
   }
 
-  confirm () {
-    this.confirmationService.confirm({
-      header: 'Cerrar Sesión',
-      message: '¿Está seguro de cerrar sesión?',
-      closable: true,
-      closeOnEscape: true,
-      icon: 'pi pi-exclamation-triangle',
-      rejectButtonProps: {
-        label: 'No',
-        severity: 'secondary',
-        outlined: true,
-        styleClass: '!px-6'
-      },
-      acceptButtonProps: {
-        label: 'Sí',
-        styleClass: '!px-6'
-      },
-      accept: () => {
-        localStorage.removeItem('token');
-        this.router.navigate(['/auth']);
-      }
-    });
+  cancelLogout () {
+    this.showDialog.set(false);
   }
 }

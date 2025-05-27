@@ -6,7 +6,7 @@ import { BtnEditCardComponent, ModalHouseComponent } from '../../components';
 import { ModalDataTransfer, HouseProp } from '../../interfaces';
 import { SensorService } from '../../services';
 import { Sensor } from '../../../shared/interfaces';
-import { MessageService } from 'primeng/api';
+import { ToastService } from '../../../shared/services';
 
 interface EventItem {
   status?: string;
@@ -26,7 +26,7 @@ interface EventItem {
 })
 export class SensorComponent implements OnInit {
   private sensorService = inject(SensorService);
-  private messageService = inject(MessageService);
+  private toastService = inject(ToastService);
   @Input() sensorNumber!: string;
   sensor = signal<Sensor | null>(null);
   noSensor = signal(false);
@@ -51,7 +51,7 @@ export class SensorComponent implements OnInit {
       },
       error: e => {
         this.noSensor.set(true);
-        this.messageService.add({ severity: 'contrast', summary: 'Error', detail: e.error.message });
+        this.toastService.error(e.error.message);
       }
     });
   }
@@ -59,15 +59,23 @@ export class SensorComponent implements OnInit {
   onSubmit (data: ModalDataTransfer) {
     this.submitedEnd.set(false);
 
-    this.sensorService.getOne(this.sensorNumber).subscribe(console.log);
-
-    setTimeout(() => {
-      this.visible = false;
-      this.submitedEnd.set(true);
-      console.log('Cerrando');
-    }, 2000);
-
-    console.log('dasd', data);
+    if (!data.sensorName) {
+      this.toastService.error('El nombre del sensor no es válido');
+      return;
+    }
+      
+    this.sensorService.modifyName(Number(this.sensorNumber), data.sensorName).subscribe({
+      next: sensor => {
+        this.sensor.set(sensor);
+        this.submitedEnd.set(true);
+        this.visible = false;
+      },
+      error: e => {
+        this.toastService.error(e.error.message);
+        this.submitedEnd.set(true);
+        this.visible = false;
+      }
+    });
   }
   
   showDialog () {

@@ -1,63 +1,82 @@
-<h4 class="text-muted-color tracking-wide mb-3">PERFIL</h4>
+@let _user = user();
+@let _noUser = noUser();
 
-<section class="mb-4">
-  <p-card styleClass="mb-8">
-    <ng-template #content>
-      <ul class="list-card">
-        <li>
-          <span class="font-normal block  mb-2">Email: </span>
-          <span class="m-4 ">{{ email }}</span>
-        </li>
-        <li>
-          <span class="font-normal block  mb-1">Nombre Titular: </span>
-          <span class="m-4 ">{{ name }}</span>
-          <app-btn-edit-card (click)="showDialog('profile', 'name')" />
-        </li>
-        <li>
-          <span class="font-normal block  mb-1">Apellido Titular: </span>
-          <span class="m-4 ">{{ lastname }}</span>
-          <app-btn-edit-card (click)="showDialog('profile', 'lastname')" />
-        </li>
-        <li>
-          <span class="font-normal block  mb-1">Teléfono: </span>
-          <span class="m-4 ">{{ phone }}</span>
-          <app-btn-edit-card (click)="showDialog('profile', 'phone')" />
-        </li>
-      </ul>
+@if (!_user && !_noUser) {
+  <div class="text-center pt-8">
+    <h3>Cargando perfil...</h3>
+  </div>
+}
+@else if (!_user && _noUser) {
+  <div class="text-center pt-8">
+    <h3>No se encontró el usuario.</h3>
+  </div>
+}
+@else {
+  <h4 class="text-muted-color tracking-wide mb-3">PERFIL</h4>
 
-      <div class="mt-6 md:max-w-xs">
-        <p-button label="Cambiar contraseña" styleClass="w-full" (onClick)="showDialog('password')" />
-      </div>
-    </ng-template>
-  </p-card>
-</section>
+  <section class="mb-4">
+    <p-card styleClass="mb-8">
+      <ng-template #content>
+        <ul class="list-card">
+          <li>
+            <span class="font-normal block  mb-2">Email: </span>
+            <span class="m-4 ">{{ _user?.email }}</span>
+          </li>
+          <li>
+            <span class="font-normal block  mb-1">Nombre Titular: </span>
+            <span class="m-4 ">{{ _user?.nombre }}</span>
+            <app-btn-edit-card (click)="showDialog('profile', 'name')" />
+          </li>
+          <li>
+            <span class="font-normal block  mb-1">Apellido Titular: </span>
+            <span class="m-4 ">{{  _user?.apellido }}</span>
+            <app-btn-edit-card (click)="showDialog('profile', 'lastname')" />
+          </li>
+          <li>
+            <span class="font-normal block  mb-1">Teléfono: </span>
+            <span class="m-4 ">{{ _user?.telefono }}</span>
+            <app-btn-edit-card (click)="showDialog('profile', 'phone')" />
+          </li>
+        </ul>
 
-<h4 class="text-muted-color tracking-wide mb-3">SITIOS</h4>
+        <div class="mt-6 md:max-w-xs">
+          <p-button label="Cambiar contraseña" styleClass="w-full" (onClick)="showDialog('password')" />
+        </div>
+      </ng-template>
+    </p-card>
+  </section>
 
-<section class="mb-4">
-  <p-card styleClass="mb-8">
-    <ng-template #content>
-      <ul class="list-card">
-        @for (house of houses; track $index) {
-        <li>
-          <span class="m-4">{{ house.name }}</span>
-          <app-btn-edit-card routerLink="./house/{{ house.id }}" />
-        </li>
-        }
-      </ul>
-    </ng-template>
-  </p-card>
-</section>
+  <h4 class="text-muted-color tracking-wide mb-3">SITIOS</h4>
 
-<div class="mt-8 md:max-w-xs xl:hidden">
-  <p-button label="Cerrar Sesión" variant="outlined" styleClass="w-full" />
-</div>
+  <section class="mb-4">
+    <p-card styleClass="mb-8">
+      <ng-template #content>
+        <ul class="list-card">
+          @for (house of _user?.casas; track $index) {
+            <li>
+              <span class="m-4">{{ house.nombre }}</span>
+              <app-btn-edit-card (click)="goInfoHouse(house._id)" />
+            </li>
+          }
+        </ul>
+      </ng-template>
+    </p-card>
+  </section>
+
+  <div class="mt-8 md:max-w-xs xl:hidden">
+    <p-button label="Cerrar Sesión" variant="outlined" styleClass="w-full" (onClick)="logout()" />
+  </div>
+
+}
+
+<app-modal-logout [showModal]="showModalLogout()" (closeModal)="cancelLogout()" />
 
 @if (this.profileProp) {
-<app-modal-profile [visible]="visibleProfileModal" [profileProp]="profileProp" [propValue]="propValue"
-  (visibleChange)="closeDialog()" />
+  <app-modal-profile [visible]="visibleProfileModal" [profileProp]="profileProp" [propValue]="propValue" [submitEnd]="submitEnd()"
+    (visibleChange)="closeDialog()" (changeValue)="onSubmit($event)" />
 }
 
 @if (this.profileProp) {
-<app-modal-password [visible]="visiblePassModal" (visibleChange)="closeDialog()" />
+  <app-modal-password [visible]="visiblePassModal" [submitEnd]="submitEnd()" (visibleChange)="closeDialog()"
+    (changeValue)="onChangePassword($event)" />
 }

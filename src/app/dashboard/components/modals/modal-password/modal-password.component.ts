@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, model, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, model, OnInit, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -16,8 +16,8 @@ import { ModalDataTransfer } from '../../../interfaces';
 export class ModalPasswordComponent implements OnInit {
   private fb = inject(FormBuilder);
   visible = model<boolean>(false);
-  disabled = signal(false);
-  closable = signal(true);
+  submitEnd = input.required();
+  changeValue = output<ModalDataTransfer>();
   passForm = this.fb.group({
     currentPassword: ['', [Validators.required, Validators.minLength(3)]],
     newPassword: ['', [Validators.required, Validators.minLength(3)]],
@@ -36,20 +36,13 @@ export class ModalPasswordComponent implements OnInit {
     markAllAsDirtyAndTouched(this.passForm);
     
     if (this.passForm.invalid) return;
-  
-    this.disabled.set(true);
-    this.closable.set(false);
-  
-    const data: ModalDataTransfer = { newPassword: this.passForm.controls.newPassword.value };
-  
-    console.log('Data transfer', data);
-  
-    // TODO: realizar petición
-    setTimeout(() => {
-      this.disabled.set(false);
-      this.closable.set(true);
-      this.close();
-    }, 1000);
+    
+    const data: ModalDataTransfer = {
+      password: this.passForm.controls.currentPassword.value,
+      newPassword: this.passForm.controls.newPassword.value
+    };
+
+    this.changeValue.emit(data);
   }
 
   close () {

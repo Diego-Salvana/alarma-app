@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, model, output, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -16,29 +16,23 @@ import { ProfileProp, ModalDataTransfer } from '../../../interfaces';
 })
 export class ModalProfileComponent {
   visible = model<boolean>(false);
+  submitEnd = input.required();
   profileProp = input.required<ProfileProp>();
   propValue = input<string>();
-  disabled = signal(false);
+  changeValue = output<ModalDataTransfer>();
   closable = signal(true);
-  formControl!: FormControl;
-  private ef = effect(() => (this.formControl = new FormControl(this.propValue(), [Validators.required])));
+  formControl = new FormControl('', [Validators.required]);
+
+  constructor () {
+    effect(() => (this.formControl.setValue(this.propValue() ?? '')));
+    effect(() => (this.submitEnd() ? this.formControl.enable() : this.formControl.disable()));
+  }
 
   onSubmit () {
     if (this.formControl.invalid) return;
 
-    this.disabled.set(true);
-    this.closable.set(false);
-
     const data: ModalDataTransfer = { [this.profileProp()]: this.formControl.value };
-
-    console.log('Data transfer', data);
-
-    // TODO: realizar petición
-    setTimeout(() => {
-      this.disabled.set(false);
-      this.closable.set(true);
-      this.close();
-    }, 1000);
+    this.changeValue.emit(data);
   }
   
   close () {

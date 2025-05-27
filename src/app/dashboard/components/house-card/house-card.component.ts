@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
-import { HouseResponse } from '../../../auth/interfaces';
 import { HouseService } from '../../services';
+import { HouseResponse } from '../../../shared/interfaces';
 
 @Component({
   selector: 'app-house-card',

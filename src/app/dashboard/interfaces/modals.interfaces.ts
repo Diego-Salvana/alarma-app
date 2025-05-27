@@ -11,5 +11,6 @@ export interface ModalDataTransfer {
   number?: string;
   city?: string;
   sensorName?: string;
+  password?: string | null;
   newPassword?: string | null;
 }

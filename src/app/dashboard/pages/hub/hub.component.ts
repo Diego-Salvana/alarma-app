@@ -1,11 +1,10 @@
 import { TitleCasePipe, UpperCasePipe, NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { MessageService } from 'primeng/api';
 import { SensorListComponent, ModalExclusionComponent } from '../../components';
 import { HouseService } from '../../services';
-import { HouseResponse } from '../../../auth/interfaces';
-import { Sensor } from '../../../shared/interfaces';
+import { HouseResponse, Sensor } from '../../../shared/interfaces';
+import { ToastService } from '../../../shared/services';
 
 @Component({
   selector: 'app-hub',
@@ -16,7 +15,7 @@ import { Sensor } from '../../../shared/interfaces';
 })
 export class HubComponent implements OnInit {
   private houseService = inject(HouseService);
-  private messageService = inject(MessageService);
+  private toastService = inject(ToastService);
   house = signal<HouseResponse | null>(null);
   noHouse = signal(false);
   isActivated = computed(() => this.house()?.alarmaEncendida === 'On');
@@ -34,8 +33,9 @@ export class HubComponent implements OnInit {
         }, 2000);
       },
       error: e => {
+        const message = typeof e.message === 'string' ? e.message : e.error.message;
+        this.toastService.error(message);
         this.noHouse.set(true);
-        this.messageService.add({ severity: 'contrast', summary: 'Error', detail: e.error.message });
       }
     });
   }

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@ang
 import { MessageService } from 'primeng/api';
 import { HouseCardComponent } from '../../components';
 import { HouseService } from '../../services';
-import { HouseResponse } from '../../../auth/interfaces';
+import { HouseResponse } from '../../../shared/interfaces';
 
 @Component({
   selector: 'app-home',

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { HeaderComponent, NavBarComponent, SideBarComponent } from './components';
 import { ActiveRouteService } from './services';
@@ -10,8 +9,7 @@ import { ActiveRouteService } from './services';
   imports: [RouterModule, HeaderComponent, NavBarComponent, SideBarComponent, ToastModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ConfirmationService]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
   private activeRouteService = inject(ActiveRouteService);
