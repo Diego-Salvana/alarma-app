@@ -7,6 +7,11 @@ export interface Historial {
   fechaHora: Date;
 }
 
+export interface HistorialConNombre {
+  fechaHora: Date;
+  nombreDispositivo: string;
+}
+
 export interface Direccion {
   calle: string;
   numero: number;

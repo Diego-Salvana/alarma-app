@@ -1,4 +1,4 @@
-import { Direccion, Estado, Sensor } from './models.interface';
+import { Direccion, Estado, HistorialConNombre, Sensor } from './models.interface';
 
 export interface InfoLoginResponse {
   message: string;
@@ -50,4 +50,9 @@ export interface ProfileResponse {
   telefono: string;
   habilitado: boolean;
   casas: HouseResponse[];
+}
+
+export interface InfoHistoryResponse {
+  message: string;
+  data: HistorialConNombre[];
 }
