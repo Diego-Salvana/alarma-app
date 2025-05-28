@@ -1,7 +1,7 @@
 <p-card>
   <p-table [value]="sensors()" selectionMode="single">
     <ng-template #body let-sensor>
-      <tr [pSelectableRow]="sensor" class="row" routerLink="./sensor/1">
+      <tr [pSelectableRow]="sensor" class="row" routerLink="./sensor/{{ sensor.numeroSensor }}">
         <td>
           <i class="pi pi-hashtag !text-xs mr-1"></i>
           <span>{{ sensor.nombre }}</span>
@@ -10,8 +10,9 @@
           <td class="!text-right md:!text-left !font-semibold !text-muted-color-emphasis">
             <i>{{ sensor.estado === 'On' ? 'Activo' : 'Inactivo' }}</i>
           </td>
-        } @else {
-           <td class="!text-right md:!text-left !font-semibold !text-muted-color-emphasis">
+        } 
+        @else {
+          <td class="!text-right md:!text-left !font-semibold !text-muted-color-emphasis">
             <span>🟢</span>
           </td>
         }

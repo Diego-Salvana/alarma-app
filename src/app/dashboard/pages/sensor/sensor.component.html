@@ -34,13 +34,13 @@
   <h4 class="text-muted-color tracking-wide mb-8">Historial de disparos</h4>
 
   <div>
-    <p-timeline [value]="events">
+    <p-timeline [value]="_sensor?.historial">
       <ng-template #opposite let-event>
-        <small class="text-surface-500 dark:text-surface-400">{{ event.date }}</small>
+        <small class="text-surface-500 dark:text-surface-400">{{ event.fechaHora | date:'dd/MM/yyyy' }}</small>
       </ng-template>
 
       <ng-template #content let-event>
-        <span>{{ event.hour }}</span>
+        <span>{{ event.fechaHora | date:'HH:mm' }}hs</span>
       </ng-template>
     </p-timeline>
   </div>

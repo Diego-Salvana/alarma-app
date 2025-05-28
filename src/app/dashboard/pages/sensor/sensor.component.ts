@@ -1,4 +1,4 @@
-import { TitleCasePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
@@ -8,18 +8,9 @@ import { SensorService } from '../../services';
 import { Sensor } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 
-interface EventItem {
-  status?: string;
-  date?: string;
-  hour?: string;
-  icon?: string;
-  color?: string;
-  image?: string;
-}
-
 @Component({
   selector: 'app-sensor',
-  imports: [CardModule, TimelineModule, BtnEditCardComponent, ModalHouseComponent, TitleCasePipe],
+  imports: [CardModule, TimelineModule, BtnEditCardComponent, ModalHouseComponent, TitleCasePipe, DatePipe],
   templateUrl: './sensor.component.html',
   styleUrl: './sensor.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -33,16 +24,6 @@ export class SensorComponent implements OnInit {
   visible = false;
   houseProp!: HouseProp;
   submitedEnd = signal(true);
-  events: EventItem[];
-
-  constructor () {
-    this.events = [
-      { status: 'Ordered', date: '15/10/2020', hour: '10:30', icon: 'pi pi-shopping-cart', color: '#9C27B0' },
-      { status: 'Processing', date: '15/10/2020', hour: '14:00', icon: 'pi pi-cog', color: '#673AB7' },
-      { status: 'Shipped', date: '15/10/2020', hour: '16:15', icon: 'pi pi-shopping-cart', color: '#FF9800' },
-      { status: 'Delivered', date: '16/10/2020', hour: '10:00', icon: 'pi pi-check', color: '#607D8B' }
-    ];
-  }
 
   ngOnInit () {
     this.sensorService.getOne(this.sensorNumber).subscribe({

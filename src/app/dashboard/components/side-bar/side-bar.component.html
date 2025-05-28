@@ -23,8 +23,10 @@
 
     <div class="logout p-4">
       <li>
-        <p-button label="Cerrar sesión" severity="secondary" styleClass="w-full !p-4" />
+        <p-button label="Cerrar sesión" severity="secondary" styleClass="w-full !p-4" (onClick)="logout()" />
       </li>
     </div>
   </ul>
 </nav>
+
+<app-modal-logout [showModal]="showDialog()" (closeModal)="cancelLogout()" />
