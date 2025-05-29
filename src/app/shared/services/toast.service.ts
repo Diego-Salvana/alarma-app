@@ -10,4 +10,8 @@ export class ToastService {
   error (message: string) {
     this.messageService.add({ severity: 'contrast', summary: 'Error', detail: message });
   }
+
+  info (message: string) {
+    this.messageService.add({ severity: 'info', summary: 'Info', detail: message });
+  }
 }

@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, model, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Estado, Sensor } from '../../../../shared/interfaces';
+
+export type ExclusionFromValue = Partial<{ [key: string]: Estado }>;
 
 @Component({
   selector: 'app-modal-exclusion',
@@ -15,29 +17,23 @@ import { Estado, Sensor } from '../../../../shared/interfaces';
 })
 export class ModalExclusionComponent {
   visible = model<boolean>(false);
-  disabled = signal(false);
-  closable = signal(true);
+  submitEnd = input.required<boolean>();
+  onActive = output<ExclusionFromValue>();
+
   sensors = input.required<Sensor[]>();
-  exclusionForm = computed<FormGroup>(() => {
+  exclusionForm = computed<FormGroup<{ [key: string]: FormControl<Estado> }>>(() => {
     return this.sensors().reduce((form, sensor) => {
       form.addControl(sensor.numeroSensor.toString(), new FormControl(Estado.ENCENDIDO));
       return form;
     }, new FormGroup({}));
   });
 
+  constructor () {
+    effect(() => (this.submitEnd() ? this.exclusionForm().enable() : this.exclusionForm().disable()));
+  }
+
   onSubmit () {
-    console.log('Exclusión: ', this.exclusionForm().value);
-    this.disabled.set(true);
-    this.closable.set(false);
-    this.exclusionForm().disable();
-    
-    // TODO: realizar petición
-    setTimeout(() => {
-      this.disabled.set(false);
-      this.closable.set(true);
-      this.exclusionForm().enable();
-      this.close();
-    }, 1000);
+    this.onActive.emit(this.exclusionForm().value);
   }
 
   close () {

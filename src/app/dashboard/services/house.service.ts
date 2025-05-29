@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable, tap, throwError } from 'rxjs';
 import { Casa, HouseResponse, InfoHouseResponse, InfoHousesResponse } from '../../shared/interfaces';
-import { ModalDataTransfer } from '../interfaces';
+import { ExclusionSensor, ModalDataTransfer } from '../interfaces';
 
 interface UpdateHouseBody {
   nombre?: Casa ['nombre'];
@@ -69,5 +69,13 @@ export class HouseService {
     };
 
     return this.http.patch<InfoHouseResponse>(`${this.baseUrl}/name-dir/${this.infoHouseID}`, body).pipe(map(response => response.data));
+  }
+
+  activeAlarm (exclusionArray: ExclusionSensor[]): Observable<HouseResponse> {
+    return this.http.post<InfoHouseResponse>(`${this.baseUrl}/active`, { exclusionArray }).pipe(map(response => response.data));
+  }
+
+  disarmAlarm (): Observable<HouseResponse> {
+    return this.http.get<InfoHouseResponse>(`${this.baseUrl}/disarm`).pipe(map(response => response.data));
   }
 }

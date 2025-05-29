@@ -1,5 +1,7 @@
+@let _submitEnd = submitEnd();
+
 <div class="card flex justify-center">
-  <p-dialog header="Exclusión" modal maximizable draggable="false" [(visible)]="visible" [closable]="closable()"
+  <p-dialog header="Exclusión" modal maximizable draggable="false" [(visible)]="visible" [closable]="_submitEnd"
     styleClass="w-[95%] max-w-screen-sm">
     <span class="p-text-secondary block mb-8">Deshabilita los sensores que desees y luego activa la alarma.</span>
 
@@ -21,7 +23,7 @@
 
     <div class="text-center mt-8">
       <p-button id="btn-activate" label="Activar alarma" severity="danger" raised outlined icon="pi pi-lock"
-        styleClass="w-full sm:w-max sm:!px-16 red-text red-border" [disabled]="disabled()" (onClick)="onSubmit()" />
+        styleClass="w-full sm:w-max sm:!px-16 red-text red-border" [disabled]="!_submitEnd" (onClick)="onSubmit()" />
     </div>
   </p-dialog>
 </div>

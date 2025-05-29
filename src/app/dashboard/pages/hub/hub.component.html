@@ -28,8 +28,9 @@
     </div>
   
     <div class="grid grid-cols-3 gap-4 px-4 max-w-md m-auto">
-      <p-button id="disarm-btn" label="Desactivar" severity="success" variant="outlined" raised="true"
-        icon="pi pi-lock-open" iconPos="top" styleClass="w-full green-text green-border" class="action-btn" />
+      <p-button id="disarm-btn" label="Desactivar" severity="success" variant="outlined" raised="true" 
+        icon="pi pi-lock-open" iconPos="top" styleClass="w-full green-text green-border" class="action-btn" 
+        (onClick)="showDisarmConfirmation()" />
       <p-button id="panic-btn" label="Pánico" severity="warn" variant="outlined" raised="true" icon="pi pi-volume-down"
         iconPos="top" styleClass="w-full orange-text orange-border" class="action-btn" />
       <p-button id="arm-btn" label="Activar" severity="danger" variant="outlined" raised="true" icon="pi pi-lock"
@@ -44,4 +45,7 @@
   </section>
 }
 
-<app-modal-exclusion [visible]="visible" [sensors]="_sensors" (visibleChange)="closeDialog()" />
+<app-modal-exclusion [visible]="visible" [sensors]="_sensors" [submitEnd]="submitEnd()" 
+  (visibleChange)="closeDialog()" (onActive)="activeAlarm($event)" />
+
+<app-confirm-disarm [visible]="showConfirmDisarm()" [submitEnd]="disarmEnd()" (onCloseDialog)="closeDisarmConfirmation($event)" />

@@ -1,3 +1,5 @@
+import { Estado } from '../../shared/interfaces';
+
 export type ProfileProp = 'name' | 'lastname' | 'phone' | 'password';
 
 export type HouseProp = 'houseName' | 'street' | 'number' | 'city' | 'sensorName';
@@ -14,3 +16,8 @@ export interface ModalDataTransfer {
   password?: string | null;
   newPassword?: string | null;
 }
+
+export interface ExclusionSensor {
+  numeroSensor: string;
+  estado: Estado | undefined;
+};
