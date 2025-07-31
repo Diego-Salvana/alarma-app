@@ -1,11 +1,17 @@
 import { TitleCasePipe, UpperCasePipe, NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SensorListComponent, ModalExclusionComponent, ExclusionFromValue } from '../../components';
 import { HouseService } from '../../services';
 import { HouseResponse, Sensor } from '../../../shared/interfaces';
-import { ToastService } from '../../../shared/services';
+import { SocketService, ToastService } from '../../../shared/services';
 import { ConfirmDisarmComponent } from '../../components/modals/confirm-disarm/confirm-disarm.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subscription } from 'rxjs';
+
+const activeAlarmEvent = 'alarmaEncendida'; // Mover.
+const userPrefix = 'user_';
+const currentUser = 'pedro.sala8@example.com';
 
 @Component({
   selector: 'app-hub',
@@ -14,9 +20,11 @@ import { ConfirmDisarmComponent } from '../../components/modals/confirm-disarm/c
   styleUrl: './hub.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HubComponent implements OnInit {
+export class HubComponent implements OnDestroy {
   private houseService = inject(HouseService);
   private toastService = inject(ToastService);
+  private socketsService = inject(SocketService);
+  private socketsSubscription: Subscription;
   house = signal<HouseResponse | null>(null);
   noHouse = signal(false);
   isActivated = computed(() => this.house()?.alarmaEncendida === 'On');
@@ -26,8 +34,17 @@ export class HubComponent implements OnInit {
   showConfirmDisarm = signal(false);
   disarmEnd = signal(true);
 
-  ngOnInit () {
-    this.houseService.getHouse(true).subscribe({
+  constructor () {
+    this.socketsSubscription = this.socketsService.on(`${activeAlarmEvent}/${userPrefix}${currentUser}`).subscribe({
+      next: data => {
+        console.log('Data Casa activa: ', data);
+      },
+      error: e => {
+        console.log(e);
+      }
+    });
+
+    this.houseService.getHouse(true).pipe(takeUntilDestroyed()).subscribe({
       next: houseResponse => {
         this.house.set(houseResponse);
       },
@@ -37,6 +54,10 @@ export class HubComponent implements OnInit {
         this.noHouse.set(true);
       }
     });
+  }
+
+  ngOnDestroy () {
+    this.socketsSubscription.unsubscribe();
   }
 
   activeAlarm (value: ExclusionFromValue) {

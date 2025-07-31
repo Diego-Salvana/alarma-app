@@ -48,4 +48,5 @@
 <app-modal-exclusion [visible]="visible" [sensors]="_sensors" [submitEnd]="submitEnd()" 
   (visibleChange)="closeDialog()" (onActive)="activeAlarm($event)" />
 
-<app-confirm-disarm [visible]="showConfirmDisarm()" [submitEnd]="disarmEnd()" (onCloseDialog)="closeDisarmConfirmation($event)" />
+<app-confirm-disarm [visible]="showConfirmDisarm()" [submitEnd]="disarmEnd()" 
+  (onCloseDialog)="closeDisarmConfirmation($event)" />
