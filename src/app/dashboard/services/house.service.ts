@@ -24,6 +24,7 @@ export class HouseService {
     return this.http.get<InfoHousesResponse>(`${this.baseUrl}`).pipe(map(response => response.data));
   }
 
+  /** Obtiene información de una casa. Si `setHouse` es true actualiza casa actual y el token. */
   getHouse (setHouse = false): Observable<HouseResponse> {
     let houseId: string;
 
@@ -40,13 +41,14 @@ export class HouseService {
       }
     }
 
-    return this.http.get<InfoHouseResponse>(`${this.baseUrl}/${houseId}`, { headers: { 'set-house': setHouse ? 'true' : 'false' } })
-      .pipe(
-        map(response => response.data),
-        tap(response => {
-          if (response.token) localStorage.setItem('token', response.token);
-        })
-      );
+    return this.http.get<InfoHouseResponse>(
+      `${this.baseUrl}/${houseId}`, { headers: { 'set-house': setHouse ? 'true' : 'false' } }
+    ).pipe(
+      map(response => response.data),
+      tap(response => {
+        if (response.token) localStorage.setItem('token', response.token);
+      })
+    );
   }
 
   getInfoHouse (): Observable<HouseResponse> {
@@ -55,7 +57,8 @@ export class HouseService {
       return throwError(() => new Error('No se encontró la casa.'));
     }
 
-    return this.http.get<InfoHouseResponse>(`${this.baseUrl}/${this.infoHouseID}`).pipe(map(response => response.data));
+    return this.http.get<InfoHouseResponse>(`${this.baseUrl}/${this.infoHouseID}`)
+      .pipe(map(response => response.data));
   }
 
   modifyHouse (data: ModalDataTransfer): Observable<HouseResponse> {
@@ -68,7 +71,8 @@ export class HouseService {
       }
     };
 
-    return this.http.patch<InfoHouseResponse>(`${this.baseUrl}/name-dir/${this.infoHouseID}`, body).pipe(map(response => response.data));
+    return this.http.patch<InfoHouseResponse>(`${this.baseUrl}/name-dir/${this.infoHouseID}`, body)
+      .pipe(map(response => response.data));
   }
 
   activeAlarm (exclusionArray: ExclusionSensor[]): Observable<HouseResponse> {

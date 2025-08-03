@@ -1,14 +1,14 @@
 @let _house = house();
-@let _noHouse = noHouse();
-@let _isActivated = isActivated();
+@let _loading = loading();
+@let _isActive = isActive();
 @let _sensors = sensors();
 
-@if (!_house && !_noHouse) {
+@if (_loading) {
   <div class="text-center pt-8">
     <h3>Cargando casa...</h3>
   </div>
 }
-@else if (!_house && _noHouse) {
+@else if (!_house) {
   <div class="text-center pt-8">
     <h3>No se encontró la casa.</h3>
   </div>
@@ -21,10 +21,10 @@
 
   <section class="mb-9">
     <div class="flex flex-col justify-center items-center mb-8">
-      <i class="lock-item mb-4" [ngClass]="_isActivated ? 'pi pi-lock red-text' : 'pi pi-lock-open green-text'"></i>
+      <i class="lock-item mb-4" [ngClass]="_isActive ? 'pi pi-lock red-text' : 'pi pi-lock-open green-text'"></i>
       <h5 class="text-lg font-semibold">Estado de alarma</h5>
-      <p class="font-semibold" [ngClass]="_isActivated ? 'red-text' : 'green-text'">
-        {{ _isActivated ? 'ACTIVADA' : 'DESACTIVADA' }}</p>
+      <p class="font-semibold" [ngClass]="_isActive ? 'red-text' : 'green-text'">
+        {{ _isActive ? 'ACTIVADA' : 'DESACTIVADA' }}</p>
     </div>
   
     <div class="grid grid-cols-3 gap-4 px-4 max-w-md m-auto">
@@ -41,7 +41,7 @@
   <h4 class="text-muted-color tracking-wide mb-4">SENSORES</h4>
   
   <section>
-    <app-sensor-list [sensors]="_sensors" [isAlarmOn]="_isActivated" />
+    <app-sensor-list [sensors]="_sensors" [isAlarmOn]="_isActive" />
   </section>
 }
 

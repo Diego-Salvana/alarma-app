@@ -6,7 +6,7 @@ import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Estado, Sensor } from '../../../../shared/interfaces';
 
-export type ExclusionFromValue = Partial<{ [key: string]: Estado }>;
+export type ExclusionFormValue = Partial<{ [key: string]: Estado }>;
 
 @Component({
   selector: 'app-modal-exclusion',
@@ -18,7 +18,7 @@ export type ExclusionFromValue = Partial<{ [key: string]: Estado }>;
 export class ModalExclusionComponent {
   visible = model<boolean>(false);
   submitEnd = input.required<boolean>();
-  onActive = output<ExclusionFromValue>();
+  onActive = output<ExclusionFormValue>();
 
   sensors = input.required<Sensor[]>();
   exclusionForm = computed<FormGroup<{ [key: string]: FormControl<Estado> }>>(() => {
@@ -29,7 +29,9 @@ export class ModalExclusionComponent {
   });
 
   constructor () {
-    effect(() => (this.submitEnd() ? this.exclusionForm().enable() : this.exclusionForm().disable()));
+    effect(() => {
+      this.submitEnd() ? this.exclusionForm().enable() : this.exclusionForm().disable();
+    });
   }
 
   onSubmit () {

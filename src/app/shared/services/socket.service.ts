@@ -12,13 +12,12 @@ export class SocketService {
     this.socket.emit(event, data);
   }
 
-  on (event: string): Observable<any> {
+  on <T>(event: string): Observable<T> {
     return new Observable((observer) => {
       this.socket.on(event, (data) => {
         observer.next(data);
       });
 
-      // Revisar por qué no se destruye la conexión.
       return () => {
         this.socket.off(event);
       };

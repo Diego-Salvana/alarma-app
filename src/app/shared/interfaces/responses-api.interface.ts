@@ -20,7 +20,7 @@ export interface InfoHouseResponse {
 
 export interface InfoHousesResponse {
   message: string;
-  data: HouseResponse [];
+  data: HouseResponse[];
 }
 
 export interface HouseResponse {
