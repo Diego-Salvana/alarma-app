@@ -29,9 +29,13 @@ export class ActiveRouteService {
         case 'profile':
           this._activeSection.set('profile');
           break;
+        case 'preferences':
+          this._activeSection.set('preferences');
+          break;
         default:
           if (url.includes('sensor')) this._activeSection.set('sensor');
           else if (url.includes('house')) this._activeSection.set('house');
+          else this._activeSection.set('home');
       }
     });
   }

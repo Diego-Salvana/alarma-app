@@ -8,7 +8,7 @@ import { SocketService, ToastService } from '../../../shared/services';
 import { ConfirmDisarmComponent } from '../../components/modals/confirm-disarm/confirm-disarm.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
-import { AlarmActivation } from '../../../shared/interfaces/websockets-models';
+import { AlarmActivation, SocketError } from '../../../shared/interfaces/websockets-models';
 import { cloneDeep } from 'lodash';
 
 /* Mover constantes */
@@ -42,11 +42,24 @@ export class HubComponent implements OnDestroy {
       this.socketsService.on<AlarmActivation>(`${alarmOnEvent}/${userPrefix}${currentUser}`).subscribe({
         next: data => {
           this.updateHouse(data);
+          this.closeDialog();
+          this.submitEnd.set(true);
+          this.closeDisarmConfirmation(false);
+          this.disarmEnd.set(true);
         },
         error: e => {
           console.log(e);
         }
       });
+
+    this.socketsService.on<SocketError>('error').subscribe(data => {
+      if (data.event === 'alarmActivation') {
+        console.log(data);
+        this.closeDialog();
+        this.submitEnd.set(true);
+        this.toastService.error(data.message);
+      }
+    });
 
     this.houseService.getHouse(true).pipe(takeUntilDestroyed()).subscribe({
       next: houseResponse => {
@@ -73,10 +86,8 @@ export class HubComponent implements OnDestroy {
       .map(([numeroSensor, estado]) => ({ numeroSensor, estado }));
 
     this.houseService.activeAlarm(exclusionArray).subscribe({
-      next: houseResponse => {
-        this.house.set(houseResponse);
-        this.submitEnd.set(true);
-        this.visible = false;
+      next: activationResponse => {
+        console.log(activationResponse);
       },
       error: e => {
         this.toastService.error(e.error.message);
@@ -115,10 +126,8 @@ export class HubComponent implements OnDestroy {
       this.disarmEnd.set(false);
 
       this.houseService.disarmAlarm().subscribe({
-        next: houseResponse => {
-          this.house.set(houseResponse);
-          this.disarmEnd.set(true);
-          this.showConfirmDisarm.set(false);
+        next: disarmResponse => {
+          console.log(disarmResponse);
         },
         error: e => {
           this.toastService.error(e.error.message);
@@ -136,7 +145,7 @@ export class HubComponent implements OnDestroy {
       throw new Error('No se encontró la casa al momento de actualizarla.');
     }
 
-    updatedHouse.alarmaEncendida = info.isActive ? Estado.ENCENDIDO : Estado.APAGADO;
+    updatedHouse.alarmaEncendida = info.state;
     updatedHouse.sensores?.forEach((sensor, index) => {
       if (!updatedHouse.sensores) return;
 

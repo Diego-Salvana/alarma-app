@@ -1,10 +1,14 @@
 <header class="fixed flex top-0 left-0 w-full z-50 bg-zinc-950 pr-4">
-  <div class="w-0 overflow-hidden text-center p-2 hidden xl:block header-text br" [class.show]="!isHome()">
+  <div
+    class="w-0 overflow-hidden text-center p-2 hidden xl:block header-text br"
+    [class.show]="!isHome()">
     <h2 class="font-medium text-nowrap">Alarma X</h2>
   </div>
 
   <div class="flex grow justify-center items-center relative p-2 header-text">
-    <i class="pi pi-angle-left !text-lg absolute left-2 lg:left-3 cursor-pointer" (click)="navigateTo()"></i>
+    <i
+      class="pi pi-angle-left !text-lg absolute left-2 lg:left-3 cursor-pointer"
+      (click)="navigateTo()"></i>
     <h2 class="font-medium" [class.xl:hidden]="!isHome()">Alarma X</h2>
   </div>
 </header>

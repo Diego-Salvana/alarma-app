@@ -24,17 +24,11 @@ export class HeaderComponent {
       case 'hub':
         this.router.navigate(['dashboard', 'home']);
         break;
-      case 'sensor':
-        this.router.navigate(['dashboard', 'hub']);
-        break;
-      case 'history':
-        this.router.navigate(['dashboard', 'hub']);
-        break;
-      case 'profile':
-        this.router.navigate(['dashboard', 'hub']);
-        break;
       case 'house':
         this.router.navigate(['dashboard', 'profile']);
+        break;
+      default:
+        this.router.navigate(['dashboard', 'hub']);
         break;
     }
   }

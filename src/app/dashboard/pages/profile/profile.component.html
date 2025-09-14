@@ -3,68 +3,196 @@
 
 @if (!_user && !_noUser) {
   <div class="text-center pt-8">
-    <h3>Cargando perfil...</h3>
+    <div class="loading-container">
+      <i class="pi pi-spin pi-spinner text-2xl text-primary mb-3"></i>
+      <h3 class="text-muted-color">Cargando perfil...</h3>
+    </div>
   </div>
 }
 @else if (!_user && _noUser) {
   <div class="text-center pt-8">
-    <h3>No se encontró el usuario.</h3>
+    <div class="error-container">
+      <i class="pi pi-exclamation-triangle text-3xl text-amber-500 mb-3"></i>
+      <h3 class="text-muted-color">No se encontró el usuario.</h3>
+    </div>
   </div>
 }
 @else {
-  <h4 class="text-muted-color tracking-wide mb-3">PERFIL</h4>
+  <!-- Profile Header -->
+  <div class="profile-header mb-6">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="profile-avatar">
+        <i class="pi pi-user text-3xl"></i>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold mb-1">{{ _user?.nombre }} {{ _user?.apellido }}</h2>
+        <p class="text-muted-color text-sm">{{ _user?.email }}</p>
+      </div>
+    </div>
+  </div>
 
-  <section class="mb-4">
-    <p-card styleClass="mb-8">
+  <h4 class="section-title">INFORMACIÓN PERSONAL</h4>
+
+  <!-- Personal Information Cards -->
+  <section class="profile-section">
+    <!-- Email Card -->
+    <p-card styleClass="profile-info-card mb-4">
       <ng-template #content>
-        <ul class="list-card">
-          <li>
-            <span class="font-normal block  mb-2">Email: </span>
-            <span class="m-4 ">{{ _user?.email }}</span>
-          </li>
-          <li>
-            <span class="font-normal block  mb-1">Nombre Titular: </span>
-            <span class="m-4 ">{{ _user?.nombre }}</span>
-            <app-btn-edit-card (click)="showDialog('profile', 'name')" />
-          </li>
-          <li>
-            <span class="font-normal block  mb-1">Apellido Titular: </span>
-            <span class="m-4 ">{{  _user?.apellido }}</span>
-            <app-btn-edit-card (click)="showDialog('profile', 'lastname')" />
-          </li>
-          <li>
-            <span class="font-normal block  mb-1">Teléfono: </span>
-            <span class="m-4 ">{{ _user?.telefono }}</span>
-            <app-btn-edit-card (click)="showDialog('profile', 'phone')" />
-          </li>
-        </ul>
+        <div class="info-card-content">
+          <div class="info-icon">
+            <i class="pi pi-envelope"></i>
+          </div>
+          <div class="info-details">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ _user?.email }}</span>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
 
-        <div class="mt-6 md:max-w-xs">
-          <p-button label="Cambiar contraseña" styleClass="w-full" (onClick)="showDialog('password')" />
+    <!-- Name Card -->
+    <p-card styleClass="profile-info-card mb-4">
+      <ng-template #content>
+        <div class="info-card-content">
+          <div class="info-icon">
+            <i class="pi pi-user"></i>
+          </div>
+          <div class="info-details">
+            <span class="info-label">Nombre</span>
+            <span class="info-value">{{ _user?.nombre }}</span>
+          </div>
+          <div class="info-actions">
+            <app-btn-edit-card (click)="showDialog('profile', 'name')" />
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <!-- Lastname Card -->
+    <p-card styleClass="profile-info-card mb-4">
+      <ng-template #content>
+        <div class="info-card-content">
+          <div class="info-icon">
+            <i class="pi pi-user"></i>
+          </div>
+          <div class="info-details">
+            <span class="info-label">Apellido</span>
+            <span class="info-value">{{ _user?.apellido }}</span>
+          </div>
+          <div class="info-actions">
+            <app-btn-edit-card (click)="showDialog('profile', 'lastname')" />
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <!-- Phone Card -->
+    <p-card styleClass="profile-info-card mb-4">
+      <ng-template #content>
+        <div class="info-card-content">
+          <div class="info-icon">
+            <i class="pi pi-phone"></i>
+          </div>
+          <div class="info-details">
+            <span class="info-label">Teléfono</span>
+            <span class="info-value">{{ _user?.telefono }}</span>
+          </div>
+          <div class="info-actions">
+            <app-btn-edit-card (click)="showDialog('profile', 'phone')" />
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <!-- Password Card -->
+    <p-card styleClass="profile-action-card mb-6">
+      <ng-template #content>
+        <div class="action-card-content">
+          <div class="action-icon">
+            <i class="pi pi-lock"></i>
+          </div>
+          <div class="action-details">
+            <span class="action-title">Seguridad</span>
+            <span class="action-subtitle">Cambiar contraseña</span>
+          </div>
+          <div class="action-button">
+            <p-button 
+              icon="pi pi-key" 
+              label="Cambiar" 
+              size="small" 
+              variant="outlined"
+              (onClick)="showDialog('password')" />
+          </div>
         </div>
       </ng-template>
     </p-card>
   </section>
 
-  <h4 class="text-muted-color tracking-wide mb-3">SITIOS</h4>
+  <h4 class="section-title">MIS SITIOS</h4>
 
-  <section class="mb-4">
-    <p-card styleClass="mb-8">
-      <ng-template #content>
-        <ul class="list-card">
-          @for (house of _user?.casas; track $index) {
-            <li>
-              <span class="m-4">{{ house.nombre }}</span>
-              <app-btn-edit-card (click)="goInfoHouse(house._id)" />
-            </li>
-          }
-        </ul>
-      </ng-template>
-    </p-card>
+  <!-- Sites Section -->
+  <section class="sites-section">
+    @if (_user && _user.casas.length > 0) {
+      <div class="sites-grid">
+        @for (house of _user.casas; track $index) {
+          <p-card styleClass="site-card hover:shadow-lg transition-shadow cursor-pointer" (click)="goInfoHouse(house._id)">
+            <ng-template #content>
+              <div class="site-card-content">
+                <div class="site-icon">
+                  <i class="pi pi-home"></i>
+                </div>
+                <div class="site-info">
+                  <h5 class="site-name">{{ house.nombre }}</h5>
+                  <p class="site-status green-text">
+                    <i class="pi pi-circle-fill text-xs mr-1"></i>
+                    Activo
+                  </p>
+                </div>
+                <div class="site-arrow">
+                  <i class="pi pi-angle-right"></i>
+                </div>
+              </div>
+            </ng-template>
+          </p-card>
+        }
+      </div>
+    } @else {
+      <p-card styleClass="empty-state-card">
+        <ng-template #content>
+          <div class="empty-state">
+            <i class="pi pi-home text-4xl text-muted-color mb-3"></i>
+            <h5 class="text-muted-color mb-2">No hay sitios configurados</h5>
+            <p class="text-sm text-muted-color">Agrega tu primer sitio para comenzar</p>
+          </div>
+        </ng-template>
+      </p-card>
+    }
   </section>
 
-  <div class="mt-8 md:max-w-xs xl:hidden">
-    <p-button label="Cerrar Sesión" variant="outlined" styleClass="w-full" (onClick)="logout()" />
+  <!-- Logout Section -->
+  <div class="logout-section xl:hidden">
+    <p-card styleClass="logout-card">
+      <ng-template #content>
+        <div class="logout-content">
+          <div class="logout-icon">
+            <i class="pi pi-sign-out"></i>
+          </div>
+          <div class="logout-details">
+            <span class="logout-title">Cerrar Sesión</span>
+            <span class="logout-subtitle">Salir de la aplicación</span>
+          </div>
+          <div class="logout-button">
+            <p-button 
+              icon="pi pi-sign-out" 
+              label="Salir" 
+              variant="outlined" 
+              severity="danger"
+              size="small"
+              (onClick)="logout()" />
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
   </div>
 
 }
@@ -72,11 +200,19 @@
 <app-modal-logout [showModal]="showModalLogout()" (closeModal)="cancelLogout()" />
 
 @if (this.profileProp) {
-  <app-modal-profile [visible]="visibleProfileModal" [profileProp]="profileProp" [propValue]="propValue" [submitEnd]="submitEnd()"
-    (visibleChange)="closeDialog()" (changeValue)="onSubmit($event)" />
+  <app-modal-profile 
+    [visible]="visibleProfileModal" 
+    [profileProp]="profileProp" 
+    [propValue]="propValue" 
+    [submitEnd]="submitEnd()"
+    (visibleChange)="closeDialog()" 
+    (changeValue)="onSubmit($event)" />
 }
 
 @if (this.profileProp) {
-  <app-modal-password [visible]="visiblePassModal" [submitEnd]="submitEnd()" (visibleChange)="closeDialog()"
+  <app-modal-password 
+    [visible]="visiblePassModal"
+    [submitEnd]="submitEnd()"
+    (visibleChange)="closeDialog()"
     (changeValue)="onChangePassword($event)" />
 }

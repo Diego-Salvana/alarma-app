@@ -10,6 +10,13 @@ interface UpdateHouseBody {
   direccion?: Partial<Casa ['direccion']>;
 }
 
+type RequestState = 'success' | 'pending' | 'error';
+
+interface ActivationResponse {
+  message: string;
+  state: RequestState;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -75,11 +82,11 @@ export class HouseService {
       .pipe(map(response => response.data));
   }
 
-  activeAlarm (exclusionArray: ExclusionSensor[]): Observable<HouseResponse> {
-    return this.http.post<InfoHouseResponse>(`${this.baseUrl}/active`, { exclusionArray }).pipe(map(response => response.data));
+  activeAlarm (exclusionArray: ExclusionSensor[]): Observable<ActivationResponse> {
+    return this.http.post<ActivationResponse>(`${this.baseUrl}/active`, { exclusionArray });
   }
 
-  disarmAlarm (): Observable<HouseResponse> {
-    return this.http.get<InfoHouseResponse>(`${this.baseUrl}/disarm`).pipe(map(response => response.data));
+  disarmAlarm (): Observable<ActivationResponse> {
+    return this.http.get<ActivationResponse>(`${this.baseUrl}/disarm`);
   }
 }
