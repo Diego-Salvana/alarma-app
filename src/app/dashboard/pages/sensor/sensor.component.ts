@@ -1,4 +1,4 @@
-import { DatePipe, TitleCasePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Input, OnInit, signal } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
@@ -10,7 +10,7 @@ import { ToastService } from '../../../shared/services';
 
 @Component({
   selector: 'app-sensor',
-  imports: [CardModule, TimelineModule, BtnEditCardComponent, ModalHouseComponent, TitleCasePipe, DatePipe],
+  imports: [CardModule, TimelineModule, BtnEditCardComponent, ModalHouseComponent, TitleCasePipe, DatePipe, UpperCasePipe],
   templateUrl: './sensor.component.html',
   styleUrl: './sensor.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

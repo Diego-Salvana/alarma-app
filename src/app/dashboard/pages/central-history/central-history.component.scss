@@ -1,0 +1,375 @@
+@use '../../dashboard.component.scss';
+@use '../../../../scss/variables.scss';
+
+// Header Styles
+.history-header {
+   .header-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--p-orange-500), var(--p-orange-600));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+   }
+}
+
+// Timeline Container
+.timeline-container {
+   position: relative;
+   margin-top: 2rem;
+}
+
+// Empty State
+.empty-timeline {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   min-height: 300px;
+   padding: 2rem;
+
+   .empty-timeline-content {
+      text-align: center;
+      padding: 2rem;
+      border-radius: 12px;
+      border: 2px dashed var(--p-content-border-color);
+      background-color: var(--p-surface-50);
+      max-width: 400px;
+
+      h5 {
+         margin: 0;
+         font-weight: 600;
+      }
+
+      p {
+         margin: 0;
+      }
+   }
+}
+
+// Custom Timeline Styles
+:host ::ng-deep .custom-timeline {
+   .p-timeline-event {
+      margin-bottom: 2.5rem;
+   }
+
+   .p-timeline-event-content {
+      padding: 0;
+      flex: 1;
+      margin-left: 2rem;
+   }
+
+   .p-timeline-event-opposite {
+      padding: 0;
+      flex: 1;
+      margin-right: 2rem;
+      text-align: right;
+   }
+
+   .p-timeline-event-separator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 0 0 auto;
+   }
+
+   .p-timeline-event-marker {
+      border: none;
+      background: none;
+      width: auto;
+      height: auto;
+      padding: 0;
+      z-index: 1;
+   }
+
+   .p-timeline-event-connector {
+      background: linear-gradient(180deg, var(--p-orange-200), var(--p-orange-300));
+      width: 2px;
+      border-radius: 1px;
+   }
+}
+
+// Timeline Date Section (Simplified)
+.timeline-date {
+   display: flex;
+   justify-content: flex-end;
+   align-items: center;
+   height: 100%;
+
+   .date-display {
+      background: var(--p-surface-100);
+      border: 1px solid var(--p-content-border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      text-align: right;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+      .date-text {
+         display: block;
+         font-size: 0.85rem;
+         font-weight: 600;
+         color: var(--p-text-color);
+         margin-bottom: 0.25rem;
+      }
+
+      .time-text {
+         display: block;
+         font-size: 0.75rem;
+         font-weight: 500;
+         color: var(--p-text-muted-color);
+      }
+   }
+}
+
+// Timeline Marker (Simplified)
+.timeline-marker {
+   .marker-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--p-orange-500);
+      border: 3px solid var(--p-surface-0);
+      box-shadow: 0 0 0 2px var(--p-orange-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+         font-size: 4px;
+         color: var(--p-surface-0);
+      }
+   }
+}
+
+@keyframes pulse {
+   0% {
+      transform: scale(1);
+      opacity: 0.1;
+   }
+
+   50% {
+      transform: scale(1.1);
+      opacity: 0.05;
+   }
+
+   100% {
+      transform: scale(1);
+      opacity: 0.1;
+   }
+}
+
+// Timeline Event Card (Simplified)
+.timeline-event {
+   .event-card {
+      background: var(--p-surface-0);
+      border: 1px solid var(--p-content-border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
+      position: relative;
+
+      &::before {
+         content: '';
+         position: absolute;
+         right: -6px;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 0;
+         height: 0;
+         border-top: 6px solid transparent;
+         border-bottom: 6px solid transparent;
+         border-left: 6px solid var(--p-surface-0);
+      }
+
+      &:hover {
+         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+         border-color: var(--p-orange-300);
+      }
+   }
+
+   .event-content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .event-icon {
+         width: 32px;
+         height: 32px;
+         border-radius: 6px;
+         background: linear-gradient(135deg, var(--p-red-500), var(--p-red-600));
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         color: white;
+         font-size: 0.9rem;
+         flex-shrink: 0;
+      }
+
+      .event-info {
+         flex: 1;
+         min-width: 0;
+
+         .event-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--p-text-color);
+            margin: 0 0 0.25rem 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+         }
+
+         .event-time {
+            font-size: 0.8rem;
+            color: var(--p-text-muted-color);
+            margin: 0;
+            font-weight: 500;
+         }
+      }
+   }
+}
+
+// History Summary
+.history-summary {
+   .summary-card {
+      background: linear-gradient(135deg, var(--p-emerald-50), var(--p-emerald-100));
+      border: 1px solid var(--p-emerald-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+      .summary-content {
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+
+         .summary-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--p-emerald-500), var(--p-emerald-600));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+         }
+
+         .summary-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            .summary-label {
+               font-size: 0.85rem;
+               font-weight: 500;
+               color: var(--p-text-muted-color);
+               text-transform: uppercase;
+               letter-spacing: 0.5px;
+            }
+
+            .summary-value {
+               font-size: 1.5rem;
+               font-weight: 700;
+               color: var(--p-emerald-700);
+            }
+         }
+      }
+   }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+   :host ::ng-deep .custom-timeline {
+      .p-timeline-event-opposite {
+         margin-right: 1rem;
+      }
+
+      .p-timeline-event-content {
+         margin-left: 1rem;
+      }
+   }
+
+   .timeline-date {
+      .date-display {
+         padding: 0.5rem 0.75rem;
+
+         .date-text {
+            font-size: 0.8rem;
+         }
+
+         .time-text {
+            font-size: 0.7rem;
+         }
+      }
+   }
+
+   .timeline-event {
+      .event-card {
+         padding: 0.75rem;
+
+         &::before {
+            right: -4px;
+            border-left-width: 4px;
+            border-top-width: 4px;
+            border-bottom-width: 4px;
+         }
+      }
+
+      .event-content {
+         gap: 0.5rem;
+
+         .event-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+         }
+
+         .event-info {
+            .event-title {
+               font-size: 0.9rem;
+            }
+
+            .event-time {
+               font-size: 0.75rem;
+            }
+         }
+      }
+   }
+}
+
+// Dark Mode Adjustments
+::ng-deep html.my-app-dark {
+   .header-icon {
+      box-shadow: 0 4px 12px rgba(251, 146, 60, 0.5);
+   }
+
+   .empty-timeline-content {
+      background-color: var(--p-surface-800);
+      border-color: var(--p-surface-600);
+   }
+
+   .date-display {
+      background-color: var(--p-surface-700);
+      border-color: var(--p-surface-600);
+   }
+
+   .event-card {
+      &::before {
+         border-left-color: var(--p-surface-0);
+      }
+   }
+
+   .marker-dot {
+      border-color: var(--p-surface-0);
+   }
+
+   .summary-card {
+      background: linear-gradient(135deg, var(--p-emerald-900), var(--p-emerald-800));
+      border-color: var(--p-emerald-700);
+   }
+}

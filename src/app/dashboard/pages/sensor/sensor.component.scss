@@ -1,5 +1,554 @@
 @use '../../dashboard.component.scss';
+@use '../../../../scss/variables.scss';
 
 .list-card {
    @extend %list-card-extend;
+}
+
+// Sensor Header Styles
+.sensor-header {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+   
+   .sensor-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--p-orange-500), var(--p-orange-600));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+   }
+
+   .sensor-info {
+      flex: 1;
+
+      .sensor-title {
+         margin: 0 0 0.25rem 0;
+         font-size: 1.5rem;
+         font-weight: 700;
+         color: var(--p-text-color);
+      }
+
+      .sensor-subtitle {
+         margin: 0;
+         color: var(--p-text-muted-color);
+         font-size: 0.95rem;
+      }
+   }
+}
+
+// Section Titles
+.section-title {
+   color: var(--p-text-muted-color);
+   font-weight: 600;
+   font-size: 0.875rem;
+   letter-spacing: 0.05em;
+   margin-bottom: 1rem;
+   text-transform: uppercase;
+}
+
+// Sensor Section
+.sensor-section {
+   display: flex;
+   flex-direction: column;
+   gap: 0;
+   margin-bottom: 2rem;
+}
+
+// Sensor Details Grid
+.sensor-details-grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+   gap: 1rem;
+}
+
+// Sensor Action Cards
+:host ::ng-deep .sensor-action-card {
+   .p-card-body {
+      padding: 1.25rem;
+   }
+
+   .p-card {
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--p-orange-50), var(--p-orange-25));
+      border: 1px solid var(--p-orange-200);
+      transition: all 0.2s ease;
+      
+      &:hover {
+         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+         transform: translateY(-1px);
+      }
+   }
+}
+
+.action-card-content {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+
+   .action-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background-color: var(--p-orange-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--p-orange-700);
+      font-size: 1.125rem;
+   }
+
+   .action-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .action-title {
+         font-size: 0.95rem;
+         font-weight: 600;
+         color: var(--p-text-color);
+      }
+
+      .action-subtitle {
+         font-size: 0.8rem;
+         color: var(--p-text-muted-color);
+      }
+   }
+
+   .action-button {
+      margin-left: auto;
+   }
+}
+
+// Sensor Information Cards
+:host ::ng-deep .sensor-info-card {
+   .p-card-body {
+      padding: 1.25rem;
+   }
+
+   .p-card {
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      border: 1px solid var(--p-content-border-color);
+      
+      &:hover {
+         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+         transform: translateY(-1px);
+      }
+   }
+}
+
+.info-card-content {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+
+   .info-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background-color: var(--p-orange-50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--p-orange-600);
+      font-size: 1.125rem;
+   }
+
+   .info-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .info-label {
+         font-size: 0.75rem;
+         font-weight: 500;
+         color: var(--p-text-muted-color);
+         text-transform: uppercase;
+         letter-spacing: 0.025em;
+      }
+
+      .info-value {
+         font-size: 0.95rem;
+         font-weight: 600;
+         color: var(--p-text-color);
+      }
+   }
+}
+
+// History Summary Cards
+:host ::ng-deep .history-summary-card {
+   .p-card-body {
+      padding: 1.25rem;
+   }
+
+   .p-card {
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--p-red-50), var(--p-red-25));
+      border: 1px solid var(--p-red-200);
+      transition: all 0.2s ease;
+      
+      &:hover {
+         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+         transform: translateY(-1px);
+      }
+   }
+}
+
+.summary-content {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+
+   .summary-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--p-red-500), var(--p-red-600));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+      box-shadow: 0 3px 10px rgba(239, 68, 68, 0.3);
+   }
+
+   .summary-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .summary-label {
+         font-size: 0.85rem;
+         font-weight: 500;
+         color: var(--p-text-muted-color);
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+      }
+
+      .summary-value {
+         font-size: 1.5rem;
+         font-weight: 700;
+         color: var(--p-red-700);
+      }
+   }
+
+   .summary-badge {
+      .event-badge {
+         padding: 0.5rem 1rem;
+         border-radius: 20px;
+         font-size: 0.8rem;
+         font-weight: 600;
+         display: flex;
+         align-items: center;
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+
+         &.recent {
+            background: linear-gradient(135deg, var(--p-red-50), var(--p-red-100));
+            color: var(--p-red-700);
+            border: 1px solid var(--p-red-200);
+         }
+      }
+   }
+}
+
+// Timeline Styles
+.timeline-container {
+   margin-top: 1rem;
+}
+
+:host ::ng-deep .custom-timeline {
+   .p-timeline-event {
+      min-height: 80px;
+   }
+
+   .p-timeline-event-content {
+      padding: 0 1rem;
+   }
+
+   .p-timeline-event-opposite {
+      padding: 0 1rem;
+      flex: 1;
+   }
+
+   .p-timeline-event-separator {
+      flex: 0;
+      align-items: center;
+      justify-content: center;
+   }
+}
+
+.timeline-date-card {
+   display: flex;
+   align-items: center;
+   gap: 0.75rem;
+   background: linear-gradient(135deg, var(--p-surface-0), var(--p-surface-50));
+   padding: 0.75rem 1rem;
+   border-radius: 10px;
+   border: 1px solid var(--p-content-border-color);
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+   justify-content: flex-end;
+   text-align: right;
+
+   .date-main {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--p-primary-color);
+      line-height: 1;
+   }
+
+   .date-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+
+      .date-month {
+         font-size: 0.75rem;
+         font-weight: 600;
+         color: var(--p-text-muted-color);
+         letter-spacing: 0.5px;
+      }
+
+      .date-year {
+         font-size: 0.7rem;
+         color: var(--p-text-muted-color);
+      }
+   }
+}
+
+.timeline-event-card {
+   background: var(--p-surface-0);
+   border: 1px solid var(--p-content-border-color);
+   border-radius: 10px;
+   padding: 1rem;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+   transition: all 0.2s ease;
+
+   &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+   }
+
+   .event-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .event-icon {
+         width: 32px;
+         height: 32px;
+         border-radius: 6px;
+         background: linear-gradient(135deg, var(--p-red-500), var(--p-red-600));
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         color: white;
+         font-size: 0.9rem;
+      }
+
+      .event-info {
+         display: flex;
+         flex-direction: column;
+         gap: 0.125rem;
+
+         .event-time {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--p-text-color);
+         }
+
+         .event-type {
+            font-size: 0.8rem;
+            color: var(--p-text-muted-color);
+         }
+      }
+   }
+}
+
+.timeline-marker {
+   .marker-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--p-red-500), var(--p-red-600));
+      box-shadow: 0 0 0 3px var(--p-red-100);
+   }
+}
+
+// Empty History State
+.empty-history {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 3rem 2rem;
+   text-align: center;
+
+   .empty-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--p-surface-100), var(--p-surface-200));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--p-text-muted-color);
+      font-size: 2rem;
+      margin-bottom: 1rem;
+   }
+
+   h3 {
+      margin: 0 0 0.5rem 0;
+      font-weight: 600;
+      color: var(--p-text-color);
+   }
+
+   p {
+      margin: 0;
+      color: var(--p-text-muted-color);
+      font-size: 0.9rem;
+   }
+}
+
+// Loading and Error States
+.loading-container,
+.error-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 3rem 2rem;
+   text-align: center;
+
+   h3 {
+      margin: 1rem 0 0.5rem 0;
+      font-weight: 600;
+      color: var(--p-text-color);
+   }
+
+   p {
+      margin: 0;
+      color: var(--p-text-muted-color);
+      font-size: 0.9rem;
+   }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+   .sensor-header {
+      .sensor-avatar {
+         width: 50px;
+         height: 50px;
+         font-size: 1.3rem;
+      }
+
+      .sensor-info {
+         .sensor-title {
+            font-size: 1.3rem;
+         }
+      }
+   }
+
+   .sensor-details-grid {
+      grid-template-columns: 1fr;
+   }
+
+   .action-card-content,
+   .info-card-content {
+      gap: 0.75rem;
+
+      .action-icon,
+      .info-icon {
+         width: 35px;
+         height: 35px;
+         font-size: 1rem;
+      }
+   }
+
+   .summary-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+
+      .summary-icon {
+         width: 45px;
+         height: 45px;
+         font-size: 1.2rem;
+      }
+
+      .summary-badge {
+         align-self: flex-end;
+      }
+   }
+
+   .timeline-date-card {
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+
+      .date-main {
+         font-size: 1.3rem;
+      }
+   }
+
+   .timeline-event-card {
+      padding: 0.75rem;
+
+      .event-header {
+         gap: 0.5rem;
+
+         .event-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+         }
+      }
+   }
+}
+
+// Dark Mode Adjustments
+::ng-deep html.my-app-dark {
+   .sensor-avatar {
+      box-shadow: 0 4px 12px rgba(251, 146, 60, 0.5);
+   }
+
+   .action-icon {
+      background-color: var(--p-orange-900);
+      color: var(--p-orange-300);
+   }
+
+   .info-icon {
+      background-color: var(--p-orange-900);
+      color: var(--p-orange-300);
+   }
+
+   .summary-icon {
+      box-shadow: 0 3px 10px rgba(239, 68, 68, 0.5);
+   }
+
+   .event-badge {
+      &.recent {
+         background: linear-gradient(135deg, var(--p-red-900), var(--p-red-800));
+         color: var(--p-red-300);
+         border-color: var(--p-red-700);
+      }
+   }
+
+   .timeline-date-card {
+      background: linear-gradient(135deg, var(--p-surface-800), var(--p-surface-700));
+   }
+
+   .timeline-event-card {
+      background: var(--p-surface-800);
+   }
+
+   .marker-dot {
+      box-shadow: 0 0 0 3px var(--p-red-900);
+   }
 }

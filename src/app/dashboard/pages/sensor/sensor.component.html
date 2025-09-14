@@ -2,48 +2,150 @@
 @let _noSensor = noSensor();
 
 @if (!_sensor && !_noSensor) {
-  <div class="text-center pt-8">
+  <div class="loading-container">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: var(--p-primary-color);"></i>
     <h3>Cargando sensor...</h3>
+    <p>Obteniendo información del dispositivo</p>
   </div>
 }
 @else if (!_sensor && _noSensor) {
-  <div class="text-center pt-8">
-    <h3>No se encontró el sensor.</h3>
+  <div class="error-container">
+    <i class="pi pi-exclamation-triangle" style="font-size: 2rem; color: var(--p-orange-500);"></i>
+    <h3>Sensor no encontrado</h3>
+    <p>No se pudo encontrar el sensor solicitado</p>
   </div>
 }
 @else {
-  <p-card styleClass="mb-8">
-    <ng-template #content>
-      <ul class="list-card">
-        <li>
-          <span>SENSOR N°</span>
-          <span>{{ _sensor?.numeroSensor }}</span>
-        </li>
-        <li>
-          <span>Tipo: </span>
-          <span>{{ _sensor?.tipo | titlecase }}</span>
-        </li>
-        <li>
-          <span class="mr-4">{{ _sensor?.nombre | titlecase }}</span>
-          <app-btn-edit-card (click)="showDialog()" />
-        </li>
-      </ul>
-    </ng-template>
-  </p-card>
-
-  <h4 class="text-muted-color tracking-wide mb-8">Historial de disparos</h4>
-
-  <div>
-    <p-timeline [value]="_sensor?.historial">
-      <ng-template #opposite let-event>
-        <small class="text-surface-500 dark:text-surface-400">{{ event.fechaHora | date:'dd/MM/yyyy' }}</small>
-      </ng-template>
-
-      <ng-template #content let-event>
-        <span>{{ event.fechaHora | date:'HH:mm' }}hs</span>
-      </ng-template>
-    </p-timeline>
+  <!-- Sensor Header -->
+  <div class="sensor-header mb-6">
+    <div class="sensor-avatar">
+      <i class="pi pi-wifi"></i>
+    </div>
+    <div class="sensor-info">
+      <h2 class="sensor-title">{{ _sensor?.nombre | titlecase }}</h2>
+      <p class="sensor-subtitle">Sensor {{ _sensor?.tipo | titlecase }} • N° {{ _sensor?.numeroSensor }}</p>
+    </div>
   </div>
+
+  <!-- Sensor Information Section -->
+  <div class="section-title">Información del Sensor</div>
+  <div class="sensor-section">
+    <!-- Sensor Name Card -->
+    <p-card styleClass="sensor-action-card mb-4">
+      <ng-template #content>
+        <div class="action-card-content">
+          <div class="action-icon">
+            <i class="pi pi-tag"></i>
+          </div>
+          <div class="action-details">
+            <div class="action-title">{{ _sensor?.nombre | titlecase }}</div>
+            <div class="action-subtitle">Cambiar nombre del sensor</div>
+          </div>
+          <div class="action-button">
+            <app-btn-edit-card (click)="showDialog()" />
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <!-- Sensor Details Cards -->
+    <div class="sensor-details-grid">
+      <p-card styleClass="sensor-info-card">
+        <ng-template #content>
+          <div class="info-card-content">
+            <div class="info-icon">
+              <i class="pi pi-id-card"></i>
+            </div>
+            <div class="info-details">
+              <div class="info-label">Número de Sensor</div>
+              <div class="info-value">#{{ _sensor?.numeroSensor }}</div>
+            </div>
+          </div>
+        </ng-template>
+      </p-card>
+
+      <p-card styleClass="sensor-info-card">
+        <ng-template #content>
+          <div class="info-card-content">
+            <div class="info-icon">
+              <i class="pi pi-cog"></i>
+            </div>
+            <div class="info-details">
+              <div class="info-label">Tipo de Sensor</div>
+              <div class="info-value">{{ _sensor?.tipo | titlecase }}</div>
+            </div>
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+  </div>
+
+  <!-- History Section -->
+  <div class="section-title mt-6">Historial de Disparos</div>
+  
+  @if (_sensor && _sensor.historial.length > 0) {
+    <!-- History Summary -->
+    <p-card styleClass="history-summary-card mb-4">
+      <ng-template #content>
+        <div class="summary-content">
+          <div class="summary-icon">
+            <i class="pi pi-chart-line"></i>
+          </div>
+          <div class="summary-info">
+            <div class="summary-label">Total de Disparos</div>
+            <div class="summary-value">{{ _sensor?.historial?.length }}</div>
+          </div>
+          <div class="summary-badge">
+            <span class="event-badge recent">Actividad Reciente</span>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <!-- Enhanced Timeline -->
+    <div class="timeline-container">
+      <p-timeline [value]="_sensor?.historial" styleClass="custom-timeline">
+        <ng-template #opposite let-event let-i="index">
+          <div class="timeline-date-card">
+            <div class="date-main">{{ event.fechaHora | date:'dd' }}</div>
+            <div class="date-details">
+              <div class="date-month">{{ event.fechaHora | date:'MMM' | uppercase }}</div>
+              <div class="date-year">{{ event.fechaHora | date:'yyyy' }}</div>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template #content let-event let-i="index">
+          <div class="timeline-event-card">
+            <div class="event-header">
+              <div class="event-icon">
+                <i class="pi pi-bell"></i>
+              </div>
+              <div class="event-info">
+                <div class="event-time">{{ event.fechaHora | date:'HH:mm' }}hs</div>
+                <div class="event-type">Disparo de Sensor</div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template #marker let-event let-i="index">
+          <div class="timeline-marker">
+            <div class="marker-dot"></div>
+          </div>
+        </ng-template>
+      </p-timeline>
+    </div>
+  } @else {
+    <!-- Empty History State -->
+    <div class="empty-history">
+      <div class="empty-icon">
+        <i class="pi pi-clock"></i>
+      </div>
+      <h3>Sin historial de disparos</h3>
+      <p>Este sensor no ha registrado ningún disparo aún</p>
+    </div>
+  }
 }
 
 @if (this.houseProp) {

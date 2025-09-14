@@ -3,45 +3,130 @@
 
 @if (!_house && !_noHouse) {
   <div class="text-center pt-8">
-    <h3>Cargando casa...</h3>
+    <div class="loading-container">
+      <i class="pi pi-spin pi-spinner text-2xl text-primary mb-3"></i>
+      <h3 class="text-muted-color">Cargando información de la casa...</h3>
+    </div>
   </div>
 } 
 @else if (!_house && _noHouse) {
   <div class="text-center pt-8">
-    <h3>No se encontró la casa.</h3>
+    <div class="error-container">
+      <i class="pi pi-exclamation-triangle text-3xl text-amber-500 mb-3"></i>
+      <h3 class="text-muted-color">No se encontró la casa.</h3>
+    </div>
   </div>
 }
 @else {
-  <h4 class="text-muted-color tracking-wide mb-3">{{ _house?.nombre | uppercase }}</h4>
+  <!-- House Header -->
+  <div class="house-header mb-6">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="house-avatar">
+        <i class="pi pi-home text-3xl"></i>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold mb-1">{{ _house?.nombre }}</h2>
+        <p class="text-muted-color text-sm">{{ _house?.direccion?.calle }} {{ _house?.direccion?.numero }}, {{ _house?.direccion?.ciudad | titlecase }}</p>
+      </div>
+    </div>
+  </div>
 
-  <section class="mb-4">
-    <p-card styleClass="mb-8">
+  <h4 class="section-title">INFORMACIÓN DE LA CASA</h4>
+
+  <!-- House Name Action Card -->
+  <section class="house-section">
+    <p-card styleClass="house-action-card mb-4">
       <ng-template #content>
-        <div class="mb-6 md:max-w-xs">
-          <p-button label="Cambiar nombre" styleClass="w-full" (onClick)="showDialog('houseName')" />
+        <div class="action-card-content">
+          <div class="action-icon">
+            <i class="pi pi-pencil"></i>
+          </div>
+          <div class="action-details">
+            <span class="action-title">Nombre de la casa</span>
+            <span class="action-subtitle">Cambiar identificación</span>
+          </div>
+          <div class="action-button">
+            <p-button 
+              icon="pi pi-pencil" 
+              label="Editar" 
+              size="small" 
+              variant="outlined"
+              (onClick)="showDialog('houseName')" />
+          </div>
         </div>
+      </ng-template>
+    </p-card>
 
-        <ul class="list-card">
-          <li>
-            <span class="font-normal">Calle: </span>
-            <span class="m-2 ">{{ _house?.direccion?.calle | titlecase }}</span>
+    <!-- Address Cards -->
+    <p-card styleClass="house-info-card mb-4">
+      <ng-template #content>
+        <div class="info-card-content">
+          <div class="info-icon">
+            <i class="pi pi-map-marker"></i>
+          </div>
+          <div class="info-details">
+            <span class="info-label">Calle</span>
+            <span class="info-value">{{ _house?.direccion?.calle | titlecase }}</span>
+          </div>
+          <div class="info-actions">
             <app-btn-edit-card (click)="showDialog('street')" />
-          </li>
-          <li>
-            <span class="font-normal">Número: </span>
-            <span class="m-2 ">{{ _house?.direccion?.numero }}</span>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <p-card styleClass="house-info-card mb-4">
+      <ng-template #content>
+        <div class="info-card-content">
+          <div class="info-icon">
+            <i class="pi pi-hashtag"></i>
+          </div>
+          <div class="info-details">
+            <span class="info-label">Número</span>
+            <span class="info-value">{{ _house?.direccion?.numero }}</span>
+          </div>
+          <div class="info-actions">
             <app-btn-edit-card (click)="showDialog('number')" />
-          </li>
-          <li>
-            <span class="font-normal">Ciudad: </span>
-            <span class="m-2 ">{{ _house?.direccion?.ciudad | titlecase }}</span>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <p-card styleClass="house-info-card mb-4">
+      <ng-template #content>
+        <div class="info-card-content">
+          <div class="info-icon">
+            <i class="pi pi-building"></i>
+          </div>
+          <div class="info-details">
+            <span class="info-label">Ciudad</span>
+            <span class="info-value">{{ _house?.direccion?.ciudad | titlecase }}</span>
+          </div>
+          <div class="info-actions">
             <app-btn-edit-card (click)="showDialog('city')" />
-          </li>
-          <li class="pt-2">
-            <span class="font-normal">Cantidad de sensores: </span>
-            <span class="m-2 ">{{ _house?.sensores?.length }}</span>
-          </li>
-        </ul>
+          </div>
+        </div>
+      </ng-template>
+    </p-card>
+
+    <!-- Sensors Info Card -->
+    <p-card styleClass="house-stats-card mb-6">
+      <ng-template #content>
+        <div class="stats-card-content">
+          <div class="stats-icon">
+            <i class="pi pi-eye"></i>
+          </div>
+          <div class="stats-info">
+            <span class="stats-label">Sensores conectados</span>
+            <span class="stats-value">{{ _house?.sensores?.length || 0 }}</span>
+          </div>
+          <div class="stats-badge">
+            <span class="sensor-badge" [ngClass]="(_house?.sensores?.length || 0) > 0 ? 'active' : 'inactive'">
+              <i class="pi pi-circle-fill text-xs mr-1"></i>
+              {{ (_house?.sensores?.length || 0) > 0 ? 'Activos' : 'Sin sensores' }}
+            </span>
+          </div>
+        </div>
       </ng-template>
     </p-card>
   </section>

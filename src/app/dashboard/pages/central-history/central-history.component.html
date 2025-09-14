@@ -1,13 +1,82 @@
-<h4 class="text-muted-color tracking-wide mb-8">Historial de disparos de Alarma</h4>
-<div>
-  <p-timeline [value]="history()">
-    <ng-template #opposite let-event>
-      <small class="text-surface-500 dark:text-surface-400 block md:inline">{{ event.fechaHora | date: 'dd/MM/yyyy' }}</small>
-      <small class="text-surface-500 dark:text-surface-400 ml-2">{{ event.fechaHora | date: 'HH:mm'}}</small>
-    </ng-template>
-
-    <ng-template #content let-event>
-      <span>{{ event.nombreDispositivo }}</span>
-    </ng-template>
-  </p-timeline>
+<!-- Header Section -->
+<div class="history-header mb-6">
+  <div class="flex items-center gap-3 mb-4">
+    <div class="header-icon">
+      <i class="pi pi-history text-2xl"></i>
+    </div>
+    <div>
+      <h2 class="text-xl font-bold mb-1">Historial de Alarmas</h2>
+      <p class="text-muted-color text-sm">Registro de disparos y eventos del sistema</p>
+    </div>
+  </div>
 </div>
+
+<!-- Timeline Section -->
+<div class="timeline-container">
+  @if (history().length === 0) {
+    <!-- Empty State -->
+    <div class="empty-timeline">
+      <div class="empty-timeline-content">
+        <i class="pi pi-clock text-4xl text-muted-color mb-3"></i>
+        <h5 class="text-muted-color mb-2">No hay eventos registrados</h5>
+        <p class="text-sm text-muted-color">Los disparos de alarma aparecerán aquí cuando ocurran</p>
+      </div>
+    </div>
+  } @else {
+    <!-- Simplified Timeline -->
+    <p-timeline [value]="history()" styleClass="custom-timeline">
+      <!-- Date/Time Template -->
+      <ng-template #opposite let-event>
+        <div class="timeline-date">
+          <div class="date-display">
+            <span class="date-text">{{ event.fechaHora | date: 'dd/MM/yyyy' }}</span>
+            <span class="time-text">{{ event.fechaHora | date: 'HH:mm' }}</span>
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- Event Content Template -->
+      <ng-template #content let-event>
+        <div class="timeline-event">
+          <div class="event-card">
+            <div class="event-content">
+              <div class="event-icon">
+                <i class="pi pi-exclamation-triangle"></i>
+              </div>
+              <div class="event-info">
+                <h5 class="event-title">{{ event.nombreDispositivo }}</h5>
+                <p class="event-time">Disparo de alarma</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- Custom Marker Template -->
+      <ng-template #marker let-event>
+        <div class="timeline-marker">
+          <div class="marker-dot">
+            <i class="pi pi-circle-fill"></i>
+          </div>
+        </div>
+      </ng-template>
+    </p-timeline>
+  }
+</div>
+
+<!-- Statistics Summary (if needed) -->
+<!-- @if (history().length > 0) {
+  <div class="history-summary mt-6">
+    <div class="summary-card">
+      <div class="summary-content">
+        <div class="summary-icon">
+          <i class="pi pi-chart-line"></i>
+        </div>
+        <div class="summary-info">
+          <span class="summary-label">Total de eventos</span>
+          <span class="summary-value">{{ history().length }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+} -->
