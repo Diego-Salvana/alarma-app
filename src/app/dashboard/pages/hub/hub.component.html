@@ -5,21 +5,38 @@
 
 @if (_loading) {
   <div class="text-center pt-8">
-    <h3>Cargando casa...</h3>
+    <div class="loading-container">
+      <i class="pi pi-spin pi-spinner text-2xl text-primary mb-3"></i>
+      <h3 class="text-muted-color">Cargando casa...</h3>
+    </div>
   </div>
 }
 @else if (!_house) {
   <div class="text-center pt-8">
-    <h3>No se encontró la casa.</h3>
+    <div class="error-container">
+      <i class="pi pi-exclamation-triangle text-3xl text-amber-500 mb-3"></i>
+      <h3 class="text-muted-color">No se encontró la casa.</h3>
+    </div>
   </div>
 }
 @else {
-  <h4 class="text-muted-color tracking-wide mb-1">{{ _house?.nombre | uppercase }}</h4>
-  <h6 class="text-sm leading-none font-medium text-muted-color mb-8">
-    {{ _house?.direccion?.calle | titlecase }} {{ _house?.direccion?.numero }}
-  </h6>
+  <!-- House Header -->
+  <div class="house-header mb-6">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="house-avatar">
+        <i class="pi pi-shield text-3xl"></i>
+      </div>
+      <div>
+        <h2 class="text-xl font-bold mb-1">{{ _house?.nombre }}</h2>
+        <p class="text-muted-color text-sm">{{ _house?.direccion?.calle | titlecase }} {{ _house?.direccion?.numero }}, {{ _house?.direccion?.ciudad | titlecase }}</p>
+      </div>
+    </div>
+  </div>
 
-  <section class="mb-9">
+  <!-- Estado Section -->
+  <h4 class="section-title">ESTADO</h4>
+  
+  <section class="alarm-section mb-8">
     <div class="flex flex-col justify-center items-center mb-8">
       <i class="lock-item mb-4" [ngClass]="_isActive ? 'pi pi-lock red-text' : 'pi pi-lock-open green-text'"></i>
       <h5 class="text-lg font-semibold">Estado de alarma</h5>
@@ -38,9 +55,10 @@
     </div>
   </section>
   
-  <h4 class="text-muted-color tracking-wide mb-4">SENSORES</h4>
+  <!-- Sensors Section -->
+  <h4 class="section-title">SENSORES</h4>
   
-  <section>
+  <section class="sensors-section">
     <app-sensor-list [sensors]="_sensors" [isAlarmOn]="_isActive" />
   </section>
 }

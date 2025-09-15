@@ -3,6 +3,8 @@
 
 .side-nav {
   @extend %hide-side-nav;
+  background: var(--p-surface-0);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
 .show {
@@ -15,41 +17,258 @@ nav {
    border-right-style: solid;
 }
 
-:host ::ng-deep {
-   .p-button-secondary {
-      background: variables.$bg-light;
-      border: 1px solid var(--p-button-secondary-border-color);
-      color: var(--p-button-secondary-color);
-      justify-content: flex-start;
+// Sidebar Header
+.sidebar-header {
+   padding: 1.5rem;
+   border-bottom: 1px solid var(--p-surface-border);
+   background: linear-gradient(135deg, var(--p-red-50), var(--p-red-25));
+}
 
-      .p-button-icon {
-         margin-right: 0.5rem;
-         padding-bottom: 1px;
-      }
+.app-brand {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+
+   .brand-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--p-red-500), var(--p-red-600));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
    }
 
-   .active .p-button-secondary {
-      @extend %btn-secondary-hover;
+   .brand-info {
+      .brand-title {
+         font-size: 1.25rem;
+         font-weight: 700;
+         color: var(--p-text-color);
+         margin: 0 0 0.25rem 0;
+      }
+
+      .brand-subtitle {
+         font-size: 0.8rem;
+         color: var(--p-text-muted-color);
+         margin: 0;
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+      }
    }
 }
 
-::ng-deep html.my-app-dark .side-nav {
-   .p-button-secondary {
-      background-color: var(--p-primary-inverse-color);
-      border-color: var(--p-primary-inverse-color);
+// Sidebar Content
+.sidebar-content {
+   display: flex;
+   flex-direction: column;
+   height: calc(100% - 120px);
+   justify-content: space-between;
+}
+
+// Navigation Section
+.nav-section {
+   padding: 1.5rem 1rem;
+}
+
+.nav-menu {
+   display: flex;
+   flex-direction: column;
+   gap: 0.5rem;
+   list-style: none;
+   margin: 0;
+   padding: 0;
+}
+
+.nav-item {
+   margin: 0;
+}
+
+// Navigation Buttons
+:host ::ng-deep {
+   .nav-button {
+      width: 100% !important;
+      padding: 1rem !important;
+      justify-content: flex-start !important;
+      border-radius: 12px !important;
+      border: 1px solid transparent !important;
+      background: transparent !important;
+      color: var(--p-text-color) !important;
+      transition: all 0.2s ease !important;
 
       &:hover {
-         @extend %btn-secondary-hover;
+         background: var(--p-surface-100) !important;
+         border-color: var(--p-surface-200) !important;
+         transform: translateX(4px);
+      }
+
+      .p-button-icon {
+         margin-right: 0.75rem !important;
+         font-size: 1.1rem !important;
+         color: var(--p-text-muted-color) !important;
+      }
+
+      .p-button-label {
+         font-weight: 500 !important;
       }
    }
 
-   .active .p-button-secondary {
-      @extend %btn-secondary-hover;
+   .active .nav-button {
+      background: linear-gradient(135deg, var(--p-primary-50), var(--p-primary-25)) !important;
+      border-color: var(--p-primary-200) !important;
+      color: var(--p-primary-700) !important;
+      transform: translateX(4px);
+
+      .p-button-icon {
+         color: var(--p-primary-600) !important;
+      }
    }
 }
 
-.logout {
-   @extend %nav-border-color;
-   border-top-width: 1px;
-   border-top-style: solid;
+// Logout Section
+.logout-section {
+   padding: 1rem;
+   border-top: 1px solid var(--p-surface-border);
+   background: var(--p-surface-50);
+}
+
+.logout-card {
+   background: var(--p-surface-0);
+   border: 1px solid var(--p-surface-border);
+   border-radius: 16px;
+   padding: 1.25rem;
+   display: flex;
+   align-items: center;
+   width: 100%;
+   transition: all 0.2s ease;
+   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+   cursor: pointer;
+
+   &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+      background: var(--p-red-25);
+      border-color: var(--p-red-200);
+   }
+}
+
+.logout-content {
+   display: flex;
+   align-items: center;
+   gap: 1rem;
+
+   .logout-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--p-red-50), var(--p-red-100));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--p-red-600);
+      font-size: 1.1rem;
+   }
+
+   .logout-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .logout-title {
+         font-size: 0.95rem;
+         font-weight: 600;
+         color: var(--p-text-color);
+      }
+
+      .logout-subtitle {
+         font-size: 0.8rem;
+         color: var(--p-text-muted-color);
+      }
+   }
+}
+
+:host ::ng-deep .logout-full-button {
+   width: 100% !important;
+   padding: 0 !important;
+   border: none !important;
+   background: transparent !important;
+   border-radius: 0 !important;
+
+   .p-button {
+      width: 100% !important;
+      padding: 0 !important;
+      border: none !important;
+      background: transparent !important;
+      border-radius: 0 !important;
+      justify-content: stretch !important;
+   }
+}
+
+// Dark Mode Adjustments
+::ng-deep html.my-app-dark {
+   .side-nav {
+      background: var(--p-surface-900);
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+   }
+
+   .sidebar-header {
+      background: linear-gradient(135deg, var(--p-surface-800), var(--p-surface-700));
+      border-color: var(--p-surface-600);
+   }
+
+   .brand-icon {
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+   }
+
+   .logout-section {
+      background: var(--p-surface-800);
+      border-color: var(--p-surface-600);
+   }
+
+   .logout-card {
+      background: var(--p-surface-800);
+      border-color: var(--p-surface-600);
+   }
+
+   .logout-icon {
+      background: linear-gradient(135deg, var(--p-red-900), var(--p-red-800));
+      color: var(--p-red-300);
+   }
+
+   .nav-button {
+      &:hover {
+         background: var(--p-surface-700) !important;
+         border-color: var(--p-surface-600) !important;
+      }
+   }
+
+   .active .nav-button {
+      background: linear-gradient(135deg, var(--p-primary-900), var(--p-primary-800)) !important;
+      border-color: var(--p-primary-700) !important;
+      color: var(--p-primary-300) !important;
+
+      .p-button-icon {
+         color: var(--p-primary-400) !important;
+      }
+   }
+
+   .logout-card {
+      &:hover {
+         background: var(--p-red-900) !important;
+         border-color: var(--p-red-700) !important;
+      }
+   }
+}
+
+// Responsive Design
+@media (max-width: 1280px) {
+   .side-nav {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+   }
+
+   .show {
+      transform: translateX(0);
+   }
 }

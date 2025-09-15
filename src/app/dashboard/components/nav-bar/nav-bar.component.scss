@@ -1,21 +1,122 @@
 @use '../../dashboard.component.scss';
 
-:host ::ng-deep {
-   .active .p-button {
-      @extend %btn-text-hover;
-   }
-
-   .p-button-label {
-      font-size: 0.75rem;
-      font-weight: 400;
-   }
-}
-
+// Enhanced navbar styling following app design patterns
 .navbar {
    transform: translateY(100%);
    transition: all 0.15s ease-out;
+   backdrop-filter: blur(8px);
+   background: rgba(255, 255, 255, 0.95);
+   border-top: 1px solid var(--p-surface-border);
+   box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .show {
    transform: translateY(0);
+}
+
+// Navigation button styling
+:host ::ng-deep {
+   .p-button {
+      padding: 0.75rem 1rem !important;
+      border-radius: 12px !important;
+      transition: all 0.2s ease !important;
+      min-width: 70px !important;
+      
+      &:hover {
+         background: var(--p-surface-100) !important;
+      }
+   }
+
+   .active .p-button {
+      background: linear-gradient(135deg, var(--p-primary-50), var(--p-primary-25)) !important;
+      color: var(--p-primary-700) !important;
+      border: 1px solid var(--p-primary-200) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+      .p-button-icon {
+         color: var(--p-primary-600) !important;
+      }
+   }
+
+   // Icon styling
+   .p-button-icon {
+      font-size: 1.25rem !important;
+      margin-bottom: 0.25rem !important;
+      color: var(--p-text-muted-color) !important;
+      transition: all 0.2s ease !important;
+   }
+
+   // Label styling
+   .p-button-label {
+      font-size: 0.8rem !important;
+      font-weight: 500 !important;
+      color: var(--p-text-color) !important;
+      text-transform: capitalize !important;
+      letter-spacing: 0.025em !important;
+   }
+
+   // Hover effects for icons and labels
+   .p-button:hover {
+      .p-button-icon {
+         color: var(--p-primary-600) !important;
+         transform: scale(1.1);
+      }
+
+      .p-button-label {
+         color: var(--p-primary-700) !important;
+      }
+   }
+}
+
+// Dark mode adjustments
+::ng-deep html.my-app-dark {
+   .navbar {
+      background: rgba(0, 0, 0, 0.95);
+      border-color: var(--p-surface-600);
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3);
+   }
+
+   .p-button {
+      &:hover {
+         background: var(--p-surface-700) !important;
+      }
+   }
+
+   .active .p-button {
+      background: linear-gradient(135deg, var(--p-primary-900), var(--p-primary-800)) !important;
+      color: var(--p-primary-300) !important;
+      border-color: var(--p-primary-700) !important;
+
+      .p-button-icon {
+         color: var(--p-primary-400) !important;
+      }
+   }
+
+   .p-button:hover {
+      .p-button-icon {
+         color: var(--p-primary-400) !important;
+      }
+
+      .p-button-label {
+         color: var(--p-primary-300) !important;
+      }
+   }
+}
+
+// Responsive adjustments
+@media (max-width: 480px) {
+   :host ::ng-deep {
+      .p-button {
+         padding: 0.5rem 0.75rem !important;
+         min-width: 60px !important;
+      }
+
+      .p-button-icon {
+         font-size: 1.1rem !important;
+      }
+
+      .p-button-label {
+         font-size: 0.75rem !important;
+      }
+   }
 }

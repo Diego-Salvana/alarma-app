@@ -1,4 +1,4 @@
-import { TitleCasePipe, UpperCasePipe, NgClass } from '@angular/common';
+import { TitleCasePipe, NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SensorListComponent, ModalExclusionComponent, ExclusionFormValue } from '../../components';
@@ -18,7 +18,7 @@ const currentUser = 'pedro.sala8@example.com';
 
 @Component({
   selector: 'app-hub',
-  imports: [UpperCasePipe, TitleCasePipe, NgClass, ButtonModule, SensorListComponent, ModalExclusionComponent, ConfirmDisarmComponent],
+  imports: [TitleCasePipe, NgClass, ButtonModule, SensorListComponent, ModalExclusionComponent, ConfirmDisarmComponent],
   templateUrl: './hub.component.html',
   styleUrl: './hub.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

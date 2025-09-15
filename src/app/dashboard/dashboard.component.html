@@ -1,15 +1,17 @@
-<div>
-  <app-header />
+<app-header />
 
+<aside>
   <app-side-bar />
+</aside>
 
+<main>
   <div class="transition-all duration-200 ease-out" [class.xl:ml-72]="!isHome()">
-    <main class="p-4 mt-12 mb-20 lg:px-8 max-w-[1600px] m-auto">
+    <div class="p-4 mt-12 mb-20 lg:px-8 max-w-[1600px] m-auto">
       <router-outlet />
-    </main>
+    </div>
   </div>
+</main>
 
-  <app-nav-bar />
-</div>
+<app-nav-bar />
 
 <p-toast [breakpoints]="{ '410px': { width: '100%', right: '0', left: '0' } }" preventOpenDuplicates />

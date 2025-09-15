@@ -1,32 +1,44 @@
 <nav class="hidden xl:block fixed top-0 left-0 h-full w-72 pt-12 side-nav" [class.show]="!isHome()">
-  <div class="absolute top-0 w-full bg-slate-500 bg-header"></div>
-
-  <ul class="flex flex-col h-full justify-between">
-    <div class="flex flex-col gap-1 p-4">
-      <li>
-        <p-button label="Principal" severity="secondary" icon="pi pi-home" styleClass="w-full !p-4"
-          routerLink="/dashboard/hub" routerLinkActive="active" />
-      </li>
-      <li>
-        <p-button label="Historial" severity="secondary" icon="pi pi-history" styleClass="w-full !p-4"
-          routerLink="/dashboard/history" routerLinkActive="active" />
-      </li>
-      <li>
-        <p-button label="Perfil" severity="secondary" icon="pi pi-user" styleClass="w-full !p-4"
-          routerLink="/dashboard/profile" routerLinkActive="active" />
-      </li>
-      <li>
-        <p-button label="Ajustes" severity="secondary" icon="pi pi-cog" styleClass="w-full !p-4"
-          routerLinkActive="active" (onClick)="toggleDarkMode()" />
-      </li>
+  <div class="sidebar-content">
+    <div class="nav-section">
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <p-button label="Principal" severity="secondary" icon="pi pi-home" styleClass="nav-button"
+            routerLink="/dashboard/hub" routerLinkActive="active" />
+        </li>
+        <li class="nav-item">
+          <p-button label="Historial" severity="secondary" icon="pi pi-history" styleClass="nav-button"
+            routerLink="/dashboard/history" routerLinkActive="active" />
+        </li>
+        <li class="nav-item">
+          <p-button label="Perfil" severity="secondary" icon="pi pi-user" styleClass="nav-button"
+            routerLink="/dashboard/profile" routerLinkActive="active" />
+        </li>
+        <li class="nav-item">
+          <p-button label="Ajustes" severity="secondary" icon="pi pi-cog" styleClass="nav-button"
+            routerLinkActive="active" (onClick)="toggleDarkMode()" />
+        </li>
+      </ul>
     </div>
 
-    <div class="logout p-4">
-      <li>
-        <p-button label="Cerrar sesión" severity="secondary" styleClass="w-full !p-4" (onClick)="logout()" />
-      </li>
+    <div class="logout-section">
+      <p-button 
+        styleClass="logout-full-button" 
+        (onClick)="logout()">
+        <div class="logout-card">
+          <div class="logout-content">
+            <div class="logout-icon">
+              <i class="pi pi-sign-out"></i>
+            </div>
+            <div class="logout-info">
+              <span class="logout-title">Cerrar sesión</span>
+              <span class="logout-subtitle">Salir del sistema</span>
+            </div>
+          </div>
+        </div>
+      </p-button>
     </div>
-  </ul>
+  </div>
 </nav>
 
 <app-modal-logout [showModal]="showDialog()" (closeModal)="cancelLogout()" />
