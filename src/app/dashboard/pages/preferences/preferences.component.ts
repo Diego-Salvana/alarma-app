@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { ChangeDetectionStrategy, Component, inject, OnInit, Signal, signal } from '@angular/core';
+import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { CardModule } from 'primeng/card';
 import { FormsModule } from '@angular/forms';
+import { ThemeService } from '../../../shared/services/theme.service';
 
 @Component({
   selector: 'app-preferences',
@@ -11,28 +12,10 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PreferencesComponent {
-  // darkMode = signal<boolean>(false);
+  private themeService = inject(ThemeService);
+  darkMode = this.themeService.isDarkTheme();
 
-  // ngOnInit () {
-  //   // Load saved theme preference from localStorage
-  //   const savedTheme = localStorage.getItem('theme');
-  //   this.darkMode.set(savedTheme === 'dark');
-  //   this.applyTheme();
-  // }
-
-  // onThemeToggle () {
-  //   this.darkMode.update(current => !current);
-  //   this.applyTheme();
-  //   // Save preference to localStorage
-  //   localStorage.setItem('theme', this.darkMode() ? 'dark' : 'light');
-  // }
-
-  // private applyTheme () {
-  //   const htmlElement = document.documentElement;
-  //   if (this.darkMode()) {
-  //     htmlElement.classList.add('dark');
-  //   } else {
-  //     htmlElement.classList.remove('dark');
-  //   }
-  // }
+  onThemeToggle (event: ToggleSwitchChangeEvent) {
+    this.themeService.applyTheme(event.checked ? 'dark' : 'light');
+  }
 }
