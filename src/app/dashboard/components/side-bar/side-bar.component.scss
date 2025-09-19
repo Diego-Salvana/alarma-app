@@ -206,7 +206,7 @@ nav {
 }
 
 // Dark Mode Adjustments
-::ng-deep html.my-app-dark {
+:host-context(.my-app-dark) {
    .side-nav {
       background: var(--p-surface-900);
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);

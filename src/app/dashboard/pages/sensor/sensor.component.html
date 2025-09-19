@@ -27,10 +27,10 @@
     </div>
   </div>
 
-  <!-- Sensor Information Section -->
+  <!-- Sección Información Sensor -->
   <div class="section-title">Información del Sensor</div>
   <div class="sensor-section">
-    <!-- Sensor Name Card -->
+    <!-- Tarjeta Nombre Sensor -->
     <p-card styleClass="sensor-action-card mb-4">
       <ng-template #content>
         <div class="action-card-content">
@@ -48,7 +48,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Sensor Details Cards -->
+    <!-- Tarjetas Detalles Sensor -->
     <div class="sensor-details-grid">
       <p-card styleClass="sensor-info-card">
         <ng-template #content>
@@ -80,11 +80,11 @@
     </div>
   </div>
 
-  <!-- History Section -->
+  <!-- Sección Historial -->
   <div class="section-title mt-6">Historial de Disparos</div>
   
   @if (_sensor && _sensor.historial.length > 0) {
-    <!-- History Summary -->
+    <!-- Resumen Historial -->
     <p-card styleClass="history-summary-card mb-4">
       <ng-template #content>
         <div class="summary-content">
@@ -102,7 +102,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Enhanced Timeline -->
+    <!-- Cronología Ampliada -->
     <div class="timeline-container">
       <p-timeline [value]="_sensor?.historial" styleClass="custom-timeline">
         <ng-template #opposite let-event let-i="index">
@@ -137,7 +137,7 @@
       </p-timeline>
     </div>
   } @else {
-    <!-- Empty History State -->
+    <!-- Historial Vacío -->
     <div class="empty-history">
       <div class="empty-icon">
         <i class="pi pi-clock"></i>

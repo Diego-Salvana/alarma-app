@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, Signal, signal } fr
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { CardModule } from 'primeng/card';
 import { FormsModule } from '@angular/forms';
-import { ThemeService } from '../../../shared/services/theme.service';
+import { ThemeService } from '../../../shared/services';
 
 @Component({
   selector: 'app-preferences',

@@ -69,7 +69,7 @@
 }
 
 // Dark mode adjustments
-::ng-deep html.my-app-dark {
+:host-context(.my-app-dark) ::ng-deep {
    .navbar {
       background: rgba(0, 0, 0, 0.95);
       border-color: var(--p-surface-600);

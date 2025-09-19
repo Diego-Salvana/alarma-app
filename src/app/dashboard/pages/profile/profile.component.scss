@@ -5,11 +5,11 @@
    @extend %list-card-extend;
 }
 
-// Profile Header Styles
+// Header Perfil 
 .profile-header {
    .profile-avatar {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--p-primary-500), var(--p-primary-600));
       display: flex;
@@ -20,7 +20,7 @@
    }
 }
 
-// Section Titles
+// Títulos de Sección
 .section-title {
    color: var(--p-text-muted-color);
    font-weight: 600;
@@ -30,7 +30,7 @@
    text-transform: uppercase;
 }
 
-// Profile Information Cards
+// Cards Información Perfil
 .profile-section {
    display: flex;
    flex-direction: column;
@@ -38,38 +38,24 @@
    margin-bottom: 2rem;
 }
 
-:host ::ng-deep .profile-info-card {
-   .p-card-body {
-      padding: 1.25rem;
-   }
-
-   .p-card {
-      border-radius: 12px;
-      transition: all 0.2s ease;
-      border: 1px solid var(--p-content-border-color);
-
-      &:hover {
-         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-         transform: translateY(-1px);
-      }
-   }
-}
-
 .info-card-content {
    display: flex;
    align-items: center;
-   gap: 1rem;
+   gap: 0.75rem;
 
    .info-icon {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       border-radius: 8px;
       background-color: var(--p-primary-50);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--p-primary-600);
-      font-size: 1.125rem;
+      font-size: 1rem;
+
+      :host-context(.my-app-dark) & {
+         background-color: var(--p-primary-800);
+      }
    }
 
    .info-details {
@@ -89,7 +75,6 @@
       .info-value {
          font-size: 0.95rem;
          font-weight: 600;
-         color: var(--p-text-color);
       }
    }
 
@@ -98,40 +83,25 @@
    }
 }
 
-// Action Cards (Password)
-:host ::ng-deep .profile-action-card {
-   .p-card-body {
-      padding: 1.25rem;
-   }
-
-   .p-card {
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--p-primary-50), var(--p-primary-25));
-      border: 1px solid var(--p-primary-200);
-      transition: all 0.2s ease;
-
-      &:hover {
-         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-         transform: translateY(-1px);
-      }
-   }
-}
-
+// Cards Acciones
 .action-card-content {
    display: flex;
    align-items: center;
-   gap: 1rem;
+   gap: 0.75rem;
 
    .action-icon {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       border-radius: 8px;
-      background-color: var(--p-primary-100);
+      background-color: var(--p-primary-50);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--p-primary-700);
-      font-size: 1.125rem;
+      font-size: 1rem;
+
+      :host-context(.my-app-dark) & {
+         background-color: var(--p-primary-800);
+      }
    }
 
    .action-details {
@@ -143,7 +113,6 @@
       .action-title {
          font-size: 0.95rem;
          font-weight: 600;
-         color: var(--p-text-color);
       }
 
       .action-subtitle {
@@ -157,7 +126,7 @@
    }
 }
 
-// Sites Section
+// Sección Sitios
 .sites-section {
    margin-bottom: 2rem;
 }
@@ -176,40 +145,22 @@
    }
 }
 
-:host ::ng-deep .site-card {
-   .p-card-body {
-      padding: 1.25rem;
-   }
-
-   .p-card {
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      border: 1px solid var(--p-content-border-color);
-      height: 100%;
-
-      &:hover {
-         border-color: var(--p-primary-300);
-         transform: translateY(-2px);
-      }
-   }
-}
-
 .site-card-content {
    display: flex;
    align-items: center;
-   gap: 1rem;
+   gap: 0.75rem;
    height: 100%;
 
    .site-icon {
-      width: 48px;
-      height: 48px;
+      width: 42px;
+      height: 42px;
       border-radius: 12px;
       background: linear-gradient(135deg, var(--p-emerald-500), var(--p-emerald-600));
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
    }
 
@@ -222,7 +173,6 @@
       .site-name {
          font-size: 1rem;
          font-weight: 600;
-         color: var(--p-text-color);
          margin: 0;
          text-transform: uppercase;
          letter-spacing: 0.025em;
@@ -249,15 +199,9 @@
 }
 
 // Empty State
-:host ::ng-deep .empty-state-card {
-   .p-card-body {
-      padding: 2rem;
-   }
-
+:host::ng-deep .empty-state-card {
    .p-card {
-      border-radius: 12px;
       border: 2px dashed var(--p-content-border-color);
-      background-color: var(--p-surface-50);
    }
 }
 
@@ -278,41 +222,31 @@
 // Logout Section
 .logout-section {
    margin-top: 2rem;
+   margin-bottom: 1rem;
 }
 
-:host ::ng-deep .logout-card {
-   .p-card-body {
-      padding: 1.25rem;
-   }
-
+:host::ng-deep .logout-card {
    .p-card {
-      border-radius: 12px;
       border: 1px solid var(--p-red-200);
       background: linear-gradient(135deg, var(--p-red-25), var(--p-red-50));
-      transition: all 0.2s ease;
-
-      &:hover {
-         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
-         transform: translateY(-1px);
-      }
    }
 }
 
 .logout-content {
    display: flex;
    align-items: center;
-   gap: 1rem;
+   gap: 0.75rem;
 
    .logout-icon {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       border-radius: 8px;
       background-color: var(--p-red-100);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--p-red-700);
-      font-size: 1.125rem;
+      font-size: 1rem;
    }
 
    .logout-details {
@@ -338,7 +272,7 @@
    }
 }
 
-// Loading and Error States
+// Estados de Loading y Error
 .loading-container,
 .error-container {
    display: flex;
@@ -352,20 +286,52 @@
    }
 }
 
-// Dark mode adjustments
-::ng-deep html.my-app-dark {
+// Responsive Design
+@media (min-width: 768px) {
+   .profile-header {
+      .profile-avatar {
+         width: 60px;
+         height: 60px;
+      }
+   }
+
+   .info-card-content,
+   .action-card-content {
+      gap: 1rem;
+
+      .info-icon,
+      .action-icon {
+         width: 40px;
+         height: 40px;
+         font-size: 1.125rem;
+      }
+   }
+
+   .site-card-content {
+      gap: 1rem;
+
+      .site-icon {
+         width: 48px;
+         height: 48px;
+         font-size: 1.5rem;
+      }
+   }
+
+   .logout-content {
+      gap: 1rem;
+
+      .logout-icon {
+         width: 40px;
+         height: 40px;
+         font-size: 1.125rem;
+      }
+   }
+}
+
+// Ajustes Dark Mode
+:host-context(.my-app-dark) {
    .profile-avatar {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-   }
-
-   .info-icon {
-      background-color: var(--p-primary-900);
-      color: var(--p-primary-300);
-   }
-
-   .action-icon {
-      background-color: var(--p-primary-900);
-      color: var(--p-primary-300);
    }
 
    .site-icon {
@@ -375,10 +341,5 @@
    .logout-icon {
       background-color: var(--p-red-900);
       color: var(--p-red-300);
-   }
-
-   .empty-state-card .p-card {
-      background-color: var(--p-surface-800);
-      border-color: var(--p-surface-600);
    }
 }

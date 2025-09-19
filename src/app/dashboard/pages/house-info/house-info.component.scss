@@ -1,15 +1,29 @@
 @use '../../dashboard.component.scss';
 @use '../../../../scss/variables.scss';
 
-.list-card {
-   @extend %list-card-extend;
+@function with-opacity($color, $alpha) {
+   @return rgba(red($color), green($color), blue($color), $alpha);
 }
 
-// House Header Styles
+// Loading y Error
+.loading-container,
+.error-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 2rem;
+
+   h3 {
+      margin: 0;
+      font-weight: 500;
+   }
+}
+
+// Header Casa
 .house-header {
    .house-avatar {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--p-emerald-500), var(--p-emerald-600));
       display: flex;
@@ -17,10 +31,14 @@
       justify-content: center;
       color: white;
       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+
+      :host-context(.my-app-dark) & {
+         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
+      }
    }
 }
 
-// Section Titles
+// Títulos de Sección
 .section-title {
    color: var(--p-text-muted-color);
    font-weight: 600;
@@ -30,7 +48,7 @@
    text-transform: uppercase;
 }
 
-// House Section
+// Sección Información de la Casa
 .house-section {
    display: flex;
    flex-direction: column;
@@ -38,39 +56,27 @@
    margin-bottom: 2rem;
 }
 
-// House Information Cards
-:host ::ng-deep .house-info-card {
-   .p-card-body {
-      padding: 1.25rem;
-   }
-
-   .p-card {
-      border-radius: 12px;
-      transition: all 0.2s ease;
-      border: 1px solid var(--p-content-border-color);
-      
-      &:hover {
-         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-         transform: translateY(-1px);
-      }
-   }
-}
-
+// Cards Información de la Casa
 .info-card-content {
    display: flex;
    align-items: center;
-   gap: 1rem;
+   gap: 0.75rem;
 
    .info-icon {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       border-radius: 8px;
       background-color: var(--p-emerald-50);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--p-emerald-600);
-      font-size: 1.125rem;
+      font-size: 1rem;
+
+      :host-context(.my-app-dark) & {
+         background-color: var(--p-emerald-900);
+         color: var(--p-emerald-300);
+      }
    }
 
    .info-details {
@@ -99,40 +105,27 @@
    }
 }
 
-// Action Cards (House Name)
-:host ::ng-deep .house-action-card {
-   .p-card-body {
-      padding: 1.25rem;
-   }
-
-   .p-card {
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--p-emerald-50), var(--p-emerald-25));
-      border: 1px solid var(--p-emerald-200);
-      transition: all 0.2s ease;
-      
-      &:hover {
-         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-         transform: translateY(-1px);
-      }
-   }
-}
-
+// Action Cards (Nombre Casa)
 .action-card-content {
    display: flex;
    align-items: center;
-   gap: 1rem;
+   gap: 0.75rem;
 
    .action-icon {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       border-radius: 8px;
       background-color: var(--p-emerald-100);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--p-emerald-700);
-      font-size: 1.125rem;
+      font-size: 1rem;
+
+      :host-context(.my-app-dark) & {
+         background-color: var(--p-emerald-900);
+         color: var(--p-emerald-300);
+      }
    }
 
    .action-details {
@@ -144,7 +137,6 @@
       .action-title {
          font-size: 0.95rem;
          font-weight: 600;
-         color: var(--p-text-color);
       }
 
       .action-subtitle {
@@ -158,41 +150,28 @@
    }
 }
 
-// Stats Cards (Sensors)
-:host ::ng-deep .house-stats-card {
-   .p-card-body {
-      padding: 1.25rem;
-   }
-
-   .p-card {
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--p-blue-50), var(--p-blue-25));
-      border: 1px solid var(--p-blue-200);
-      transition: all 0.2s ease;
-      
-      &:hover {
-         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-         transform: translateY(-1px);
-      }
-   }
-}
-
+// Stats Cards (Sensores)
 .stats-card-content {
    display: flex;
-   align-items: center;
+   flex-direction: column;
+   align-items: flex-start;
    gap: 1rem;
 
    .stats-icon {
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       border-radius: 12px;
       background: linear-gradient(135deg, var(--p-blue-500), var(--p-blue-600));
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 1.3rem;
-      box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+      font-size: 1.2rem;
+
+      // box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+      :host-context(.my-app-dark) & {
+         // box-shadow: 0 3px 10px rgba(59, 130, 246, 0.5);
+      }
    }
 
    .stats-info {
@@ -217,6 +196,8 @@
    }
 
    .stats-badge {
+      align-self: flex-end;
+      
       .sensor-badge {
          padding: 0.5rem 1rem;
          border-radius: 20px;
@@ -231,100 +212,63 @@
             background: linear-gradient(135deg, var(--p-emerald-50), var(--p-emerald-100));
             color: var(--p-emerald-700);
             border: 1px solid var(--p-emerald-200);
+
+            :host-context(.my-app-dark) & {
+               background: linear-gradient(135deg, var(--p-emerald-900), var(--p-emerald-800));
+               color: var(--p-emerald-300);
+               border-color: var(--p-emerald-700);
+            }
          }
 
          &.inactive {
             background: linear-gradient(135deg, var(--p-gray-50), var(--p-gray-100));
             color: var(--p-gray-700);
             border: 1px solid var(--p-gray-200);
+
+            :host-context(.my-app-dark) & {
+               background: linear-gradient(135deg, var(--p-gray-800), var(--p-gray-700));
+               color: var(--p-gray-300);
+               border-color: var(--p-gray-600);
+            }
          }
       }
    }
 }
 
-// Loading and Error States
-.loading-container,
-.error-container {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   padding: 2rem;
-
-   h3 {
-      margin: 0;
-      font-weight: 500;
-   }
-}
-
 // Responsive Design
-@media (max-width: 768px) {
+@media (min-width: 768px) {
    .house-header {
       .house-avatar {
-         width: 50px;
-         height: 50px;
+         width: 60px;
+         height: 60px;
       }
    }
 
    .info-card-content,
    .action-card-content {
-      gap: 0.75rem;
+      gap: 1rem;
 
       .info-icon,
       .action-icon {
-         width: 35px;
-         height: 35px;
-         font-size: 1rem;
+         width: 40px;
+         height: 40px;
+         font-size: 1.125rem;
       }
    }
 
    .stats-card-content {
-      flex-direction: column;
-      align-items: flex-start;
+      flex-direction: row;
+      align-items: center;
       gap: 1rem;
 
       .stats-icon {
-         width: 45px;
-         height: 45px;
-         font-size: 1.2rem;
+         width: 50px;
+         height: 50px;
+         font-size: 1.3rem;
       }
 
       .stats-badge {
-         align-self: flex-end;
-      }
-   }
-}
-
-// Dark Mode Adjustments
-::ng-deep html.my-app-dark {
-   .house-avatar {
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
-   }
-
-   .info-icon {
-      background-color: var(--p-emerald-900);
-      color: var(--p-emerald-300);
-   }
-
-   .action-icon {
-      background-color: var(--p-emerald-900);
-      color: var(--p-emerald-300);
-   }
-
-   .stats-icon {
-      box-shadow: 0 3px 10px rgba(59, 130, 246, 0.5);
-   }
-
-   .sensor-badge {
-      &.active {
-         background: linear-gradient(135deg, var(--p-emerald-900), var(--p-emerald-800));
-         color: var(--p-emerald-300);
-         border-color: var(--p-emerald-700);
-      }
-
-      &.inactive {
-         background: linear-gradient(135deg, var(--p-gray-800), var(--p-gray-700));
-         color: var(--p-gray-300);
-         border-color: var(--p-gray-600);
+         align-self: auto;
       }
    }
 }

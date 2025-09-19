@@ -8,7 +8,7 @@
       <h3 class="text-muted-color">Cargando perfil...</h3>
     </div>
   </div>
-}
+} 
 @else if (!_user && _noUser) {
   <div class="text-center pt-8">
     <div class="error-container">
@@ -18,7 +18,7 @@
   </div>
 }
 @else {
-  <!-- Profile Header -->
+  <!-- Perfil Header -->
   <div class="profile-header mb-6">
     <div class="flex items-center gap-4 mb-4">
       <div class="profile-avatar">
@@ -33,7 +33,7 @@
 
   <h4 class="section-title">INFORMACIÓN PERSONAL</h4>
 
-  <!-- Personal Information Cards -->
+  <!-- Información Personal -->
   <section class="profile-section">
     <!-- Email Card -->
     <p-card styleClass="profile-info-card mb-4">
@@ -50,7 +50,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Name Card -->
+    <!-- Nombre Card -->
     <p-card styleClass="profile-info-card mb-4">
       <ng-template #content>
         <div class="info-card-content">
@@ -68,7 +68,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Lastname Card -->
+    <!-- Apellido Card -->
     <p-card styleClass="profile-info-card mb-4">
       <ng-template #content>
         <div class="info-card-content">
@@ -86,7 +86,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Phone Card -->
+    <!-- Teléfono Card -->
     <p-card styleClass="profile-info-card mb-4">
       <ng-template #content>
         <div class="info-card-content">
@@ -104,7 +104,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Password Card -->
+    <!-- Contraseña Card -->
     <p-card styleClass="profile-action-card mb-6">
       <ng-template #content>
         <div class="action-card-content">
@@ -130,12 +130,14 @@
 
   <h4 class="section-title">MIS SITIOS</h4>
 
-  <!-- Sites Section -->
+  <!-- Sección de Sitios -->
   <section class="sites-section">
     @if (_user && _user.casas.length > 0) {
       <div class="sites-grid">
         @for (house of _user.casas; track $index) {
-          <p-card styleClass="site-card hover:shadow-lg transition-shadow cursor-pointer" (click)="goInfoHouse(house._id)">
+          <p-card 
+            styleClass="site-card hover:shadow-lg transition-shadow cursor-pointer" 
+            (click)="goInfoHouse(house._id)">
             <ng-template #content>
               <div class="site-card-content">
                 <div class="site-icon">
@@ -169,8 +171,8 @@
     }
   </section>
 
-  <!-- Logout Section -->
-  <div class="logout-section xl:hidden">
+  <!-- Sección de Cerrar Sesión -->
+  <section class="logout-section xl:hidden">
     <p-card styleClass="logout-card">
       <ng-template #content>
         <div class="logout-content">
@@ -193,8 +195,7 @@
         </div>
       </ng-template>
     </p-card>
-  </div>
-
+  </section>
 }
 
 <app-modal-logout [showModal]="showModalLogout()" (closeModal)="cancelLogout()" />
@@ -207,12 +208,10 @@
     [submitEnd]="submitEnd()"
     (visibleChange)="closeDialog()" 
     (changeValue)="onSubmit($event)" />
-}
-
-@if (this.profileProp) {
-  <app-modal-password 
-    [visible]="visiblePassModal"
-    [submitEnd]="submitEnd()"
-    (visibleChange)="closeDialog()"
-    (changeValue)="onChangePassword($event)" />
+    
+    <app-modal-password 
+      [visible]="visiblePassModal"
+      [submitEnd]="submitEnd()"
+      (visibleChange)="closeDialog()"
+      (changeValue)="onChangePassword($event)" />
 }
