@@ -181,9 +181,10 @@
 // Tarjetas Resumen de Historial
 .summary-content {
    display: flex;
-   flex-direction: column;
-   align-items: flex-start;
-   gap: 1rem;
+   justify-content: space-between;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: 2rem;
 
    .summary-icon {
       width: 45px;
@@ -224,7 +225,13 @@
    }
 
    .summary-badge {
-      align-self: flex-end;
+      min-width: max-content;
+      margin-left: auto;
+      display: none;
+
+      @media (min-width: 480px) {
+         display: block;
+      }
 
       .event-badge {
          padding: 0.5rem 1rem;
@@ -274,7 +281,6 @@
    .p-timeline-event-separator {
       flex: 0;
       align-items: center;
-      justify-content: center;
    }
 }
 

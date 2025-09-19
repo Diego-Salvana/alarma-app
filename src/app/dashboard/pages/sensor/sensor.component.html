@@ -85,15 +85,17 @@
   
   @if (_sensor && _sensor.historial.length > 0) {
     <!-- Resumen Historial -->
-    <p-card styleClass="history-summary-card mb-4">
+    <p-card styleClass="history-summary-card mb-6">
       <ng-template #content>
         <div class="summary-content">
-          <div class="summary-icon">
-            <i class="pi pi-chart-line"></i>
-          </div>
-          <div class="summary-info">
-            <div class="summary-label">Total de Disparos</div>
-            <div class="summary-value">{{ _sensor?.historial?.length }}</div>
+          <div class="flex gap-4">
+            <div class="summary-icon">
+              <i class="pi pi-chart-line"></i>
+            </div>
+            <div class="summary-info">
+              <div class="summary-label">Total de Disparos</div>
+              <div class="summary-value">{{ _sensor?.historial?.length }}</div>
+            </div>
           </div>
           <div class="summary-badge">
             <span class="event-badge recent">Actividad Reciente</span>

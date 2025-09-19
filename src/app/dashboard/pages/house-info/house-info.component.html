@@ -113,12 +113,14 @@
     <p-card styleClass="house-stats-card mb-6">
       <ng-template #content>
         <div class="stats-card-content">
-          <div class="stats-icon">
-            <i class="pi pi-eye"></i>
-          </div>
-          <div class="stats-info">
-            <span class="stats-label">Sensores conectados</span>
-            <span class="stats-value">{{ _house?.sensores?.length || 0 }}</span>
+          <div class="flex gap-4">
+            <div class="stats-icon">
+              <i class="pi pi-eye"></i>
+            </div>
+            <div class="stats-info">
+              <span class="stats-label">Sensores conectados</span>
+              <span class="stats-value">{{ _house?.sensores?.length || 0 }}</span>
+            </div>
           </div>
           <div class="stats-badge">
             <span class="sensor-badge" [ngClass]="(_house?.sensores?.length || 0) > 0 ? 'active' : 'inactive'">
