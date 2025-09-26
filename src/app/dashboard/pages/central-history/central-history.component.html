@@ -1,3 +1,6 @@
+@let _loading = loading();
+@let _history = history();
+
 <!-- Header -->
 <div class="history-header flex items-center gap-3 mb-6">
   <div class="header-icon">
@@ -11,18 +14,29 @@
 
 <!-- Sección Línea de Tiempo -->
 <section class="timeline-container">
-  @if (history().length === 0) {
+  @if (_loading) {
+    <div class="text-center pt-8">
+      <div class="loading-container">
+        <i class="pi pi-spin pi-spinner text-2xl text-primary mb-3"></i>
+        <h3 class="text-muted-color">Cargando historial...</h3>
+      </div>
+    </div>
+  } 
+  @else if (_history.length === 0) {
     <!-- Estado Vacío -->
     <div class="empty-timeline">
       <div class="empty-timeline-content">
         <i class="pi pi-clock text-4xl text-muted-color mb-3"></i>
         <h5 class="text-muted-color mb-2">No hay eventos registrados</h5>
-        <p class="text-sm text-muted-color">Los disparos de alarma aparecerán aquí cuando ocurran</p>
+        <p class="text-sm text-muted-color">
+          Los disparos de alarma aparecerán aquí cuando ocurran
+        </p>
       </div>
     </div>
-  } @else {
+  } 
+  @else {
     <!-- Timeline -->
-    <p-timeline [value]="history()" styleClass="custom-timeline">
+    <p-timeline [value]="_history" styleClass="custom-timeline">
       <!-- Fecha y Hora Template -->
       <ng-template #opposite let-event>
         <div class="timeline-date">

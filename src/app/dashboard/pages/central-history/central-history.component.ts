@@ -15,15 +15,18 @@ import { ToastService } from '../../../shared/services';
 export class CentralHistoryComponent implements OnInit {
   private centralService = inject(CentralService);
   private toastService = inject(ToastService);
+  loading = signal(true);
   history = signal<HistorialConNombre[]>([]);
   
   ngOnInit () {
     this.centralService.getHistory().subscribe({
       next: historyResponse => {
         this.history.set(historyResponse);
+        this.loading.set(false);
       },
       error: e => {
         this.toastService.error(e.error.message);
+        this.loading.set(false);
       }
     });
   }
