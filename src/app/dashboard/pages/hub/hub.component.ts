@@ -3,15 +3,14 @@ import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy, signal
 import { ButtonModule } from 'primeng/button';
 import { SensorListComponent, ModalExclusionComponent, ExclusionFormValue } from '../../components';
 import { HouseService } from '../../services';
-import { Estado, HouseResponse, Sensor } from '../../../shared/interfaces';
+import { AlarmActivation, Estado, HouseResponse, Sensor, SocketError } from '../../../shared/interfaces';
 import { SocketService, ToastService } from '../../../shared/services';
-import { ConfirmDisarmComponent } from '../../components/modals/confirm-disarm/confirm-disarm.component';
+import { ConfirmDisarmComponent } from '../../components/modals';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subscription } from 'rxjs';
-import { AlarmActivation, SocketError } from '../../../shared/interfaces/websockets-models';
 import { cloneDeep } from 'lodash';
 
-/* Mover constantes */
+/* TODO: Mover constantes */
 const alarmOnEvent = 'alarmaEncendida';
 const userPrefix = 'user_';
 const currentUser = 'pedro.sala8@example.com';

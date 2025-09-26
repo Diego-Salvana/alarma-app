@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { NgClass, TitleCasePipe } from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BtnEditCardComponent, ModalHouseComponent } from '../../components';
@@ -10,7 +10,7 @@ import { ToastService } from '../../../shared/services';
 
 @Component({
   selector: 'app-house-info',
-  imports: [CardModule, ButtonModule, BtnEditCardComponent, ModalHouseComponent, NgClass, TitleCasePipe],
+  imports: [CardModule, ButtonModule, BtnEditCardComponent, ModalHouseComponent, TitleCasePipe],
   templateUrl: './house-info.component.html',
   styleUrl: './house-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

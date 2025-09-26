@@ -1,5 +1,5 @@
 import { DatePipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
 import { BtnEditCardComponent, ModalHouseComponent } from '../../components';
@@ -18,53 +18,54 @@ import { ToastService } from '../../../shared/services';
 export class SensorComponent implements OnInit {
   private sensorService = inject(SensorService);
   private toastService = inject(ToastService);
-  @Input() sensorNumber!: string;
+  loading = signal(true);
   sensor = signal<Sensor | null>(null);
-  noSensor = signal(false);
-  visible = false;
-  houseProp!: HouseProp;
-  submitedEnd = signal(true);
+  visible = signal(false);
+  houseProp: HouseProp = 'sensorName';
+  submitCompleted = signal(true);
+  sensorNumber = input<string>(''); // Toma el sensorNumber de la ruta
 
   ngOnInit () {
-    this.sensorService.getOne(this.sensorNumber).subscribe({
+    this.sensorService.getOne(this.sensorNumber()).subscribe({
       next: sensor => {
         this.sensor.set(sensor);
+        this.loading.set(false);
       },
       error: e => {
-        this.noSensor.set(true);
+        this.loading.set(false);
         this.toastService.error(e.error.message);
       }
     });
   }
 
   onSubmit (data: ModalDataTransfer) {
-    this.submitedEnd.set(false);
+    this.submitCompleted.set(false);
 
     if (!data.sensorName) {
       this.toastService.error('El nombre del sensor no es válido');
+      this.submitCompleted.set(true);
       return;
     }
       
-    this.sensorService.modifyName(Number(this.sensorNumber), data.sensorName).subscribe({
+    this.sensorService.modifyName(Number(this.sensorNumber()), data.sensorName).subscribe({
       next: sensor => {
         this.sensor.set(sensor);
-        this.submitedEnd.set(true);
-        this.visible = false;
+        this.submitCompleted.set(true);
+        this.visible.set(false);
       },
       error: e => {
         this.toastService.error(e.error.message);
-        this.submitedEnd.set(true);
-        this.visible = false;
+        this.submitCompleted.set(true);
+        this.visible.set(false);
       }
     });
   }
   
   showDialog () {
-    this.visible = true;
-    this.houseProp = 'sensorName';
+    this.visible.set(true);
   }
   
   closeDialog () {
-    this.visible = false;
+    this.visible.set(false);
   }
 }

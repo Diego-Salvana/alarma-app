@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { MessageService } from 'primeng/api';
 import { HouseCardComponent } from '../../components';
 import { HouseService } from '../../services';
 import { HouseResponse } from '../../../shared/interfaces';
+import { ToastService } from '../../../shared/services';
 
 @Component({
   selector: 'app-home',
@@ -13,21 +13,19 @@ import { HouseResponse } from '../../../shared/interfaces';
 })
 export class HomeComponent implements OnInit {
   private houseService = inject(HouseService);
-  private messageService = inject(MessageService);
+  private toastService = inject(ToastService);
+  loading = signal(true);
   sites = signal<HouseResponse[]>([]);
-  noHouse = false;
 
   ngOnInit () {
     this.houseService.getAll().subscribe({
       next: houses => {
+        this.loading.set(false);
         this.sites.set(houses);
-
-        if (this.sites().length < 1) this.noHouse = true;
       },
       error: (e) => {
-        this.sites.set([]);
-        this.noHouse = true;
-        this.messageService.add({ severity: 'contrast', summary: 'Error', detail: e.error.message });
+        this.loading.set(false);
+        this.toastService.error(e.error.message);
       }
     });
   }

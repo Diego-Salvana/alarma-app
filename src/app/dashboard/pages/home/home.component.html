@@ -1,14 +1,15 @@
+@let _loading = loading();
 @let _sites = sites();
 
 <section>
   <h4 class="mb-4 text-muted-color tracking-wide">SITIOS</h4>
 
-  @if (_sites.length < 1 && !noHouse) {
+  @if (_loading) {
     <div class="text-center pt-8">
       <h3>Cargando casas...</h3>
     </div>
   } 
-  @else if (_sites.length < 1 && noHouse) {
+  @else if (_sites.length < 1) {
     <div class="text-center pt-8">
       <h3>No se encontraron casas.</h3>
     </div>
