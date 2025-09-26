@@ -1,41 +1,13 @@
 @use '../../dashboard.component.scss';
 @use '../../../../scss/variables.scss';
 
-.list-card {
-   @extend %list-card-extend;
-}
-
 // Header Perfil 
 .profile-header {
    .profile-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--p-primary-500), var(--p-primary-600));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      @include dashboard.house-avatar-base(var(--p-primary-500),
+         var(--p-primary-600),
+         rgb(50, 50, 50));
    }
-}
-
-// Títulos de Sección
-.section-title {
-   color: var(--p-text-muted-color);
-   font-weight: 600;
-   font-size: 0.875rem;
-   letter-spacing: 0.05em;
-   margin-bottom: 1rem;
-   text-transform: uppercase;
-}
-
-// Cards Información Perfil
-.profile-section {
-   display: flex;
-   flex-direction: column;
-   gap: 0;
-   margin-bottom: 2rem;
 }
 
 .info-card-content {
@@ -83,7 +55,7 @@
    }
 }
 
-// Cards Acciones
+// Tarjetas con Acciones
 .action-card-content {
    display: flex;
    align-items: center;
@@ -124,11 +96,6 @@
    .action-button {
       margin-left: auto;
    }
-}
-
-// Sección Sitios
-.sites-section {
-   margin-bottom: 2rem;
 }
 
 .sites-grid {
@@ -198,7 +165,7 @@
    }
 }
 
-// Empty State
+// Estado Vacío
 :host::ng-deep .empty-state-card {
    .p-card {
       border: 2px dashed var(--p-content-border-color);
@@ -219,7 +186,7 @@
    }
 }
 
-// Logout Section
+// Sección de Cerrar Sesión
 .logout-section {
    margin-top: 2rem;
    margin-bottom: 1rem;
@@ -247,6 +214,11 @@
       justify-content: center;
       color: var(--p-red-700);
       font-size: 1rem;
+
+      :host-context(.my-app-dark) & {
+         background-color: var(--p-red-900);
+         color: var(--p-red-300);
+      }
    }
 
    .logout-details {
@@ -272,28 +244,8 @@
    }
 }
 
-// Estados de Loading y Error
-.loading-container,
-.error-container {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   padding: 2rem;
-
-   h3 {
-      margin: 0;
-      font-weight: 500;
-   }
-}
-
-// Responsive Design
+// Diseño Responsivo
 @media (min-width: 768px) {
-   .profile-header {
-      .profile-avatar {
-         width: 60px;
-         height: 60px;
-      }
-   }
 
    .info-card-content,
    .action-card-content {
@@ -325,21 +277,5 @@
          height: 40px;
          font-size: 1.125rem;
       }
-   }
-}
-
-// Ajustes Dark Mode
-:host-context(.my-app-dark) {
-   .profile-avatar {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-   }
-
-   .site-icon {
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-   }
-
-   .logout-icon {
-      background-color: var(--p-red-900);
-      color: var(--p-red-300);
    }
 }

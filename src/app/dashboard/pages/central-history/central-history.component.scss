@@ -4,19 +4,10 @@
 // Header Historial
 .history-header {
    .header-icon {
-      width: 45px;
-      height: 45px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--p-orange-500), var(--p-orange-600));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
-
-      :host-context(.my-app-dark) & {
-         box-shadow: 0 4px 12px rgba(251, 146, 60, 0.5);
-      }
+      @include dashboard.house-avatar-base($color_1: var(--p-orange-500),
+         $color_2: var(--p-orange-600),
+         $shadow_color: rgba(251, 146, 60),
+         $isSquare: true);
    }
 }
 
@@ -82,12 +73,12 @@
       border-radius: 1px;
 
       :host-context(.my-app-dark) & {
-        background: var(--p-orange-600);
+         background: var(--p-orange-600);
       }
    }
 }
 
-// Timeline Fecha
+// Timeline Fecha y Hora
 .timeline-date {
    display: flex;
    justify-content: flex-end;
@@ -149,8 +140,6 @@
             color: var(--p-timeline-event-connector-color);
          }
       }
-
-      
    }
 }
 
@@ -271,91 +260,10 @@
    }
 }
 
-// Resumen Historial
-.history-summary {
-   .summary-card {
-      background: linear-gradient(135deg, var(--p-emerald-50), var(--p-emerald-100));
-      border: 1px solid var(--p-emerald-200);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-
-      :host-context(.my-app-dark) & {
-         background: linear-gradient(135deg, var(--p-emerald-900), var(--p-emerald-800));
-         border-color: var(--p-emerald-700);
-      }
-
-      .summary-content {
-         display: flex;
-         align-items: center;
-         gap: 1rem;
-
-         .summary-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--p-emerald-500), var(--p-emerald-600));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
-         }
-
-         .summary-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-
-            .summary-label {
-               font-size: 0.85rem;
-               font-weight: 500;
-               color: var(--p-text-muted-color);
-               text-transform: uppercase;
-               letter-spacing: 0.5px;
-            }
-
-            .summary-value {
-               font-size: 1.5rem;
-               font-weight: 700;
-               color: var(--p-emerald-700);
-            }
-         }
-      }
-   }
-}
-
-// Animación
-@keyframes pulse {
-   0% {
-      transform: scale(1);
-      opacity: 0.1;
-   }
-
-   50% {
-      transform: scale(1.1);
-      opacity: 0.05;
-   }
-
-   100% {
-      transform: scale(1);
-      opacity: 0.1;
-   }
-}
-
 // Diseño Responsivo
 @media (min-width: 768px) {
 
-   // Header ajustes
-   .history-header {
-      .header-icon {
-         width: 50px;
-         height: 50px;
-      }
-   }
-
-   // Timeline date ajustes
+   // Ajustes de Fecha y Hora
    .timeline-date {
       .date-display {
          padding: 0.75rem 1rem;
@@ -370,7 +278,7 @@
       }
    }
 
-   // Timeline event ajustes
+   // Ajustes de Evento
    .timeline-event {
       .event-card {
          padding: 1rem;
@@ -400,17 +308,6 @@
             .event-time {
                font-size: 0.8rem;
             }
-         }
-      }
-   }
-
-   // Resumen historial ajustes
-   .history-summary {
-      .summary-content {
-         .summary-icon {
-            width: 50px;
-            height: 50px;
-            font-size: 1.3rem;
          }
       }
    }

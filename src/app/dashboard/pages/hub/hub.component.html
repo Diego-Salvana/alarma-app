@@ -20,51 +20,86 @@
   </div>
 }
 @else {
-  <!-- House Header -->
-  <div class="house-header mb-6">
-    <div class="flex items-center gap-4 mb-4">
-      <div class="house-avatar">
-        <i class="pi pi-shield text-3xl"></i>
-      </div>
-      <div>
-        <h2 class="text-xl font-bold mb-1">{{ _house?.nombre }}</h2>
-        <p class="text-muted-color text-sm">{{ _house?.direccion?.calle | titlecase }} {{ _house?.direccion?.numero }}, {{ _house?.direccion?.ciudad | titlecase }}</p>
-      </div>
+  <!-- Header Casa -->
+  <div class="house-header flex items-center gap-4 mb-6">
+    <div class="house-avatar" [ngClass]="{ 'armed': _isActive }">
+      <i class="pi pi-shield text-3xl"></i>
+    </div>
+    <div class="header-info">
+      <h2 class="header-title">{{ _house?.nombre }}</h2>
+      <p class="header-subtitle">
+        {{ _house?.direccion?.calle | titlecase }} {{ _house?.direccion?.numero }}, 
+        {{ _house?.direccion?.ciudad | titlecase }}
+      </p>
     </div>
   </div>
 
-  <!-- Estado Section -->
-  <h4 class="section-title">ESTADO</h4>
-  
-  <section class="alarm-section mb-8">
+  <!-- Sección Estado -->
+  <section class="mb-8">
+    <h4 class="section-title">ESTADO</h4>
     <div class="flex flex-col justify-center items-center mb-8">
-      <i class="lock-item mb-4" [ngClass]="_isActive ? 'pi pi-lock red-text' : 'pi pi-lock-open green-text'"></i>
+      <i 
+        class="lock-item mb-4" 
+        [ngClass]="_isActive ? 'pi pi-lock red-text' : 'pi pi-lock-open green-text'"></i>
       <h5 class="text-lg font-semibold">Estado de alarma</h5>
       <p class="font-semibold" [ngClass]="_isActive ? 'red-text' : 'green-text'">
-        {{ _isActive ? 'ACTIVADA' : 'DESACTIVADA' }}</p>
+        {{ _isActive ? 'ACTIVADA' : 'DESACTIVADA' }}
+      </p>
     </div>
   
     <div class="grid grid-cols-3 gap-4 px-4 max-w-md m-auto">
-      <p-button id="disarm-btn" label="Desactivar" severity="success" variant="outlined" raised="true" 
-        icon="pi pi-lock-open" iconPos="top" styleClass="w-full green-text green-border" class="action-btn" 
+      <p-button 
+        id="disarm-btn" 
+        label="Desactivar" 
+        severity="success" 
+        variant="outlined" 
+        raised="true" 
+        icon="pi pi-lock-open" 
+        iconPos="top" 
+        styleClass="w-full green-text green-border" 
+        class="action-btn" 
         (onClick)="showDisarmConfirmation()" />
-      <p-button id="panic-btn" label="Pánico" severity="warn" variant="outlined" raised="true" icon="pi pi-volume-down"
-        iconPos="top" styleClass="w-full orange-text orange-border" class="action-btn" />
-      <p-button id="arm-btn" label="Activar" severity="danger" variant="outlined" raised="true" icon="pi pi-lock"
-        iconPos="top" styleClass="w-full red-text red-border" class="action-btn" (onClick)="showDialog()" />
+      <p-button 
+        id="panic-btn" 
+        label="Pánico" 
+        severity="warn" 
+        variant="outlined" 
+        raised="true" 
+        icon="pi pi-volume-down"
+        iconPos="top" 
+        styleClass="w-full orange-text orange-border" 
+        class="action-btn" />
+      <p-button 
+        id="arm-btn" 
+        label="Activar" 
+        severity="danger" 
+        variant="outlined" 
+        raised="true" 
+        icon="pi pi-lock"
+        iconPos="top" 
+        styleClass="w-full red-text red-border" 
+        class="action-btn" 
+        (onClick)="showDialog()" />
     </div>
   </section>
   
-  <!-- Sensors Section -->
-  <h4 class="section-title">SENSORES</h4>
-  
+  <!-- Sección Sensores -->
   <section class="sensors-section">
+    <h4 class="section-title">SENSORES</h4>
     <app-sensor-list [sensors]="_sensors" [isAlarmOn]="_isActive" />
   </section>
 }
 
-<app-modal-exclusion [visible]="visible" [sensors]="_sensors" [submitEnd]="submitEnd()" 
-  (visibleChange)="closeDialog()" (onActive)="activeAlarm($event)" />
+<!-- Modal de activación -->
+<app-modal-exclusion 
+[visible]="visible" 
+[sensors]="_sensors" 
+[submitEnd]="submitEnd()" 
+(visibleChange)="closeDialog()" 
+(onActive)="activeAlarm($event)" />
 
-<app-confirm-disarm [visible]="showConfirmDisarm()" [submitEnd]="disarmEnd()" 
+<!-- Modal de desactivación -->
+<app-confirm-disarm 
+  [visible]="showConfirmDisarm()" 
+  [submitEnd]="disarmEnd()" 
   (onCloseDialog)="closeDisarmConfirmation($event)" />

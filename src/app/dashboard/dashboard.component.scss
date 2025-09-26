@@ -1,6 +1,7 @@
 @use '../../scss/variables';
 @use 'sass:map';
 
+/* Extends */
 %list-card-extend {
    display: flex;
    flex-direction: column;
@@ -10,10 +11,8 @@
 
 %nav-border-color {
    border-color: var(--p-zinc-300);
-}
 
-::ng-deep html.my-app-dark {
-   %nav-border-color {
+   :host-context(.my-app-dark) {
       border-color: var(--p-content-border-color);
    }
 }
@@ -39,6 +38,101 @@
    transform: translateX(0);
 }
 
-:host ::ng-deep .p-dialog-header {
+/* Mixins */
+// Estilos configurables para el avatar de la cabecera de cada página.
+@mixin house-avatar-base ($color_1, $color_2, $shadow_color, $isSquare: false) {
+   background: linear-gradient(135deg, $color_1, $color_2);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   color: white;
+   box-shadow: 0 4px 12px rgba($shadow_color, 0.3);
+
+   :host-context(.my-app-dark) & {
+      box-shadow: 0 4px 12px rgba($shadow_color, 0.5);
+   }
+
+   @if $isSquare {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+
+      @media (min-width: 768px) {
+         width: 50px;
+         height: 50px;
+      }
+   }
+
+   @else {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+
+      @media (min-width: 768px) {
+         width: 60px;
+         height: 60px;
+      }
+   }
+}
+
+/* Clases */
+:host::ng-deep .p-dialog-header {
    min-height: 5rem;
+}
+
+// Estados Loading y Error
+.loading-container,
+.error-container {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 3rem 2rem;
+   text-align: center;
+
+   h3 {
+      margin: 1rem 0 0.5rem 0;
+      font-weight: 600;
+   }
+
+   p {
+      margin: 0;
+      color: var(--p-text-muted-color);
+      font-size: 0.9rem;
+   }
+}
+
+// Título y subtítulo de Header
+.header-info {
+   flex: 1;
+
+   .header-title {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.3rem;
+      font-weight: 700;
+   }
+
+   .header-subtitle {
+      margin: 0;
+      color: var(--p-text-muted-color);
+      // font-size: 0.95rem;
+      font-size: 0.9rem;
+   }
+}
+
+// Contenedor de Sección
+.section-container {
+   display: flex;
+   flex-direction: column;
+   gap: 0;
+   margin-bottom: 2rem;
+}
+
+// Títulos de Sección
+.section-title {
+   color: var(--p-text-muted-color);
+   font-weight: 600;
+   font-size: 0.875rem;
+   letter-spacing: 0.05em;
+   margin-bottom: 1rem;
+   text-transform: uppercase;
 }

@@ -1,62 +1,16 @@
 @use '../../dashboard.component.scss';
 @use '../../../../scss/variables.scss';
 
-@function with-opacity($color, $alpha) {
-   @return rgba(red($color), green($color), blue($color), $alpha);
-}
-
-// Loading y Error
-.loading-container,
-.error-container {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   padding: 2rem;
-
-   h3 {
-      margin: 0;
-      font-weight: 500;
-   }
-}
-
 // Header Casa
 .house-header {
    .house-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--p-emerald-500), var(--p-emerald-600));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-
-      :host-context(.my-app-dark) & {
-         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.5);
-      }
+      @include dashboard.house-avatar-base(var(--p-emerald-500),
+         var(--p-emerald-600),
+         rgb(16, 185, 129));
    }
 }
 
-// Títulos de Sección
-.section-title {
-   color: var(--p-text-muted-color);
-   font-weight: 600;
-   font-size: 0.875rem;
-   letter-spacing: 0.05em;
-   margin-bottom: 1rem;
-   text-transform: uppercase;
-}
-
-// Sección Información de la Casa
-.house-section {
-   display: flex;
-   flex-direction: column;
-   gap: 0;
-   margin-bottom: 2rem;
-}
-
-// Cards Información de la Casa
+// Tarjetas de Información
 .info-card-content {
    display: flex;
    align-items: center;
@@ -105,7 +59,7 @@
    }
 }
 
-// Action Cards (Nombre Casa)
+// Tarjetas de Acción
 .action-card-content {
    display: flex;
    align-items: center;
@@ -150,7 +104,7 @@
    }
 }
 
-// Stats Cards (Sensores)
+// Tarjetas de Estadísticas (Sensores)
 .stats-card-content {
    display: flex;
    justify-content: space-between;
@@ -168,11 +122,7 @@
       justify-content: center;
       color: white;
       font-size: 1.2rem;
-
       // box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
-      :host-context(.my-app-dark) & {
-         // box-shadow: 0 3px 10px rgba(59, 130, 246, 0.5);
-      }
    }
 
    .stats-info {
@@ -214,29 +164,14 @@
          align-items: center;
          text-transform: uppercase;
          letter-spacing: 0.5px;
+         background: linear-gradient(135deg, var(--p-blue-100), var(--p-blue-50));
+         color: var(--p-blue-700);
+         border: 1px solid var(--p-blue-200);
 
-         &.active {
-            background: linear-gradient(135deg, var(--p-emerald-50), var(--p-emerald-100));
-            color: var(--p-emerald-700);
-            border: 1px solid var(--p-emerald-200);
-
-            :host-context(.my-app-dark) & {
-               background: linear-gradient(135deg, var(--p-emerald-900), var(--p-emerald-800));
-               color: var(--p-emerald-300);
-               border-color: var(--p-emerald-700);
-            }
-         }
-
-         &.inactive {
-            background: linear-gradient(135deg, var(--p-gray-50), var(--p-gray-100));
-            color: var(--p-gray-700);
-            border: 1px solid var(--p-gray-200);
-
-            :host-context(.my-app-dark) & {
-               background: linear-gradient(135deg, var(--p-gray-800), var(--p-gray-700));
-               color: var(--p-gray-300);
-               border-color: var(--p-gray-600);
-            }
+         :host-context(.my-app-dark) & {
+            background: linear-gradient(135deg, var(--p-blue-900), var(--p-blue-800));
+            color: var(--p-blue-100);
+            border-color: var(--p-blue-700);
          }
       }
    }
@@ -244,12 +179,6 @@
 
 // Responsive Design
 @media (min-width: 768px) {
-   .house-header {
-      .house-avatar {
-         width: 60px;
-         height: 60px;
-      }
-   }
 
    .info-card-content,
    .action-card-content {

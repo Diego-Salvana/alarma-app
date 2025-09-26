@@ -19,21 +19,22 @@
 }
 @else {
   <!-- Header Casa -->
-  <div class="house-header mb-6">
-    <div class="flex items-center gap-4 mb-4">
+  <div class="house-header flex items-center gap-4 mb-6">
       <div class="house-avatar">
         <i class="pi pi-home text-3xl"></i>
       </div>
-      <div>
-        <h2 class="text-xl font-bold mb-1">{{ _house?.nombre }}</h2>
-        <p class="text-muted-color text-sm">{{ _house?.direccion?.calle }} {{ _house?.direccion?.numero }}, {{ _house?.direccion?.ciudad | titlecase }}</p>
+      <div class="header-info">
+        <h2 class="header-title">{{ _house?.nombre }}</h2>
+        <p class="header-subtitle">
+          {{ _house?.direccion?.calle }} {{ _house?.direccion?.numero }}, 
+          {{ _house?.direccion?.ciudad | titlecase }}
+        </p>
       </div>
-    </div>
   </div>
 
-  <h4 class="section-title">INFORMACIÓN DE LA CASA</h4>
-
-  <section class="house-section">
+  
+  <section class="section-container">
+    <h4 class="section-title">INFORMACIÓN DE LA CASA</h4>
     <!-- Card de Acción de Nombre de la Casa -->
     <p-card styleClass="house-action-card mb-4">
       <ng-template #content>
@@ -57,7 +58,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Cards de Dirección -->
+    <!-- Tarjetas de Dirección -->
     <p-card styleClass="house-info-card mb-4">
       <ng-template #content>
         <div class="info-card-content">
@@ -109,7 +110,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Card Info Sensores -->
+    <!-- Tarjeta Estadística Sensores -->
     <p-card styleClass="house-stats-card mb-6">
       <ng-template #content>
         <div class="stats-card-content">
@@ -118,14 +119,14 @@
               <i class="pi pi-eye"></i>
             </div>
             <div class="stats-info">
-              <span class="stats-label">Sensores conectados</span>
+              <span class="stats-label">Sensores Instalados</span>
               <span class="stats-value">{{ _house?.sensores?.length || 0 }}</span>
             </div>
           </div>
           <div class="stats-badge">
-            <span class="sensor-badge" [ngClass]="(_house?.sensores?.length || 0) > 0 ? 'active' : 'inactive'">
+            <span class="sensor-badge active">
               <i class="pi pi-circle-fill text-xs mr-1"></i>
-              {{ (_house?.sensores?.length || 0) > 0 ? 'Activos' : 'Sin sensores' }}
+              <span>Disponibles</span>
             </span>
           </div>
         </div>
@@ -134,9 +135,13 @@
   </section>
 }
 
-
-
+<!-- Modal de Edición -->
 @if (this.houseProp) {
-  <app-modal-house [visible]="visible" [houseProp]="houseProp" [propValue]="propValue" [submitEnd]="submitEnd()"
-    (visibleChange)="closeDialog()" (changeValue)="onSubmit($event)" />
+  <app-modal-house 
+    [visible]="visible" 
+    [houseProp]="houseProp" 
+    [propValue]="propValue" 
+    [submitEnd]="submitEnd()"
+    (visibleChange)="closeDialog()" 
+    (changeValue)="onSubmit($event)" />
 }

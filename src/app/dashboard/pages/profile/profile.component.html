@@ -18,24 +18,21 @@
   </div>
 }
 @else {
-  <!-- Perfil Header -->
-  <div class="profile-header mb-6">
-    <div class="flex items-center gap-4 mb-4">
-      <div class="profile-avatar">
-        <i class="pi pi-user text-3xl"></i>
-      </div>
-      <div>
-        <h2 class="text-xl font-bold mb-1">{{ _user?.nombre }} {{ _user?.apellido }}</h2>
-        <p class="text-muted-color text-sm">{{ _user?.email }}</p>
-      </div>
+  <!-- Header Perfil -->
+  <div class="profile-header flex items-center gap-4 mb-6">
+    <div class="profile-avatar">
+      <i class="pi pi-user text-3xl"></i>
+    </div>
+    <div class="header-info">
+      <h2 class="header-title">{{ _user?.nombre }} {{ _user?.apellido }}</h2>
+      <p class="header-subtitle">{{ _user?.email }}</p>
     </div>
   </div>
 
-  <h4 class="section-title">INFORMACIÓN PERSONAL</h4>
-
   <!-- Información Personal -->
-  <section class="profile-section">
-    <!-- Email Card -->
+  <section class="section-container">
+    <h4 class="section-title">INFORMACIÓN PERSONAL</h4>
+    <!-- Tarjeta Email -->
     <p-card styleClass="profile-info-card mb-4">
       <ng-template #content>
         <div class="info-card-content">
@@ -50,7 +47,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Nombre Card -->
+    <!-- Tarjeta Nombre -->
     <p-card styleClass="profile-info-card mb-4">
       <ng-template #content>
         <div class="info-card-content">
@@ -68,7 +65,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Apellido Card -->
+    <!-- Tarjeta Apellido -->
     <p-card styleClass="profile-info-card mb-4">
       <ng-template #content>
         <div class="info-card-content">
@@ -86,7 +83,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Teléfono Card -->
+    <!-- Tarjeta Teléfono -->
     <p-card styleClass="profile-info-card mb-4">
       <ng-template #content>
         <div class="info-card-content">
@@ -104,7 +101,7 @@
       </ng-template>
     </p-card>
 
-    <!-- Contraseña Card -->
+    <!-- Tarjeta Contraseña -->
     <p-card styleClass="profile-action-card mb-6">
       <ng-template #content>
         <div class="action-card-content">
@@ -128,11 +125,11 @@
     </p-card>
   </section>
 
-  <h4 class="section-title">MIS SITIOS</h4>
-
   <!-- Sección de Sitios -->
-  <section class="sites-section">
+  <section class="mb-8">
+    <h4 class="section-title">MIS SITIOS</h4>
     @if (_user && _user.casas.length > 0) {
+      <!-- Lista de Sitios -->
       <div class="sites-grid">
         @for (house of _user.casas; track $index) {
           <p-card 
@@ -145,9 +142,9 @@
                 </div>
                 <div class="site-info">
                   <h5 class="site-name">{{ house.nombre }}</h5>
-                  <p class="site-status green-text">
-                    <i class="pi pi-circle-fill text-xs mr-1"></i>
-                    Activo
+                  <p class="site-status">
+                    <!-- <i class="pi pi-circle-fill text-xs mr-1"></i> -->
+                    <span class="text-muted-color">Info</span>
                   </p>
                 </div>
                 <div class="site-arrow">
@@ -159,6 +156,7 @@
         }
       </div>
     } @else {
+      <!-- Estado Vacío -->
       <p-card styleClass="empty-state-card">
         <ng-template #content>
           <div class="empty-state">
@@ -171,7 +169,7 @@
     }
   </section>
 
-  <!-- Sección de Cerrar Sesión -->
+  <!-- Sección Cerrar Sesión -->
   <section class="logout-section xl:hidden">
     <p-card styleClass="logout-card">
       <ng-template #content>
@@ -198,9 +196,11 @@
   </section>
 }
 
+<!-- Modal para Cerrar Sesión -->
 <app-modal-logout [showModal]="showModalLogout()" (closeModal)="cancelLogout()" />
 
 @if (this.profileProp) {
+  <!-- Modal de Perfil -->
   <app-modal-profile 
     [visible]="visibleProfileModal" 
     [profileProp]="profileProp" 
@@ -209,9 +209,10 @@
     (visibleChange)="closeDialog()" 
     (changeValue)="onSubmit($event)" />
     
-    <app-modal-password 
-      [visible]="visiblePassModal"
-      [submitEnd]="submitEnd()"
-      (visibleChange)="closeDialog()"
-      (changeValue)="onChangePassword($event)" />
+  <!-- Modal para Cambiar Contraseña -->
+  <app-modal-password 
+    [visible]="visiblePassModal"
+    [submitEnd]="submitEnd()"
+    (visibleChange)="closeDialog()"
+    (changeValue)="onChangePassword($event)" />
 }

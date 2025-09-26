@@ -1,21 +1,23 @@
 @let _sites = sites();
 
-<h4 class="mb-4 text-muted-color tracking-wide">SITIOS</h4>
+<section>
+  <h4 class="mb-4 text-muted-color tracking-wide">SITIOS</h4>
 
-@if (_sites.length < 1 && !noHouse) {
-  <div class="text-center pt-8">
-    <h3>Cargando casas...</h3>
-  </div>
-}
-@else if (_sites.length < 1 && noHouse) {
-  <div class="text-center pt-8">
-    <h3>No se encontraron casas.</h3>
-  </div>
-}
-@else {
-  <section class="flex flex-col gap-3">
-    @for (site of _sites; track $index) {
-      <app-house-card [house]="site" />
-    }
-  </section>
-}
+  @if (_sites.length < 1 && !noHouse) {
+    <div class="text-center pt-8">
+      <h3>Cargando casas...</h3>
+    </div>
+  } 
+  @else if (_sites.length < 1 && noHouse) {
+    <div class="text-center pt-8">
+      <h3>No se encontraron casas.</h3>
+    </div>
+  }
+  @else {
+    <div class="flex flex-col gap-3">
+      @for (site of _sites; track $index) {
+        <app-house-card [house]="site" />
+      }
+    </div>
+  }
+</section>

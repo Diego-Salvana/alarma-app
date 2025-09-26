@@ -1,4 +1,4 @@
-:host ::ng-deep .p-card {
+:host::ng-deep .p-card {
    overflow: hidden;
 
    .p-card-body {
@@ -6,8 +6,137 @@
    }
 }
 
-.row {
+// Tabla PrimeNG
+:host::ng-deep .p-table {
+   width: 100%;
+
+   .p-datatable-tbody>tr>td {
+      border-bottom: 1px solid var(--p-content-border-color);
+   }
+
+   :host-context(.my-app-dark) & .p-datatable-tbody>tr>td {
+      border-bottom-color: var(--p-surface-600);
+   }
+}
+
+// Fila de sensor (clickable)
+.sensor-row {
+   cursor: pointer;
+   transition: background-color 0.15s ease, transform 0.05s ease;
+
+   &:hover {
+      background: var(--p-surface-50);
+   }
+
+   &:active {
+      transform: scale(0.999);
+   }
+
+   :host-context(.my-app-dark) & {
+      &:hover {
+         background: var(--p-surface-700);
+      }
+   }
+
+   // Quitar border para la última fila
    &:last-child td {
-      border: 0;
+      border-bottom: 0;
+   }
+}
+
+.cell-left {
+   display: flex;
+   align-items: center;
+   gap: 0.5rem;
+}
+
+.sensor-icon {
+   width: 28px;
+   height: 28px;
+   border-radius: 8px;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   background: linear-gradient(135deg, var(--p-surface-50), var(--p-surface-100));
+
+   i {
+      font-size: 0.75rem;
+      line-height: 1;
+   }
+
+   :host-context(.my-app-dark) & {
+      background: linear-gradient(135deg, var(--p-surface-900), var(--p-surface-800));
+   }
+}
+
+.sensor-name {
+   font-weight: 600;
+   color: var(--p-text-color);
+}
+
+.cell-status {
+   text-align: right;
+
+   @media (min-width: 768px) {
+      text-align: left;
+   }
+}
+
+.status-pill {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   height: 24px;
+   padding: 0 0.5rem;
+   border-radius: 9999px;
+   font-size: 0.75rem;
+   font-weight: 700;
+   border: 1px solid transparent;
+
+   &.on {
+      background: linear-gradient(135deg, var(--p-red-100), var(--p-red-50));
+      color: var(--p-red-700);
+      border-color: var(--p-red-200);
+
+      :host-context(.my-app-dark) & {
+         background: linear-gradient(135deg, var(--p-red-900), var(--p-red-800));
+         color: var(--p-red-100);
+         border-color: var(--p-red-700);
+      }
+   }
+
+   &.off {
+      background: var(--p-surface-100);
+      color: var(--p-text-muted-color);
+      border-color: var(--p-content-border-color);
+
+      :host-context(.my-app-dark) & {
+         background: var(--p-surface-700);
+         color: var(--p-text-color);
+         border-color: var(--p-surface-600);
+      }
+   }
+
+   &.neutral {
+      background: linear-gradient(135deg, var(--p-blue-100), var(--p-blue-50));
+      color: var(--p-blue-700);
+      border-color: var(--p-blue-200);
+
+      :host-context(.my-app-dark) & {
+         background: linear-gradient(135deg, var(--p-blue-900), var(--p-blue-800));
+         color: var(--p-blue-100);
+         border-color: var(--p-blue-700);
+      }
+   }
+}
+
+.cell-chevron {
+   width: 1%;
+   white-space: nowrap;
+   text-align: right;
+   color: var(--p-text-muted-color);
+
+   i {
+      font-size: 0.9rem;
    }
 }

@@ -1,21 +1,33 @@
 <p-card>
   <p-table [value]="sensors()" selectionMode="single">
     <ng-template #body let-sensor>
-      <tr [pSelectableRow]="sensor" class="row" routerLink="./sensor/{{ sensor.numeroSensor }}">
-        <td>
-          <i class="pi pi-hashtag !text-xs mr-1"></i>
-          <span>{{ sensor.nombre }}</span>
+      <tr
+        [pSelectableRow]="sensor"
+        class="sensor-row"
+        routerLink="./sensor/{{ sensor.numeroSensor }}">
+        <td class="cell-left">
+          <span class="sensor-icon" aria-hidden="true">
+            <i class="pi pi-hashtag"></i>
+          </span>
+          <span class="sensor-name">{{ sensor.nombre }}</span>
         </td>
         @if (isAlarmOn()) {
-          <td class="!text-right md:!text-left !font-semibold !text-muted-color-emphasis">
-            <i>{{ sensor.estado === 'On' ? 'Activo' : 'Inactivo' }}</i>
-          </td>
-        } 
-        @else {
-          <td class="!text-right md:!text-left !font-semibold !text-muted-color-emphasis">
-            <span>🟢</span>
+          <td class="cell-status">
+            <span
+              class="status-pill"
+              [ngClass]="{ 'on': sensor.estado === 'On', 'off': sensor.estado !== 'On' }">
+              {{ sensor.estado === 'On' ? 'Activo' : 'Inactivo' }}
+            </span>
           </td>
         }
+        @else {
+          <td class="cell-status">
+            <span class="status-pill neutral">Disponible</span>
+          </td>
+        }
+        <td class="cell-chevron" aria-hidden="true">
+          <i class="pi pi-chevron-right"></i>
+        </td>
       </tr>
     </ng-template>
   </p-table>

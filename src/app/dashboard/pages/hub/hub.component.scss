@@ -1,52 +1,37 @@
 @use '../../dashboard.component.scss';
 @use '../../../../scss/variables.scss';
 
-// House Header Styles (following house-info pattern)
+// Header
 .house-header {
    .house-avatar {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--p-red-500), var(--p-red-600));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+      @include dashboard.house-avatar-base(var(--p-emerald-500),
+         var(--p-emerald-600),
+         rgb(16, 185, 129));
+
+      &.armed {
+         background: linear-gradient(135deg, var(--p-red-500), var(--p-red-600));
+         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+
+         :host-context(.my-app-dark) & {
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+         }
+      }
+
+      @media (max-width: 768px) {
+         i {
+            font-size: 1.8rem;
+         }
+      }
    }
 }
 
-// Section Titles
-.section-title {
-   color: var(--p-text-muted-color);
-   font-weight: 600;
-   font-size: 0.875rem;
-   letter-spacing: 0.05em;
-   margin-bottom: 1rem;
-   text-transform: uppercase;
-}
-
-// Loading and Error States
-.loading-container,
-.error-container {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   padding: 2rem;
-
-   h3 {
-      margin: 0;
-      font-weight: 500;
-   }
-}
-
-// Original lock icon styling
+// Tamaño de candado
 .lock-item {
    font-size: 5rem;
 }
 
-// Original action button styling
-.action-btn ::ng-deep {
+// Estilos para botones de acción
+.action-btn::ng-deep {
    .p-button {
       height: 100%;
       justify-content: space-between;
@@ -62,121 +47,15 @@
    }
 }
 
-#panic-btn ::ng-deep .p-button-icon {
+// Ajuste particular para el botón de pánico
+#panic-btn::ng-deep .p-button-icon {
    font-size: 1.4rem;
    flex-grow: 1;
    display: flex;
    align-items: center;
 }
 
-// Sensors Section
+// Sección de Sensores
 .sensors-section {
    margin-bottom: 2rem;
-}
-
-// Responsive Design
-@media (max-width: 768px) {
-   .house-header {
-      .house-avatar {
-         width: 50px;
-         height: 50px;
-      }
-   }
-
-   .status-content {
-      flex-direction: column;
-      text-align: center;
-      gap: 1rem;
-
-      .status-icon {
-         width: 70px;
-         height: 70px;
-
-         i {
-            font-size: 2rem;
-         }
-      }
-   }
-
-   .action-buttons-grid {
-      grid-template-columns: 1fr;
-      max-width: 300px;
-      gap: 0.75rem;
-   }
-
-   .action-button-card {
-      padding: 0.25rem;
-   }
-
-   :host ::ng-deep {
-      .action-button-success,
-      .action-button-warning,
-      .action-button-danger {
-         .p-button {
-            height: 80px;
-         }
-
-         .p-button-icon {
-            font-size: 1.25rem;
-         }
-
-         .p-button-label {
-            font-size: 0.8rem;
-         }
-      }
-   }
-}
-
-@media (max-width: 480px) {
-   .alarm-status-card {
-      padding: 1.5rem;
-   }
-
-   .status-content {
-      .status-icon {
-         width: 60px;
-         height: 60px;
-
-         i {
-            font-size: 1.75rem;
-         }
-      }
-
-      .status-info {
-         .status-title {
-            font-size: 1.1rem;
-         }
-
-         .status-value {
-            font-size: 0.9rem;
-         }
-      }
-   }
-}
-
-// Dark Mode Adjustments
-::ng-deep html.my-app-dark {
-   .house-avatar {
-      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
-   }
-
-   .alarm-status-card {
-      background: linear-gradient(135deg, var(--p-surface-800), var(--p-surface-700));
-      border-color: var(--p-surface-600);
-   }
-
-   .action-button-card {
-      background: var(--p-surface-800);
-      border-color: var(--p-surface-600);
-   }
-
-   .status-icon {
-      &.status-active {
-         box-shadow: 0 4px 16px rgba(239, 68, 68, 0.6);
-      }
-
-      &.status-inactive {
-         box-shadow: 0 4px 16px rgba(34, 197, 94, 0.6);
-      }
-   }
 }

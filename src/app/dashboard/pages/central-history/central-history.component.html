@@ -1,20 +1,18 @@
-<!-- Header Section -->
-<div class="history-header mb-6">
-  <div class="flex items-center gap-3 mb-4">
-    <div class="header-icon">
-      <i class="pi pi-history text-2xl"></i>
-    </div>
-    <div>
-      <h2 class="text-xl font-bold mb-1">Historial de Alarmas</h2>
-      <p class="text-muted-color text-sm">Registro de disparos y eventos del sistema</p>
-    </div>
+<!-- Header -->
+<div class="history-header flex items-center gap-3 mb-6">
+  <div class="header-icon">
+    <i class="pi pi-history text-2xl"></i>
+  </div>
+  <div class="header-info">
+    <h2 class="text-xl font-bold mb-1">Historial de Alarmas</h2>
+    <p class="header-subtitle">Registro de disparos y eventos del sistema</p>
   </div>
 </div>
 
-<!-- Timeline Section -->
-<div class="timeline-container">
+<!-- Sección Línea de Tiempo -->
+<section class="timeline-container">
   @if (history().length === 0) {
-    <!-- Empty State -->
+    <!-- Estado Vacío -->
     <div class="empty-timeline">
       <div class="empty-timeline-content">
         <i class="pi pi-clock text-4xl text-muted-color mb-3"></i>
@@ -25,7 +23,7 @@
   } @else {
     <!-- Timeline -->
     <p-timeline [value]="history()" styleClass="custom-timeline">
-      <!-- Date/Time Template -->
+      <!-- Fecha y Hora Template -->
       <ng-template #opposite let-event>
         <div class="timeline-date">
           <div class="date-display">
@@ -35,7 +33,7 @@
         </div>
       </ng-template>
 
-      <!-- Event Content Template -->
+      <!-- Contenido del Evento Template -->
       <ng-template #content let-event>
         <div class="timeline-event">
           <div class="event-card">
@@ -52,7 +50,7 @@
         </div>
       </ng-template>
 
-      <!-- Custom Marker Template -->
+      <!-- Marcador Personalizado Template -->
       <ng-template #marker let-event>
         <div class="timeline-marker">
           <div class="marker-dot">
@@ -62,21 +60,4 @@
       </ng-template>
     </p-timeline>
   }
-</div>
-
-<!-- Statistics Summary (if needed) -->
-<!-- @if (history().length > 0) {
-  <div class="history-summary mt-6">
-    <div class="summary-card">
-      <div class="summary-content">
-        <div class="summary-icon">
-          <i class="pi pi-chart-line"></i>
-        </div>
-        <div class="summary-info">
-          <span class="summary-label">Total de eventos</span>
-          <span class="summary-value">{{ history().length }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-} -->
+</section>

@@ -3,27 +3,47 @@
     <div class="nav-section">
       <ul class="nav-menu">
         <li class="nav-item">
-          <p-button label="Principal" severity="secondary" icon="pi pi-home" styleClass="nav-button"
-            routerLink="/dashboard/hub" routerLinkActive="active" />
+          <p-button
+            label="Principal"
+            severity="secondary"
+            icon="pi pi-home"
+            styleClass="nav-button"
+            routerLink="/dashboard/hub"
+            routerLinkActive="active" />
         </li>
         <li class="nav-item">
-          <p-button label="Historial" severity="secondary" icon="pi pi-history" styleClass="nav-button"
-            routerLink="/dashboard/history" routerLinkActive="active" />
+          <p-button
+            label="Historial"
+            severity="secondary"
+            icon="pi pi-history"
+            styleClass="nav-button"
+            routerLink="/dashboard/history"
+            routerLinkActive="active" />
         </li>
         <li class="nav-item">
-          <p-button label="Perfil" severity="secondary" icon="pi pi-user" styleClass="nav-button"
-            routerLink="/dashboard/profile" routerLinkActive="active" />
+          <p-button
+            label="Perfil"
+            severity="secondary"
+            icon="pi pi-user"
+            styleClass="nav-button"
+            routerLink="/dashboard/profile"
+            routerLinkActive="active" />
         </li>
         <li class="nav-item">
-          <p-button label="Ajustes" severity="secondary" icon="pi pi-cog" styleClass="nav-button"
-            routerLinkActive="active" (onClick)="toggleDarkMode()" />
+          <p-button
+            label="Ajustes"
+            severity="secondary"
+            icon="pi pi-cog"
+            styleClass="nav-button"
+            routerLink="/dashboard/preferences"
+            routerLinkActive="active" />
         </li>
       </ul>
     </div>
 
     <div class="logout-section">
-      <p-button 
-        styleClass="logout-full-button" 
+      <p-button
+        styleClass="logout-full-button"
         (onClick)="logout()">
         <div class="logout-card">
           <div class="logout-content">

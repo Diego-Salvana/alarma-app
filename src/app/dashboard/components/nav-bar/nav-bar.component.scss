@@ -1,6 +1,6 @@
 @use '../../dashboard.component.scss';
 
-// Enhanced navbar styling following app design patterns
+// Navbar
 .navbar {
    transform: translateY(100%);
    transition: all 0.15s ease-out;
@@ -8,115 +8,109 @@
    background: rgba(255, 255, 255, 0.95);
    border-top: 1px solid var(--p-surface-border);
    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+
+   :host-context(.my-app-dark) & {
+      background: rgba(0, 0, 0, 0.95);
+      border-color: var(--p-surface-600);
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3);
+   }
 }
 
 .show {
    transform: translateY(0);
 }
 
-// Navigation button styling
-:host ::ng-deep {
+// Botones de navegación
+:host::ng-deep {
    .p-button {
-      padding: 0.75rem 1rem !important;
-      border-radius: 12px !important;
-      transition: all 0.2s ease !important;
-      min-width: 70px !important;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+      min-width: 70px;
       
       &:hover {
-         background: var(--p-surface-100) !important;
+         background: var(--p-surface-100);
+
+         :host-context(.my-app-dark) & {
+            background: var(--p-surface-700);
+         }
       }
    }
 
    .active .p-button {
-      background: linear-gradient(135deg, var(--p-primary-50), var(--p-primary-25)) !important;
-      color: var(--p-primary-700) !important;
-      border: 1px solid var(--p-primary-200) !important;
+      background: linear-gradient(135deg, var(--p-primary-50), var(--p-primary-25));
+      color: var(--p-primary-700);
+      border: 1px solid var(--p-primary-200);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
       .p-button-icon {
-         color: var(--p-primary-600) !important;
+         color: var(--p-primary-600);
+      }
+
+      :host-context(.my-app-dark) & {
+         background: linear-gradient(135deg, var(--p-primary-900), var(--p-primary-800));
+         color: var(--p-primary-300);
+         border-color: var(--p-primary-700);
+
+         .p-button-icon {
+            color: var(--p-primary-400);
+         }
       }
    }
 
-   // Icon styling
+   // Icono
    .p-button-icon {
-      font-size: 1.25rem !important;
-      margin-bottom: 0.25rem !important;
-      color: var(--p-text-muted-color) !important;
-      transition: all 0.2s ease !important;
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+      color: var(--p-text-muted-color);
+      transition: all 0.2s ease;
    }
 
-   // Label styling
+   // Etiqueta
    .p-button-label {
-      font-size: 0.8rem !important;
-      font-weight: 500 !important;
-      color: var(--p-text-color) !important;
-      text-transform: capitalize !important;
-      letter-spacing: 0.025em !important;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--p-text-color);
+      text-transform: capitalize;
+      letter-spacing: 0.025em;
    }
 
-   // Hover effects for icons and labels
+   // Hover
    .p-button:hover {
       .p-button-icon {
-         color: var(--p-primary-600) !important;
+         color: var(--p-primary-600);
          transform: scale(1.1);
+
+         :host-context(.my-app-dark) & {
+            color: var(--p-primary-400);
+         }
       }
 
       .p-button-label {
-         color: var(--p-primary-700) !important;
+         color: var(--p-primary-700);
+
+         :host-context(.my-app-dark) & {
+            color: var(--p-primary-300);
+         }
       }
    }
 }
 
-// Dark mode adjustments
-:host-context(.my-app-dark) ::ng-deep {
-   .navbar {
-      background: rgba(0, 0, 0, 0.95);
-      border-color: var(--p-surface-600);
-      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3);
-   }
 
-   .p-button {
-      &:hover {
-         background: var(--p-surface-700) !important;
-      }
-   }
-
-   .active .p-button {
-      background: linear-gradient(135deg, var(--p-primary-900), var(--p-primary-800)) !important;
-      color: var(--p-primary-300) !important;
-      border-color: var(--p-primary-700) !important;
-
-      .p-button-icon {
-         color: var(--p-primary-400) !important;
-      }
-   }
-
-   .p-button:hover {
-      .p-button-icon {
-         color: var(--p-primary-400) !important;
-      }
-
-      .p-button-label {
-         color: var(--p-primary-300) !important;
-      }
-   }
-}
-
-// Responsive adjustments
+// Responsive Design
 @media (max-width: 480px) {
-   :host ::ng-deep {
+   :host::ng-deep {
       .p-button {
-         padding: 0.5rem 0.75rem !important;
-         min-width: 60px !important;
+         padding: 0.5rem 0.75rem;
+         min-width: 60px;
       }
 
       .p-button-icon {
-         font-size: 1.1rem !important;
+         font-size: 1.1rem;
       }
 
       .p-button-label {
-         font-size: 0.75rem !important;
+         font-size: 0.75rem;
       }
    }
 }

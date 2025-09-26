@@ -12,17 +12,12 @@ import { ModalLogoutComponent } from '../../../shared/components';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideBarComponent {
+  // Si no es la páigina de entrada (home), se muestra la barra lateral.
   private activeRouteService = inject(ActiveRouteService);
   isHome = computed(() => this.activeRouteService.activeSection() === 'home');
-  showDialog = signal(false);
-  
-  toggleDarkMode () {
-    const htmlElement = document.querySelector('html');
 
-    if (htmlElement) {
-      htmlElement.classList.toggle('my-app-dark');
-    }
-  }
+  // Dialog de cierre de sesión
+  showDialog = signal(false);
   
   logout () {
     this.showDialog.set(true);
