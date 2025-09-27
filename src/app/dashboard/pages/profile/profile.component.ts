@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { BtnEditCardComponent, ModalPasswordComponent, ModalProfileComponent } from '../../components';
-import { ModalDataTransfer, ProfileProp } from '../../interfaces/modals.interfaces';
+import { ModalDataTransfer, ProfileProp } from '../../interfaces';
 import { ProfileService } from '../../services/profile.service';
 import { ProfileResponse } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
@@ -24,55 +24,57 @@ export class ProfileComponent implements OnInit {
   private toastService = inject(ToastService);
   private houseService = inject(HouseService);
   private router = inject(Router);
+  loading = signal(true);
   user = signal<ProfileResponse | null>(null);
-  noUser = signal(false);
-  submitEnd = signal(true);
-  visiblePassModal = false;
-  visibleProfileModal = false;
+  submitCompleted = signal(true);
+  visiblePassModal = signal(false);
+  visibleProfileModal = signal(false);
+  showModalLogout = signal(false);
   profileProp?: ProfileProp;
   propValue?: string;
-  showModalLogout = signal(false);
   
   ngOnInit () {
     this.profileService.getUser().subscribe({
       next: userResponse => {
         this.user.set(userResponse);
+        this.loading.set(false);
       },
       error: e => {
         this.toastService.error(e.error.message);
+        this.loading.set(false);
       }
     });
   }
 
   onSubmit (data: ModalDataTransfer) {
-    this.submitEnd.set(false);
+    this.submitCompleted.set(false);
         
     this.profileService.modifyUserData(data).subscribe({
       next: userResponse => {
         this.user.set(userResponse);
-        this.submitEnd.set(true);
-        this.visibleProfileModal = false;
+        this.submitCompleted.set(true);
+        this.visibleProfileModal.set(false);
       },
       error: e => {
         this.toastService.error(e.error.message);
-        this.submitEnd.set(true);
-        this.visibleProfileModal = false;
+        this.submitCompleted.set(true);
+        this.visibleProfileModal.set(false);
       }
     });
   }
 
   onChangePassword (data: ModalDataTransfer) {
-    this.submitEnd.set(false);
+    this.submitCompleted.set(false);
 
     this.profileService.updateUserPassword(data).subscribe({
       next: () => {
-        this.submitEnd.set(true);
-        this.visiblePassModal = false;
+        this.submitCompleted.set(true);
+        this.visiblePassModal.set(false);
       },
       error: e => {
         this.toastService.error(e.error.message);
-        this.submitEnd.set(true);
-        this.visiblePassModal = false;
+        this.submitCompleted.set(true);
+        this.visiblePassModal.set(false);
       }
     });
   }
@@ -85,11 +87,11 @@ export class ProfileComponent implements OnInit {
   showDialog (modal: ModalType, prop?: ProfileProp) {
     switch (modal) {
       case 'password':
-        this.visiblePassModal = true;
+        this.visiblePassModal.set(true);
         this.profileProp = 'password';
         break;
       case 'profile':
-        this.visibleProfileModal = true;
+        this.visibleProfileModal.set(true);
         break;
     }
 
@@ -110,8 +112,8 @@ export class ProfileComponent implements OnInit {
   }
   
   closeDialog () {
-    this.visiblePassModal = false;
-    this.visibleProfileModal = false;
+    this.visiblePassModal.set(false);
+    this.visibleProfileModal.set(false);
   }
 
   logout () {

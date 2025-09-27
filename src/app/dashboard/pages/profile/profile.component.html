@@ -1,7 +1,11 @@
 @let _user = user();
-@let _noUser = noUser();
+@let _loading = loading();
+@let _submitCompleted = submitCompleted();
+@let _visiblePassModal = visiblePassModal();
+@let _visibleProfileModal = visibleProfileModal();
+@let _showModalLogout = showModalLogout();
 
-@if (!_user && !_noUser) {
+@if (_loading) {
   <div class="text-center pt-8">
     <div class="loading-container">
       <i class="pi pi-spin pi-spinner text-2xl text-primary mb-3"></i>
@@ -9,7 +13,7 @@
     </div>
   </div>
 } 
-@else if (!_user && _noUser) {
+@else if (!_user) {
   <div class="text-center pt-8">
     <div class="error-container">
       <i class="pi pi-exclamation-triangle text-3xl text-amber-500 mb-3"></i>
@@ -197,22 +201,22 @@
 }
 
 <!-- Modal para Cerrar Sesión -->
-<app-modal-logout [showModal]="showModalLogout()" (closeModal)="cancelLogout()" />
+<app-modal-logout [showModal]="_showModalLogout" (closeModal)="cancelLogout()" />
 
 @if (this.profileProp) {
   <!-- Modal de Perfil -->
   <app-modal-profile 
-    [visible]="visibleProfileModal" 
+    [visible]="_visibleProfileModal" 
     [profileProp]="profileProp" 
     [propValue]="propValue" 
-    [submitEnd]="submitEnd()"
+    [submitEnd]="_submitCompleted"
     (visibleChange)="closeDialog()" 
     (changeValue)="onSubmit($event)" />
     
   <!-- Modal para Cambiar Contraseña -->
   <app-modal-password 
-    [visible]="visiblePassModal"
-    [submitEnd]="submitEnd()"
+    [visible]="_visiblePassModal"
+    [submitEnd]="_submitCompleted"
     (visibleChange)="closeDialog()"
     (changeValue)="onChangePassword($event)" />
 }
