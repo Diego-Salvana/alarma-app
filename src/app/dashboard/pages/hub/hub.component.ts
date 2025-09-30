@@ -21,6 +21,7 @@ export class HubComponent {
   private currentHouseController = inject(CurrentHouseService);
   private toastService = inject(ToastService);
   private socketsService = inject(SocketService);
+  private timeOutId!: ReturnType<typeof setTimeout>;
   house = signal<HouseResponse | null>(null);
   loading = signal(true);
   isActive = computed(() => this.house()?.alarmaEncendida === 'On');
@@ -53,6 +54,7 @@ export class HubComponent {
         this.submitCompleted.set(true);
         this.disarmConfirmationAction(false);
         this.disarmEnd.set(true);
+        clearTimeout(this.timeOutId);
       });
 
     // Subscripción a eventos de error.
@@ -69,7 +71,7 @@ export class HubComponent {
       });
   }
 
-  /** Ordena iniciar la activación de la alarma. */
+  /** Ordena iniciar la activación de la alarma. Genera un timeout con tiempo límite de espera para la respuesta. */
   activateAlarm (value: ExclusionFormValue) {
     this.submitCompleted.set(false);
 
@@ -78,8 +80,12 @@ export class HubComponent {
       .map(([numeroSensor, estado]) => ({ numeroSensor, estado }));
 
     this.currentHouseController.armAlarm(exclusionArray).subscribe({
-      next: activationResponse => {
-        console.log(activationResponse);
+      next: _ => {
+        this.timeOutId = setTimeout(() => {
+          this.submitCompleted.set(true);
+          this.exclusionFormVisible = false;
+          this.toastService.error('No se pudo activar la alarma.');
+        }, 5000);
       },
       error: e => {
         this.toastService.error(e.error.message);
@@ -111,7 +117,7 @@ export class HubComponent {
     this.disarmConfirmationVisible.set(true);
   }
 
-  /** Ordena iniciar la desactivación de la alarma si `disarm` es `true`, de lo contrario cierra el modal. */
+  /** Ordena iniciar la desactivación de la alarma si `disarm` es `true`, de lo contrario cierra el modal. Genera un timeout con tiempo límite de espera para la respuesta. */
   disarmConfirmationAction (disarm: boolean) {
     if (!disarm) {
       this.disarmConfirmationVisible.set(false);
@@ -119,8 +125,12 @@ export class HubComponent {
       this.disarmEnd.set(false);
 
       this.currentHouseController.disarmAlarm().subscribe({
-        next: disarmResponse => {
-          console.log(disarmResponse);
+        next: _ => {
+          this.timeOutId = setTimeout(() => {
+            this.disarmEnd.set(true);
+            this.disarmConfirmationVisible.set(false);
+            this.toastService.error('No se pudo desactivar la alarma.');
+          }, 5000);
         },
         error: e => {
           this.toastService.error(e.error.message);
