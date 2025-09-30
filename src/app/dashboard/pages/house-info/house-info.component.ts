@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -7,6 +7,7 @@ import { HouseProp, ModalDataTransfer } from '../../interfaces';
 import { HouseService } from '../../services';
 import { HouseResponse } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-house-info',
@@ -15,51 +16,49 @@ import { ToastService } from '../../../shared/services';
   styleUrl: './house-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HouseInfoComponent implements OnInit {
+export class HouseInfoComponent {
   private houseService = inject(HouseService);
   private toastService = inject(ToastService);
+  loading = signal(true);
   house = signal<HouseResponse | null>(null);
-  noHouse = signal(false);
-  submitEnd = signal(true);
-  visible = false;
+  submitCompleted = signal(true);
+  visible = signal(false);
   houseProp!: HouseProp;
   propValue?: string;
 
-  ngOnInit () {
-    this.houseService.getInfoHouse().subscribe({
+  constructor () {
+    this.houseService.getHouseInfo().pipe(takeUntilDestroyed()).subscribe({
       next: house => {
         this.house.set(house);
-        this.noHouse.set(false);
+        this.loading.set(false);
       },
       error: e => {
         const message = typeof e.message === 'string' ? e.message : e.error.message;
         this.toastService.error(message);
-        this.noHouse.set(true);
+        this.loading.set(false);
       }
     });
   }
 
   onSubmit (data: ModalDataTransfer) {
-    this.submitEnd.set(false);
+    this.submitCompleted.set(false);
         
     this.houseService.modifyHouse(data).subscribe({
       next: house => {
         this.house.set(house);
-        this.submitEnd.set(true);
-        this.visible = false;
+        this.submitCompleted.set(true);
+        this.visible.set(false);
       },
       error: e => {
-        console.log(e);
-
         this.toastService.error(e.error.message);
-        this.submitEnd.set(true);
-        this.visible = false;
+        this.submitCompleted.set(true);
+        this.visible.set(false);
       }
     });
   }
 
   showDialog (prop: HouseProp) {
-    this.visible = true;
+    this.visible.set(true);
     this.houseProp = prop;
 
     switch (prop) {
@@ -79,6 +78,6 @@ export class HouseInfoComponent implements OnInit {
   }
 
   closeDialog () {
-    this.visible = false;
+    this.visible.set(false);
   }
 }

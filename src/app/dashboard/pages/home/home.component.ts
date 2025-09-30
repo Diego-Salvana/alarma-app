@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { HouseCardComponent } from '../../components';
 import { HouseService } from '../../services';
 import { HouseResponse } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
@@ -11,21 +12,21 @@ import { ToastService } from '../../../shared/services';
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   private houseService = inject(HouseService);
   private toastService = inject(ToastService);
   loading = signal(true);
   sites = signal<HouseResponse[]>([]);
 
-  ngOnInit () {
-    this.houseService.getAll().subscribe({
+  constructor () {
+    this.houseService.getAll().pipe(takeUntilDestroyed()).subscribe({
       next: houses => {
         this.loading.set(false);
         this.sites.set(houses);
       },
-      error: (e) => {
+      error: err => {
         this.loading.set(false);
-        this.toastService.error(e.error.message);
+        this.toastService.error(err.error.message);
       }
     });
   }

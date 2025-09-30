@@ -15,8 +15,8 @@ import { Subscription } from 'rxjs';
 })
 export class DashboardComponent implements OnDestroy {
   private activeRouteService = inject(ActiveRouteService);
-  private socketSubscription: Subscription;
   private socketService = inject(SocketService);
+  private socketSubscription: Subscription;
   isHome = computed(() => this.activeRouteService.activeSection() === 'home');
 
   constructor () {

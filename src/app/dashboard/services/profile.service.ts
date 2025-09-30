@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable, throwError } from 'rxjs';
 import { InfoProfileResponse, ProfileResponse, User } from '../../shared/interfaces';
 import { ModalDataTransfer } from '../interfaces';
+import { API_URL } from '../../env';
 
 interface BodyPassword {
   contrasenaActual: string;
@@ -13,7 +14,7 @@ interface BodyPassword {
   providedIn: 'root'
 })
 export class ProfileService {
-  private baseUrl = 'http://localhost:5000/api/users';
+  private baseUrl = `${API_URL}/users`;
   private http = inject(HttpClient);
 
   getUser (): Observable<ProfileResponse> {

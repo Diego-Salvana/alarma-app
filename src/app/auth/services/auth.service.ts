@@ -3,12 +3,13 @@ import { inject, Injectable } from '@angular/core';
 import { Login, Register } from '../interfaces';
 import { Observable, tap } from 'rxjs';
 import { InfoLoginResponse } from '../../shared/interfaces';
+import { API_URL } from '../../env';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:5000/api/users';
+  private baseUrl = `${API_URL}/users`;
   private http = inject(HttpClient);
 
   registerUser (userBody: Partial<Register>): Observable<InfoLoginResponse> {

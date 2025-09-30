@@ -2,6 +2,9 @@
 @let _loading = loading();
 @let _isActive = isActive();
 @let _sensors = sensors();
+@let _submitCompleted = submitCompleted();
+@let _disarmConfirmationVisible = disarmConfirmationVisible();
+@let _disarmEnd = disarmEnd();
 
 @if (_loading) {
   <div class="text-center pt-8">
@@ -79,7 +82,7 @@
         iconPos="top" 
         styleClass="w-full red-text red-border" 
         class="action-btn" 
-        (onClick)="showDialog()" />
+        (onClick)="showExclusionForm()" />
     </div>
   </section>
   
@@ -92,14 +95,14 @@
 
 <!-- Modal de activación -->
 <app-modal-exclusion 
-[visible]="visible" 
+[visible]="exclusionFormVisible" 
 [sensors]="_sensors" 
-[submitEnd]="submitEnd()" 
-(visibleChange)="closeDialog()" 
-(onActive)="activeAlarm($event)" />
+[submitEnd]="_submitCompleted" 
+(visibleChange)="closeExclusionForm()" 
+(onActive)="activateAlarm($event)" />
 
 <!-- Modal de desactivación -->
 <app-confirm-disarm 
-  [visible]="showConfirmDisarm()" 
-  [submitEnd]="disarmEnd()" 
-  (onCloseDialog)="closeDisarmConfirmation($event)" />
+  [visible]="_disarmConfirmationVisible" 
+  [submitEnd]="_disarmEnd" 
+  (onCloseDialog)="disarmConfirmationAction($event)" />

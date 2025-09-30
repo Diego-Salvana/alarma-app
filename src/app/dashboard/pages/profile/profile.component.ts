@@ -80,7 +80,7 @@ export class ProfileComponent implements OnInit {
   }
 
   goInfoHouse (id: string) {
-    this.houseService.infoHouseID = id;
+    this.houseService.setHouseInfoID(id);
     this.router.navigate(['/dashboard', 'profile', 'house']);
   }
 

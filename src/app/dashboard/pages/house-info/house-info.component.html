@@ -1,7 +1,9 @@
+@let _loading = loading();
 @let _house = house();
-@let _noHouse = noHouse();
+@let _submitCompleted = submitCompleted();
+@let _visible = visible();
 
-@if (!_house && !_noHouse) {
+@if (_loading) {
   <div class="text-center pt-8">
     <div class="loading-container">
       <i class="pi pi-spin pi-spinner text-2xl text-primary mb-3"></i>
@@ -9,7 +11,7 @@
     </div>
   </div>
 } 
-@else if (!_house && _noHouse) {
+@else if (!_house) {
   <div class="text-center pt-8">
     <div class="error-container">
       <i class="pi pi-exclamation-triangle text-3xl text-amber-500 mb-3"></i>
@@ -138,10 +140,10 @@
 <!-- Modal de Edición -->
 @if (this.houseProp) {
   <app-modal-house 
-    [visible]="visible" 
+    [visible]="_visible" 
     [houseProp]="houseProp" 
     [propValue]="propValue" 
-    [submitEnd]="submitEnd()"
+    [submitEnd]="_submitCompleted"
     (visibleChange)="closeDialog()" 
     (changeValue)="onSubmit($event)" />
 }

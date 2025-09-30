@@ -3,53 +3,36 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable, tap, throwError } from 'rxjs';
 import { Casa, HouseResponse, InfoHouseResponse, InfoHousesResponse } from '../../shared/interfaces';
-import { ExclusionSensor, ModalDataTransfer } from '../interfaces';
+import { ActivationResponse, ExclusionSensor, ModalDataTransfer } from '../interfaces';
+import { API_URL } from '../../env';
 
 interface UpdateHouseBody {
   nombre?: Casa ['nombre'];
   direccion?: Partial<Casa ['direccion']>;
 }
 
-type RequestState = 'success' | 'pending' | 'error';
-
-interface ActivationResponse {
-  message: string;
-  state: RequestState;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class HouseService {
-  private baseUrl = 'http://localhost:5000/api/houses';
+  private baseUrl = `${API_URL}/houses`;
   private http = inject(HttpClient);
   private router = inject(Router);
-  currentHouse = '';
-  infoHouseID = '';
+  private houseInfoID = ''; // Id de una casa para ver y modificar sus datos.
 
+  setHouseInfoID (id: string) {
+    this.houseInfoID = id;
+  }
+
+  /** Obtiene todas las casas del usuario. */
   getAll (): Observable<HouseResponse[]> {
     return this.http.get<InfoHousesResponse>(`${this.baseUrl}`).pipe(map(response => response.data));
   }
 
-  /** Obtiene información de una casa. Si `setHouse` es true actualiza casa actual y el token. */
-  getHouse (setHouse = false): Observable<HouseResponse> {
-    let houseId: string;
-
-    if (this.currentHouse) {
-      houseId = this.currentHouse;
-    } else {
-      const token = localStorage.getItem('token') ?? '';
-
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        houseId = payload.hid;
-      } catch (e) {
-        return throwError(() => new Error('Token no válido.'));
-      }
-    }
-
+  /** Obtiene información de la casa que será utilizada como `currentHouse` y actualiza el `token`. */
+  getHouse (houseId: string): Observable<HouseResponse> {
     return this.http.get<InfoHouseResponse>(
-      `${this.baseUrl}/${houseId}`, { headers: { 'set-house': setHouse ? 'true' : 'false' } }
+      `${this.baseUrl}/${houseId}`, { headers: { 'set-house': 'true' } }
     ).pipe(
       map(response => response.data),
       tap(response => {
@@ -58,16 +41,18 @@ export class HouseService {
     );
   }
 
-  getInfoHouse (): Observable<HouseResponse> {
-    if (!this.infoHouseID) {
+  /** Obtiene información la casa con id `houseInfoID` para ver y modificar sus datos. */
+  getHouseInfo (): Observable<HouseResponse> {
+    if (!this.houseInfoID) {
       this.router.navigate(['/dashboard', 'profile']);
       return throwError(() => new Error('No se encontró la casa.'));
     }
 
-    return this.http.get<InfoHouseResponse>(`${this.baseUrl}/${this.infoHouseID}`)
+    return this.http.get<InfoHouseResponse>(`${this.baseUrl}/${this.houseInfoID}`)
       .pipe(map(response => response.data));
   }
 
+  /** Modifica datos de la casa con id `houseInfoID`. */
   modifyHouse (data: ModalDataTransfer): Observable<HouseResponse> {
     const body: UpdateHouseBody = {
       nombre: data.houseName,
@@ -78,14 +63,16 @@ export class HouseService {
       }
     };
 
-    return this.http.patch<InfoHouseResponse>(`${this.baseUrl}/name-dir/${this.infoHouseID}`, body)
+    return this.http.patch<InfoHouseResponse>(`${this.baseUrl}/name-dir/${this.houseInfoID}`, body)
       .pipe(map(response => response.data));
   }
 
-  activeAlarm (exclusionArray: ExclusionSensor[]): Observable<ActivationResponse> {
+  /** Envía solicitud para `activar` la alarma de la casa almacenada en el token. La respuesta de activación se recibe por `websocket`. */
+  armAlarm (exclusionArray: ExclusionSensor[]): Observable<ActivationResponse> {
     return this.http.post<ActivationResponse>(`${this.baseUrl}/active`, { exclusionArray });
   }
 
+  /** Envía solicitud para `desactivar` la alarma de la casa almacenada en el token. La respuesta de desactivación se recibe por `websocket`. */
   disarmAlarm (): Observable<ActivationResponse> {
     return this.http.get<ActivationResponse>(`${this.baseUrl}/disarm`);
   }

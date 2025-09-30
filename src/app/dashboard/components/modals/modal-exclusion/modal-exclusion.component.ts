@@ -18,9 +18,8 @@ export type ExclusionFormValue = Partial<{ [key: string]: Estado }>;
 export class ModalExclusionComponent {
   visible = model<boolean>(false);
   submitEnd = input.required<boolean>();
-  onActive = output<ExclusionFormValue>();
-
   sensors = input.required<Sensor[]>();
+  onActive = output<ExclusionFormValue>();
   exclusionForm = computed<FormGroup<{ [key: string]: FormControl<Estado> }>>(() => {
     return this.sensors().reduce((form, sensor) => {
       form.addControl(sensor.numeroSensor.toString(), new FormControl(Estado.ENCENDIDO));

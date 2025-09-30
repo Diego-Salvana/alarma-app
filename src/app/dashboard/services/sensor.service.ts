@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { InfoSensorResponse, Sensor } from '../../shared/interfaces';
+import { API_URL } from '../../env';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SensorService {
-  private baseUrl = 'http://localhost:5000/api/sensors';
+  private baseUrl = `${API_URL}/sensors`;
   private http = inject(HttpClient);
 
   getOne (sensorNumber: string): Observable<Sensor> {

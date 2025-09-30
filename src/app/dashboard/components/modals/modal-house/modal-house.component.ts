@@ -18,10 +18,12 @@ export class ModalHouseComponent {
   visible = model(false);
   submitEnd = input.required<boolean>();
   houseProp = input.required<HouseProp>();
-  headerText = computed(() => this.houseProp() === 'sensorName' ? 'Datos de sensor' : 'Datos del sitio');
   propValue = input<string>();
   formControl = new FormControl('', [Validators.required]);
   changeValue = output<ModalDataTransfer>();
+  headerText = computed(
+    () => this.houseProp() === 'sensorName' ? 'Datos de sensor' : 'Datos del sitio'
+  );
 
   constructor () {
     effect(() => (this.formControl.setValue(this.propValue() ?? '')));

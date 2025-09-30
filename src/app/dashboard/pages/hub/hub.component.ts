@@ -1,19 +1,14 @@
 import { TitleCasePipe, NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SensorListComponent, ModalExclusionComponent, ExclusionFormValue } from '../../components';
-import { HouseService } from '../../services';
+import { CurrentHouseService } from '../../services';
 import { AlarmActivation, Estado, HouseResponse, Sensor, SocketError } from '../../../shared/interfaces';
 import { SocketService, ToastService } from '../../../shared/services';
 import { ConfirmDisarmComponent } from '../../components/modals';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subscription } from 'rxjs';
 import { cloneDeep } from 'lodash';
-
-/* TODO: Mover constantes */
-const alarmOnEvent = 'alarmaEncendida';
-const userPrefix = 'user_';
-const currentUser = 'pedro.sala8@example.com';
+import { alarmOnEvent, currentUser, userPrefix } from '../../../env';
 
 @Component({
   selector: 'app-hub',
@@ -22,45 +17,22 @@ const currentUser = 'pedro.sala8@example.com';
   styleUrl: './hub.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HubComponent implements OnDestroy {
-  private houseService = inject(HouseService);
+export class HubComponent {
+  private currentHouseController = inject(CurrentHouseService);
   private toastService = inject(ToastService);
   private socketsService = inject(SocketService);
-  private socketsSubscription: Subscription;
   house = signal<HouseResponse | null>(null);
   loading = signal(true);
   isActive = computed(() => this.house()?.alarmaEncendida === 'On');
   sensors = computed<Sensor[]>(() => this.house()?.sensores ?? []);
-  submitEnd = signal(true);
-  visible = false;
-  showConfirmDisarm = signal(false);
+  submitCompleted = signal(true);
+  exclusionFormVisible = false;
+  disarmConfirmationVisible = signal(false);
   disarmEnd = signal(true);
 
   constructor () {
-    this.socketsSubscription =
-      this.socketsService.on<AlarmActivation>(`${alarmOnEvent}/${userPrefix}${currentUser}`).subscribe({
-        next: data => {
-          this.updateHouse(data);
-          this.closeDialog();
-          this.submitEnd.set(true);
-          this.closeDisarmConfirmation(false);
-          this.disarmEnd.set(true);
-        },
-        error: e => {
-          console.log(e);
-        }
-      });
-
-    this.socketsService.on<SocketError>('error').subscribe(data => {
-      if (data.event === 'alarmActivation') {
-        console.log(data);
-        this.closeDialog();
-        this.submitEnd.set(true);
-        this.toastService.error(data.message);
-      }
-    });
-
-    this.houseService.getHouse(true).pipe(takeUntilDestroyed()).subscribe({
+    // Obtiene la casa actual.
+    this.currentHouseController.getHouse().pipe(takeUntilDestroyed()).subscribe({
       next: houseResponse => {
         this.house.set(houseResponse);
         this.loading.set(false);
@@ -71,42 +43,63 @@ export class HubComponent implements OnDestroy {
         this.loading.set(false);
       }
     });
+
+    // Subscripción a eventos de activación de la alarma.
+    this.socketsService.on<AlarmActivation>(`${alarmOnEvent}/${userPrefix}${currentUser}`)
+      .pipe(takeUntilDestroyed())
+      .subscribe(data => {
+        this.updateHouse(data);
+        this.closeExclusionForm();
+        this.submitCompleted.set(true);
+        this.disarmConfirmationAction(false);
+        this.disarmEnd.set(true);
+      });
+
+    // Subscripción a eventos de error.
+    this.socketsService.on<SocketError>('error')
+      .pipe(takeUntilDestroyed())
+      .subscribe(data => {
+        if (data.event === 'alarmActivation') {
+          console.log(data);
+
+          this.closeExclusionForm();
+          this.submitCompleted.set(true);
+          this.toastService.error(data.message);
+        }
+      });
   }
 
-  ngOnDestroy () {
-    this.socketsSubscription.unsubscribe();
-  }
-
-  activeAlarm (value: ExclusionFormValue) {
-    this.submitEnd.set(false);
+  /** Ordena iniciar la activación de la alarma. */
+  activateAlarm (value: ExclusionFormValue) {
+    this.submitCompleted.set(false);
 
     const exclusionArray = Object
       .entries(value)
       .map(([numeroSensor, estado]) => ({ numeroSensor, estado }));
 
-    this.houseService.activeAlarm(exclusionArray).subscribe({
+    this.currentHouseController.armAlarm(exclusionArray).subscribe({
       next: activationResponse => {
         console.log(activationResponse);
       },
       error: e => {
         this.toastService.error(e.error.message);
-        this.submitEnd.set(true);
-        this.visible = false;
+        this.submitCompleted.set(true);
+        this.exclusionFormVisible = false;
       }
     });
   }
 
-  showDialog () {
+  showExclusionForm () {
     if (this.isActive()) {
       this.toastService.info('La alarma ya está activada.');
       return;
     }
 
-    this.visible = true;
+    this.exclusionFormVisible = true;
   }
 
-  closeDialog () {
-    this.visible = false;
+  closeExclusionForm () {
+    this.exclusionFormVisible = false;
   }
 
   showDisarmConfirmation () {
@@ -115,33 +108,35 @@ export class HubComponent implements OnDestroy {
       return;
     }
 
-    this.showConfirmDisarm.set(true);
+    this.disarmConfirmationVisible.set(true);
   }
 
-  closeDisarmConfirmation (disarm: boolean) {
+  /** Ordena iniciar la desactivación de la alarma si `disarm` es `true`, de lo contrario cierra el modal. */
+  disarmConfirmationAction (disarm: boolean) {
     if (!disarm) {
-      this.showConfirmDisarm.set(false);
+      this.disarmConfirmationVisible.set(false);
     } else {
       this.disarmEnd.set(false);
 
-      this.houseService.disarmAlarm().subscribe({
+      this.currentHouseController.disarmAlarm().subscribe({
         next: disarmResponse => {
           console.log(disarmResponse);
         },
         error: e => {
           this.toastService.error(e.error.message);
           this.disarmEnd.set(true);
-          this.showConfirmDisarm.set(false);
+          this.disarmConfirmationVisible.set(false);
         }
       });
     }
   }
 
+  /** Actualiza el estado la casa y los sensores con la información recibida por `websocket`. */
   private updateHouse (info: AlarmActivation) {
     const updatedHouse = cloneDeep(this.house());
 
     if (!updatedHouse) {
-      throw new Error('No se encontró la casa al momento de actualizarla.');
+      throw new Error('Ocurrió un error al actualizar la casa.');
     }
 
     updatedHouse.alarmaEncendida = info.state;
