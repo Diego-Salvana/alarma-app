@@ -12,7 +12,8 @@ export class SensorService {
   private http = inject(HttpClient);
 
   getOne (sensorNumber: string): Observable<Sensor> {
-    return this.http.get<InfoSensorResponse>(`${this.baseUrl}/${sensorNumber}`).pipe(map(res => res.data));
+    return this.http.get<InfoSensorResponse>(`${this.baseUrl}/${sensorNumber}`)
+      .pipe(map(res => res.data));
   }
 
   modifyName (sensorNumber: number, newName: string): Observable<Sensor> {
@@ -21,6 +22,7 @@ export class SensorService {
       numeroSensor: isNaN(sensorNumber) ? 0 : sensorNumber
     };
 
-    return this.http.patch<InfoSensorResponse>(`${this.baseUrl}/sensor-name`, body).pipe(map(res => res.data));
+    return this.http.patch<InfoSensorResponse>(`${this.baseUrl}/sensor-name`, body)
+      .pipe(map(res => res.data));
   }
 }

@@ -1,8 +1,9 @@
-import { inject, Injectable } from '@angular/core';
-import { HouseResponse } from '../../shared/interfaces';
+import { inject, Injectable, signal } from '@angular/core';
+import { AlarmActivation, Estado, HouseResponse } from '../../shared/interfaces';
 import { HouseService } from './house.service';
-import { Observable, throwError } from 'rxjs';
+import { Observable, tap, throwError } from 'rxjs';
 import { ActivationResponse, ExclusionSensor } from '../interfaces';
+import { cloneDeep } from 'lodash';
 
 // Servicio que funciona como controlador para manejar la casa actual.
 @Injectable({
@@ -11,9 +12,15 @@ import { ActivationResponse, ExclusionSensor } from '../interfaces';
 export class CurrentHouseService {
   private houseService = inject(HouseService);
   private houseId = '';
+  private _house = signal<HouseResponse | null>(null);
+  house = this._house.asReadonly();
   
   setHouseId (houseId: string) {
     this.houseId = houseId;
+  }
+
+  setHouse (house: HouseResponse) {
+    this._house.set(house);
   }
   
   /** Obtiene la casa actual. Si no existe `houseId` se obtiene del token. */
@@ -29,7 +36,8 @@ export class CurrentHouseService {
       }
     }
 
-    return this.houseService.getHouse(this.houseId);
+    return this.houseService.getHouse(this.houseId)
+      .pipe(tap(house => this.setHouse(house)));
   }
 
   /** Inicia activación de la alarma. */
@@ -42,5 +50,25 @@ export class CurrentHouseService {
     return this.houseService.disarmAlarm();
   }
 
-  // Sensores
+  /** Actualiza el estado la casa y los sensores con la información recibida por `websocket`. */
+  updateHouse (info: AlarmActivation) {
+    const updatedHouse = cloneDeep(this._house());
+  
+    if (!updatedHouse) {
+      throw new Error('No se pudo actualizar la casa.');
+    }
+  
+    updatedHouse.alarmaEncendida = info.state;
+    updatedHouse.sensores?.forEach((sensor, index) => {
+      if (!updatedHouse.sensores) return;
+  
+      if (info.excludedSensors.includes(sensor.numeroSensor.toString())) {
+        updatedHouse.sensores[index].estado = Estado.APAGADO;
+      } else {
+        updatedHouse.sensores[index].estado = Estado.ENCENDIDO;
+      }
+    });
+  
+    this.setHouse(updatedHouse);
+  }
 }
