@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -8,4 +8,6 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './btn-edit-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BtnEditCardComponent { }
+export class BtnEditCardComponent {
+  disabled = input<boolean>(false);
+}

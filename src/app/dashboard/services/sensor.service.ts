@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { InfoSensorResponse, Sensor } from '../../shared/interfaces';
 import { API_URL } from '../../env';
 
+/** Provee acceso a la API para realizar operaciones relacionadas a los sensores. */
 @Injectable({
   providedIn: 'root'
 })
@@ -11,11 +12,13 @@ export class SensorService {
   private baseUrl = `${API_URL}/sensors`;
   private http = inject(HttpClient);
 
+  /** Obtiene un sensor por su número. */
   getOne (sensorNumber: string): Observable<Sensor> {
     return this.http.get<InfoSensorResponse>(`${this.baseUrl}/${sensorNumber}`)
       .pipe(map(res => res.data));
   }
 
+  /** Modifica el nombre de un sensor. */
   modifyName (sensorNumber: number, newName: string): Observable<Sensor> {
     const body: Pick<Sensor, 'nombre' | 'numeroSensor'> = {
       nombre: newName,

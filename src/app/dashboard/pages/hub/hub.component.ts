@@ -22,8 +22,8 @@ export class HubComponent {
   private socketsService = inject(SocketService);
   private timeOutId!: ReturnType<typeof setTimeout>;
   house: Signal<HouseResponse | null> = this.currentHouseController.house;
-  loading = signal(true);
-  isActive = computed(() => this.house()?.alarmaEncendida === 'On');
+  loading: Signal<boolean> = this.currentHouseController.loading;
+  isActive = computed<boolean>(() => this.house()?.alarmaEncendida === 'On');
   sensors = computed<Sensor[]>(() => this.house()?.sensores ?? []);
   submitCompleted = signal(true);
   exclusionFormVisible = false;
@@ -31,17 +31,17 @@ export class HubComponent {
   disarmEnd = signal(true);
 
   constructor () {
-    // Carga la casa actual.
-    this.currentHouseController.getHouse().pipe(takeUntilDestroyed()).subscribe({
-      next: _ => {
-        this.loading.set(false);
-      },
-      error: e => {
-        const message = typeof e.message === 'string' ? e.message : e.error.message;
-        this.toastService.error(message);
-        this.loading.set(false);
-      }
-    });
+    // Si aún no hay una casa cargada intenta cargarla.
+    if (!this.loading() && !this.house()) {
+      this.currentHouseController.getHouse()
+        .pipe(takeUntilDestroyed())
+        .subscribe({
+          error: e => {
+            const message = typeof e.message === 'string' ? e.message : e.error.message;
+            this.toastService.error(message);
+          }
+        });
+    }
 
     // Subscripción a eventos de activación de la alarma.
     this.socketsService.on<AlarmActivation>(`${alarmOnEvent}/${userPrefix}${currentUser}`)
@@ -64,8 +64,6 @@ export class HubComponent {
       .pipe(takeUntilDestroyed())
       .subscribe(data => {
         if (data.event === 'alarmActivation') {
-          console.log(data);
-
           this.closeExclusionForm();
           this.submitCompleted.set(true);
           this.toastService.error(data.message);
@@ -73,7 +71,7 @@ export class HubComponent {
       });
   }
 
-  /** Ordena iniciar la activación de la alarma. Genera un timeout con tiempo límite de espera para la respuesta. */
+  /** Ordena iniciar la activación de la alarma. Genera un timeout con tiempo límite de espera para la respuesta por `websocket`. */
   activateAlarm (value: ExclusionFormValue) {
     this.submitCompleted.set(false);
 
@@ -119,7 +117,7 @@ export class HubComponent {
     this.disarmConfirmationVisible.set(true);
   }
 
-  /** Ordena iniciar la desactivación de la alarma si `disarm` es `true`, de lo contrario cierra el modal. Genera un timeout con tiempo límite de espera para la respuesta. */
+  /** Ordena iniciar la desactivación de la alarma si `disarm` es `true`, de lo contrario cierra el modal. Genera un timeout con tiempo límite de espera para la respuesta por `websocket`. */
   disarmConfirmationAction (disarm: boolean) {
     if (!disarm) {
       this.disarmConfirmationVisible.set(false);

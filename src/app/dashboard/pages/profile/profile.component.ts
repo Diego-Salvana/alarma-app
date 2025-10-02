@@ -1,20 +1,21 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { BtnEditCardComponent, ModalPasswordComponent, ModalProfileComponent } from '../../components';
 import { ModalDataTransfer, ProfileProp } from '../../interfaces';
 import { ProfileService } from '../../services/profile.service';
-import { ProfileResponse } from '../../../shared/interfaces';
+import { Estado, ProfileResponse } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
-import { HouseService } from '../../services';
+import { CurrentHouseService, HouseService } from '../../services';
 import { ModalLogoutComponent } from '../../../shared/components';
+import { NgClass } from '@angular/common';
 
 type ModalType = 'password' | 'profile';
 
 @Component({
   selector: 'app-profile',
-  imports: [CardModule, ButtonModule, BtnEditCardComponent, ModalPasswordComponent, ModalProfileComponent, ModalLogoutComponent],
+  imports: [CardModule, ButtonModule, BtnEditCardComponent, ModalPasswordComponent, ModalProfileComponent, ModalLogoutComponent, NgClass],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,6 +24,7 @@ export class ProfileComponent implements OnInit {
   private profileService = inject(ProfileService);
   private toastService = inject(ToastService);
   private houseService = inject(HouseService);
+  private currentHouseService = inject(CurrentHouseService);
   private router = inject(Router);
   loading = signal(true);
   user = signal<ProfileResponse | null>(null);
@@ -32,6 +34,9 @@ export class ProfileComponent implements OnInit {
   showModalLogout = signal(false);
   profileProp?: ProfileProp;
   propValue?: string;
+  isAlarmOn = computed(() =>
+    this.currentHouseService.house()?.alarmaEncendida === Estado.ENCENDIDO
+  );
   
   ngOnInit () {
     this.profileService.getUser().subscribe({

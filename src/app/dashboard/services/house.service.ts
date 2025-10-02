@@ -11,6 +11,7 @@ interface UpdateHouseBody {
   direccion?: Partial<Casa ['direccion']>;
 }
 
+/** Provee acceso a la API para realizar operaciones relacionadas a las casas. */
 @Injectable({
   providedIn: 'root'
 })
@@ -26,7 +27,8 @@ export class HouseService {
 
   /** Obtiene todas las casas del usuario. */
   getAll (): Observable<HouseResponse[]> {
-    return this.http.get<InfoHousesResponse>(`${this.baseUrl}`).pipe(map(response => response.data));
+    return this.http.get<InfoHousesResponse>(`${this.baseUrl}`)
+      .pipe(map(response => response.data));
   }
 
   /** Obtiene información de la casa que será utilizada como `currentHouse` y actualiza el `token`. */

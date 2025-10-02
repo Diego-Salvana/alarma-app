@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { HeaderComponent, NavBarComponent, SideBarComponent } from './components';
-import { ActiveRouteService } from './services';
-import { SocketService } from '../shared/services';
-import { Subscription } from 'rxjs';
+import { ActiveRouteService, CurrentHouseService } from './services';
+import { ToastService } from '../shared/services';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,24 +13,24 @@ import { Subscription } from 'rxjs';
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent implements OnDestroy {
+export class DashboardComponent {
   private activeRouteService = inject(ActiveRouteService);
-  private socketService = inject(SocketService);
-  private socketSubscription: Subscription;
+  private toastService = inject(ToastService);
+  private currentHouseController = inject(CurrentHouseService);
   isHome = computed(() => this.activeRouteService.activeSection() === 'home');
 
+  // Dispara la carga de la casa actual y así queda disponible para los componentes hijos.
   constructor () {
-    this.socketSubscription = this.socketService.on('topico/usuario_1').subscribe({
-      next: data => {
-        console.log('Data desde el back: ', data);
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
-  }
+    const token = localStorage.getItem('token');
 
-  ngOnDestroy () {
-    this.socketSubscription.unsubscribe();
+    if (token) {
+      this.currentHouseController.getHouse()
+        .pipe(takeUntilDestroyed())
+        .subscribe({
+          error: e => {
+            this.toastService.error(e.error?.message || e.message);
+          }
+        });
+    }
   }
 }

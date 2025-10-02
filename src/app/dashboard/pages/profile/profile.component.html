@@ -4,6 +4,7 @@
 @let _visiblePassModal = visiblePassModal();
 @let _visibleProfileModal = visibleProfileModal();
 @let _showModalLogout = showModalLogout();
+@let _isAlarmOn = isAlarmOn();
 
 @if (_loading) {
   <div class="text-center pt-8">
@@ -106,7 +107,7 @@
     </p-card>
 
     <!-- Tarjeta Contraseña -->
-    <p-card styleClass="profile-action-card mb-6">
+    <p-card styleClass="profile-action-card mb-6" [ngClass]="{ 'opacity-60': _isAlarmOn }">
       <ng-template #content>
         <div class="action-card-content">
           <div class="action-icon">
@@ -115,6 +116,9 @@
           <div class="action-details">
             <span class="action-title">Seguridad</span>
             <span class="action-subtitle">Cambiar contraseña</span>
+            <span class="action-subtitle" [ngClass]="{ 'hidden': !_isAlarmOn }">
+              <i>(Disponible cuando la alarma está desactivada)</i>
+            </span>
           </div>
           <div class="action-button">
             <p-button 
@@ -122,6 +126,7 @@
               label="Cambiar" 
               size="small" 
               variant="outlined"
+              [disabled]="_isAlarmOn"
               (onClick)="showDialog('password')" />
           </div>
         </div>
