@@ -1,10 +1,11 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { AlarmActivation, Estado, HouseResponse, Sensor } from '../../shared/interfaces';
+import { AlarmActivation, Estado, HistorialConNombre, HouseResponse, Sensor } from '../../shared/interfaces';
 import { HouseService } from './house.service';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { ActivationResponse, ExclusionSensor } from '../interfaces';
 import { cloneDeep } from 'lodash';
 import { SensorService } from './sensor.service';
+import { CentralService } from './central.service';
 
 /** Servicio que funciona como controlador para manejar la casa actual. */
 @Injectable({
@@ -13,6 +14,7 @@ import { SensorService } from './sensor.service';
 export class CurrentHouseService {
   private houseService = inject(HouseService);
   private sensorService = inject(SensorService);
+  private centralService = inject(CentralService);
   private houseId = '';
   private _house = signal<HouseResponse | null>(null);
   private _loading = signal(false);
@@ -93,5 +95,11 @@ export class CurrentHouseService {
   /** Modifica el nombre de un sensor de la casa actual. */
   modifySensorName (sensorNumber: number, newName: string): Observable<Sensor> {
     return this.sensorService.modifyName(sensorNumber, newName);
+  }
+
+  // Central
+  /** Obtiene el historial de eventos de la casa actual. */
+  getHistory (): Observable<HistorialConNombre[]> {
+    return this.centralService.getHistory();
   }
 }

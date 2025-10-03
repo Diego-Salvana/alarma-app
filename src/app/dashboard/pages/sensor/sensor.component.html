@@ -1,6 +1,6 @@
 @let _sensor = sensor();
 @let _loading = loading();
-@let _visible = visible();
+@let _modalOpen = modalOpen();
 @let _submitCompleted = submitCompleted();
 @let _isAlarmOn = isAlarmOn();
 
@@ -160,7 +160,7 @@
 <!-- Modal de Cambio de Nombre de Sensor -->
 @if (this.houseProp) {
   <app-modal-house 
-    [visible]="_visible"
+    [visible]="_modalOpen"
     [houseProp]="houseProp" 
     [propValue]="_sensor?.nombre" 
     [submitEnd]="_submitCompleted"

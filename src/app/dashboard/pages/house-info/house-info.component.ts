@@ -22,43 +22,47 @@ export class HouseInfoComponent {
   loading = signal(true);
   house = signal<HouseResponse | null>(null);
   submitCompleted = signal(true);
-  visible = signal(false);
+  houseModalOpen = signal(false);
   houseProp!: HouseProp;
   propValue?: string;
 
   constructor () {
-    this.houseService.getHouseInfo().pipe(takeUntilDestroyed()).subscribe({
-      next: house => {
-        this.house.set(house);
-        this.loading.set(false);
-      },
-      error: e => {
-        const message = typeof e.message === 'string' ? e.message : e.error.message;
-        this.toastService.error(message);
-        this.loading.set(false);
-      }
-    });
+    this.houseService.getHouseInfo()
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: house => {
+          this.house.set(house);
+          this.loading.set(false);
+        },
+        error: e => {
+          const message = typeof e.message === 'string' ? e.message : e.error.message;
+          this.toastService.error(message);
+          this.loading.set(false);
+        }
+      });
   }
 
-  onSubmit (data: ModalDataTransfer) {
+  /** Actualiza datos de una casa. */
+  updateHouse (data: ModalDataTransfer) {
     this.submitCompleted.set(false);
         
     this.houseService.modifyHouse(data).subscribe({
       next: house => {
         this.house.set(house);
         this.submitCompleted.set(true);
-        this.visible.set(false);
+        this.houseModalOpen.set(false);
       },
       error: e => {
         this.toastService.error(e.error.message);
         this.submitCompleted.set(true);
-        this.visible.set(false);
+        this.houseModalOpen.set(false);
       }
     });
   }
 
+  /** Abre una modal de edición según la propiedad de la casa. */
   showDialog (prop: HouseProp) {
-    this.visible.set(true);
+    this.houseModalOpen.set(true);
     this.houseProp = prop;
 
     switch (prop) {
@@ -77,7 +81,8 @@ export class HouseInfoComponent {
     }
   }
 
+  /** Cierra modal de edición. */
   closeDialog () {
-    this.visible.set(false);
+    this.houseModalOpen.set(false);
   }
 }

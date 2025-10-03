@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { CardModule } from 'primeng/card';
 import { FormsModule } from '@angular/forms';

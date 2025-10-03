@@ -1,7 +1,7 @@
 @let _loading = loading();
 @let _house = house();
 @let _submitCompleted = submitCompleted();
-@let _visible = visible();
+@let _houseModalOpen = houseModalOpen();
 
 @if (_loading) {
   <div class="text-center pt-8">
@@ -140,10 +140,10 @@
 <!-- Modal de Edición -->
 @if (this.houseProp) {
   <app-modal-house 
-    [visible]="_visible" 
+    [visible]="_houseModalOpen" 
     [houseProp]="houseProp" 
     [propValue]="propValue" 
     [submitEnd]="_submitCompleted"
     (visibleChange)="closeDialog()" 
-    (changeValue)="onSubmit($event)" />
+    (changeValue)="updateHouse($event)" />
 }

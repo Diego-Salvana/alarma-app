@@ -19,15 +19,17 @@ export class HomeComponent {
   sites = signal<HouseResponse[]>([]);
 
   constructor () {
-    this.houseService.getAll().pipe(takeUntilDestroyed()).subscribe({
-      next: houses => {
-        this.loading.set(false);
-        this.sites.set(houses);
-      },
-      error: err => {
-        this.loading.set(false);
-        this.toastService.error(err.error.message);
-      }
-    });
+    this.houseService.getAll()
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: houses => {
+          this.loading.set(false);
+          this.sites.set(houses);
+        },
+        error: err => {
+          this.loading.set(false);
+          this.toastService.error(err.error.message);
+        }
+      });
   }
 }

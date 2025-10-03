@@ -1,9 +1,9 @@
 @let _user = user();
 @let _loading = loading();
 @let _submitCompleted = submitCompleted();
-@let _visiblePassModal = visiblePassModal();
-@let _visibleProfileModal = visibleProfileModal();
-@let _showModalLogout = showModalLogout();
+@let _visiblePassModal = passModalOpen();
+@let _visibleProfileModal = profileModalOpen();
+@let _showModalLogout = logoutModalOpen();
 @let _isAlarmOn = isAlarmOn();
 
 @if (_loading) {
@@ -143,7 +143,7 @@
         @for (house of _user.casas; track $index) {
           <p-card 
             styleClass="site-card hover:shadow-lg transition-shadow cursor-pointer" 
-            (click)="goInfoHouse(house._id)">
+            (click)="goToHouseInfo(house._id)">
             <ng-template #content>
               <div class="site-card-content">
                 <div class="site-icon">
@@ -197,7 +197,7 @@
               variant="outlined" 
               severity="danger"
               size="small"
-              (onClick)="logout()" />
+              (onClick)="showLogoutModal()" />
           </div>
         </div>
       </ng-template>
@@ -216,12 +216,12 @@
     [propValue]="propValue" 
     [submitEnd]="_submitCompleted"
     (visibleChange)="closeDialog()" 
-    (changeValue)="onSubmit($event)" />
+    (changeValue)="updateProfile($event)" />
     
   <!-- Modal para Cambiar Contraseña -->
   <app-modal-password 
     [visible]="_visiblePassModal"
     [submitEnd]="_submitCompleted"
     (visibleChange)="closeDialog()"
-    (changeValue)="onChangePassword($event)" />
+    (changeValue)="updatePassword($event)" />
 }

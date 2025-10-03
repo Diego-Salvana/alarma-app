@@ -22,7 +22,7 @@ export class SensorComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   loading = signal(true);
   sensor = signal<Sensor | null>(null);
-  visible = signal(false);
+  modalOpen = signal(false);
   submitCompleted = signal(true);
   houseProp: HouseProp = 'sensorName';
   sensorNumber = input<string>(''); // Toma "sensorNumber" de la ruta.
@@ -60,23 +60,23 @@ export class SensorComponent implements OnInit {
         next: sensor => {
           this.sensor.set(sensor);
           this.submitCompleted.set(true);
-          this.visible.set(false);
+          this.modalOpen.set(false);
         },
         error: e => {
           this.toastService.error(e.error.message);
           this.submitCompleted.set(true);
-          this.visible.set(false);
+          this.modalOpen.set(false);
         }
       });
   }
   
   /** Muestra el modal de cambio de nombre. */
   showDialog () {
-    this.visible.set(true);
+    this.modalOpen.set(true);
   }
   
   /** Cierra el modal de cambio de nombre. */
   closeDialog () {
-    this.visible.set(false);
+    this.modalOpen.set(false);
   }
 }

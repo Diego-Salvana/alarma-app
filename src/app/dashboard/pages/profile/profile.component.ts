@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -10,6 +10,7 @@ import { ToastService } from '../../../shared/services';
 import { CurrentHouseService, HouseService } from '../../services';
 import { ModalLogoutComponent } from '../../../shared/components';
 import { NgClass } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type ModalType = 'password' | 'profile';
 
@@ -20,83 +21,89 @@ type ModalType = 'password' | 'profile';
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent {
   private profileService = inject(ProfileService);
-  private toastService = inject(ToastService);
   private houseService = inject(HouseService);
   private currentHouseService = inject(CurrentHouseService);
+  private toastService = inject(ToastService);
   private router = inject(Router);
   loading = signal(true);
   user = signal<ProfileResponse | null>(null);
   submitCompleted = signal(true);
-  visiblePassModal = signal(false);
-  visibleProfileModal = signal(false);
-  showModalLogout = signal(false);
+  passModalOpen = signal(false);
+  profileModalOpen = signal(false);
+  logoutModalOpen = signal(false);
   profileProp?: ProfileProp;
   propValue?: string;
   isAlarmOn = computed(() =>
     this.currentHouseService.house()?.alarmaEncendida === Estado.ENCENDIDO
   );
   
-  ngOnInit () {
-    this.profileService.getUser().subscribe({
-      next: userResponse => {
-        this.user.set(userResponse);
-        this.loading.set(false);
-      },
-      error: e => {
-        this.toastService.error(e.error.message);
-        this.loading.set(false);
-      }
-    });
+  constructor () {
+    this.profileService.getUser()
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: userResponse => {
+          this.user.set(userResponse);
+          this.loading.set(false);
+        },
+        error: e => {
+          this.toastService.error(e.error.message);
+          this.loading.set(false);
+        }
+      });
   }
 
-  onSubmit (data: ModalDataTransfer) {
+  /** Actualiza datos del perfil de usuario. */
+  updateProfile (data: ModalDataTransfer) {
     this.submitCompleted.set(false);
         
     this.profileService.modifyUserData(data).subscribe({
       next: userResponse => {
         this.user.set(userResponse);
         this.submitCompleted.set(true);
-        this.visibleProfileModal.set(false);
+        this.profileModalOpen.set(false);
       },
       error: e => {
         this.toastService.error(e.error.message);
         this.submitCompleted.set(true);
-        this.visibleProfileModal.set(false);
+        this.profileModalOpen.set(false);
       }
     });
   }
 
-  onChangePassword (data: ModalDataTransfer) {
+  /** Cambia la contraseña del usuario. */
+  updatePassword (data: ModalDataTransfer) {
     this.submitCompleted.set(false);
 
     this.profileService.updateUserPassword(data).subscribe({
       next: () => {
         this.submitCompleted.set(true);
-        this.visiblePassModal.set(false);
+        this.passModalOpen.set(false);
       },
       error: e => {
         this.toastService.error(e.error.message);
         this.submitCompleted.set(true);
-        this.visiblePassModal.set(false);
+        this.passModalOpen.set(false);
       }
     });
   }
 
-  goInfoHouse (id: string) {
+  /** Navega a la información de la casa. */
+  goToHouseInfo (id: string) {
     this.houseService.setHouseInfoID(id);
     this.router.navigate(['/dashboard', 'profile', 'house']);
   }
 
+  /** Abre una modal de edición según la propiedad de perfil. */
   showDialog (modal: ModalType, prop?: ProfileProp) {
     switch (modal) {
       case 'password':
-        this.visiblePassModal.set(true);
+        this.passModalOpen.set(true);
         this.profileProp = 'password';
         break;
       case 'profile':
-        this.visibleProfileModal.set(true);
+        this.profileModalOpen.set(true);
         break;
     }
 
@@ -116,16 +123,17 @@ export class ProfileComponent implements OnInit {
     }
   }
   
+  /** Cierra modales de edición. */
   closeDialog () {
-    this.visiblePassModal.set(false);
-    this.visibleProfileModal.set(false);
+    this.passModalOpen.set(false);
+    this.profileModalOpen.set(false);
   }
 
-  logout () {
-    this.showModalLogout.set(true);
+  showLogoutModal () {
+    this.logoutModalOpen.set(true);
   }
 
   cancelLogout () {
-    this.showModalLogout.set(false);
+    this.logoutModalOpen.set(false);
   }
 }
