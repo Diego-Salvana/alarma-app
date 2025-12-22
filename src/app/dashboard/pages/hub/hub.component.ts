@@ -1,13 +1,14 @@
 import { TitleCasePipe, NgClass } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SensorListComponent, ModalExclusionComponent, ExclusionFormValue } from '../../components';
 import { CurrentHouseService } from '../../services';
-import { AlarmActivation, HouseResponse, Sensor, SocketError } from '../../../shared/interfaces';
+import { AlarmActivation, Estado, HouseResponse, Sensor } from '../../../shared/interfaces';
 import { SocketService, ToastService } from '../../../shared/services';
 import { ConfirmDisarmComponent } from '../../components/modals';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { alarmOnEvent, currentUser, userPrefix } from '../../../env';
+import { WS_ALARM_ARMING } from '../../../env';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-hub',
@@ -17,14 +18,15 @@ import { alarmOnEvent, currentUser, userPrefix } from '../../../env';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HubComponent {
-  private currentHouseController = inject(CurrentHouseService);
+  private currentHouseService = inject(CurrentHouseService);
   private toastService = inject(ToastService);
-  private socketsService = inject(SocketService);
+  private socketService = inject(SocketService);
   private timeOutId!: ReturnType<typeof setTimeout>;
-  house: Signal<HouseResponse | null> = this.currentHouseController.house;
-  loading: Signal<boolean> = this.currentHouseController.loading;
-  isActive = computed<boolean>(() => this.house()?.alarmaEncendida === 'On');
-  sensors = computed<Sensor[]>(() => this.house()?.sensores ?? []);
+  private readonly username = this.currentHouseService.username;
+  readonly house: Signal<HouseResponse | null> = this.currentHouseService.house;
+  readonly loading: Signal<boolean> = this.currentHouseService.loading;
+  readonly isActive = computed<boolean>(() => this.house()?.alarmaEncendida === Estado.ENCENDIDO);
+  readonly sensorList = computed<Sensor[]>(() => this.house()?.sensores ?? []);
   submitCompleted = signal(true);
   exclusionFormVisible = false;
   disarmConfirmationVisible = signal(false);
@@ -33,7 +35,7 @@ export class HubComponent {
   constructor () {
     // Si aún no hay una casa cargada intenta cargarla.
     if (!this.loading() && !this.house()) {
-      this.currentHouseController.getHouse()
+      this.currentHouseService.getHouse()
         .pipe(takeUntilDestroyed())
         .subscribe({
           error: e => {
@@ -42,13 +44,33 @@ export class HubComponent {
           }
         });
     }
-
+    
     // Subscripción a eventos de activación de la alarma.
-    this.socketsService.on<AlarmActivation>(`${alarmOnEvent}/${userPrefix}${currentUser}`)
-      .pipe(takeUntilDestroyed())
+    effect(onCleanup => {
+      const sub = this.subscribeToHouseSocket(this.username(), this.house()?.nombreCasa ?? '');
+      
+      onCleanup(() => sub.unsubscribe());
+    });
+
+    // Subscripción a eventos de error.
+    // this.socketService.on<SocketError>('error')
+    //   .pipe(takeUntilDestroyed())
+    //   .subscribe(data => {
+    //     if (data.event === 'alarmActivation') {
+    //       this.closeExclusionForm();
+    //       this.submitCompleted.set(true);
+    //       this.toastService.error(data.message);
+    //       clearTimeout(this.timeOutId);
+    //     }
+    //   });
+  }
+    
+  private subscribeToHouseSocket (username: string, houseName: string): Subscription {
+    return this.socketService
+      .on<AlarmActivation>(`${WS_ALARM_ARMING}/${username}/${houseName}`)
       .subscribe(data => {
         try {
-          this.currentHouseController.updateHouse(data);
+          this.currentHouseService.updateHouse(data);
         } catch {
           this.toastService.error('Ocurrió un error al actualizar la casa.');
         }
@@ -57,17 +79,6 @@ export class HubComponent {
         this.disarmConfirmationAction(false);
         this.disarmEnd.set(true);
         clearTimeout(this.timeOutId);
-      });
-
-    // Subscripción a eventos de error.
-    this.socketsService.on<SocketError>('error')
-      .pipe(takeUntilDestroyed())
-      .subscribe(data => {
-        if (data.event === 'alarmActivation') {
-          this.closeExclusionForm();
-          this.submitCompleted.set(true);
-          this.toastService.error(data.message);
-        }
       });
   }
 
@@ -79,7 +90,7 @@ export class HubComponent {
       .entries(value)
       .map(([numeroSensor, estado]) => ({ numeroSensor, estado }));
 
-    this.currentHouseController.armAlarm(exclusionArray).subscribe({
+    this.currentHouseService.armAlarm(exclusionArray).subscribe({
       next: _ => {
         this.timeOutId = setTimeout(() => {
           this.submitCompleted.set(true);
@@ -93,6 +104,30 @@ export class HubComponent {
         this.exclusionFormVisible = false;
       }
     });
+  }
+
+  /** Ordena iniciar la desactivación de la alarma si `disarm` es `true`, de lo contrario cierra el modal. Genera un timeout con tiempo límite de espera para la respuesta por `websocket`. */
+  disarmConfirmationAction (disarm: boolean) {
+    if (!disarm) {
+      this.disarmConfirmationVisible.set(false);
+    } else {
+      this.disarmEnd.set(false);
+
+      this.currentHouseService.disarmAlarm().subscribe({
+        next: _ => {
+          this.timeOutId = setTimeout(() => {
+            this.disarmEnd.set(true);
+            this.disarmConfirmationVisible.set(false);
+            this.toastService.error('No se pudo desactivar la alarma.');
+          }, 5000);
+        },
+        error: e => {
+          this.toastService.error(e.error.message);
+          this.disarmEnd.set(true);
+          this.disarmConfirmationVisible.set(false);
+        }
+      });
+    }
   }
 
   showExclusionForm () {
@@ -115,29 +150,5 @@ export class HubComponent {
     }
 
     this.disarmConfirmationVisible.set(true);
-  }
-
-  /** Ordena iniciar la desactivación de la alarma si `disarm` es `true`, de lo contrario cierra el modal. Genera un timeout con tiempo límite de espera para la respuesta por `websocket`. */
-  disarmConfirmationAction (disarm: boolean) {
-    if (!disarm) {
-      this.disarmConfirmationVisible.set(false);
-    } else {
-      this.disarmEnd.set(false);
-
-      this.currentHouseController.disarmAlarm().subscribe({
-        next: _ => {
-          this.timeOutId = setTimeout(() => {
-            this.disarmEnd.set(true);
-            this.disarmConfirmationVisible.set(false);
-            this.toastService.error('No se pudo desactivar la alarma.');
-          }, 5000);
-        },
-        error: e => {
-          this.toastService.error(e.error.message);
-          this.disarmEnd.set(true);
-          this.disarmConfirmationVisible.set(false);
-        }
-      });
-    }
   }
 }

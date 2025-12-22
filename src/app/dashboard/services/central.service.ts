@@ -14,7 +14,8 @@ export class CentralService {
 
   /** Obtiene el historial de eventos de la central. */
   getHistory (): Observable<HistorialConNombre[]> {
-    return this.http.get<InfoHistoryResponse>(`${this.baseUrl}`)
+    return this.http
+      .get<InfoHistoryResponse>(`${this.baseUrl}`)
       .pipe(map(response => response.data));
   }
 }

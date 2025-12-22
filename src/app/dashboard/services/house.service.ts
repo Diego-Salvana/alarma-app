@@ -65,17 +65,18 @@ export class HouseService {
       }
     };
 
-    return this.http.patch<InfoHouseResponse>(`${this.baseUrl}/name-dir/${this.houseInfoID}`, body)
+    return this.http
+      .patch<InfoHouseResponse>(`${this.baseUrl}/name-dir/${this.houseInfoID}`, body)
       .pipe(map(response => response.data));
   }
 
   /** Envía solicitud para `activar` la alarma de la casa almacenada en el token. La respuesta de activación se recibe por `websocket`. */
   armAlarm (exclusionArray: ExclusionSensor[]): Observable<ActivationResponse> {
-    return this.http.post<ActivationResponse>(`${this.baseUrl}/active`, { exclusionArray });
+    return this.http.post<ActivationResponse>(`${this.baseUrl}/arm`, { exclusionArray });
   }
 
   /** Envía solicitud para `desactivar` la alarma de la casa almacenada en el token. La respuesta de desactivación se recibe por `websocket`. */
   disarmAlarm (): Observable<ActivationResponse> {
-    return this.http.get<ActivationResponse>(`${this.baseUrl}/disarm`);
+    return this.http.post<ActivationResponse>(`${this.baseUrl}/disarm`, {});
   }
 }

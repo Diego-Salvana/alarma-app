@@ -1,10 +1,19 @@
 // Localhost
-export const API_URL = 'http://localhost:5000/api';
+export const API_URL = 'http://localhost:5200/api-alarma';
+export const SOCKET_URL = 'http://localhost:5200';
 
-// Servidor Local Linux
-// export const API_URL = 'http://192.168.0.216:5000/api';
+// Servidor DonWeb
+// export const API_URL = 'https://vps-4920163-x.dattaweb.com:443/api-alarma';
+// export const SOCKET_URL = 'https://vps-4920163-x.dattaweb.com:443';
+
+// Ruta del socket
+export const SOCKET_PATH = '/api-alarma/socket';
 
 // Constantes de pruebas
-export const alarmOnEvent = 'alarmaEncendida';
-export const userPrefix = 'user_';
-export const currentUser = 'pedro.sala8@example.com';
+export const alarmArmingEvent = 'alarmaEncendida';
+
+// Eventos WebSocket
+export const WS_ALARM_ARMING = 'alarm/state';
+
+// Otras constantes
+export const USER_PREFIX = 'user_';

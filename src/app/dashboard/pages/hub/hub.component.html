@@ -1,7 +1,7 @@
 @let _house = house();
 @let _loading = loading();
 @let _isActive = isActive();
-@let _sensors = sensors();
+@let _sensors = sensorList();
 @let _submitCompleted = submitCompleted();
 @let _disarmConfirmationVisible = disarmConfirmationVisible();
 @let _disarmEnd = disarmEnd();
@@ -95,11 +95,11 @@
 
 <!-- Modal de activación -->
 <app-modal-exclusion 
-[visible]="exclusionFormVisible" 
-[sensors]="_sensors" 
-[submitEnd]="_submitCompleted" 
-(visibleChange)="closeExclusionForm()" 
-(onActive)="activateAlarm($event)" />
+  [visible]="exclusionFormVisible" 
+  [sensors]="_sensors" 
+  [submitEnd]="_submitCompleted" 
+  (visibleChange)="closeExclusionForm()" 
+  (onActive)="activateAlarm($event)" />
 
 <!-- Modal de desactivación -->
 <app-confirm-disarm 

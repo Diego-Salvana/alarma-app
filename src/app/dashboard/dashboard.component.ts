@@ -16,7 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class DashboardComponent {
   private activeRouteService = inject(ActiveRouteService);
   private toastService = inject(ToastService);
-  private currentHouseController = inject(CurrentHouseService);
+  private currentHouseService = inject(CurrentHouseService);
   isHome = computed(() => this.activeRouteService.activeSection() === 'home');
 
   // Dispara la carga de la casa actual y así queda disponible para los componentes hijos.
@@ -24,7 +24,7 @@ export class DashboardComponent {
     const token = localStorage.getItem('token');
 
     if (token) {
-      this.currentHouseController.getHouse()
+      this.currentHouseService.getHouse()
         .pipe(takeUntilDestroyed())
         .subscribe({
           error: e => {

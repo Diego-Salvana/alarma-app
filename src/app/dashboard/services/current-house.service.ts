@@ -1,11 +1,13 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { AlarmActivation, Estado, HistorialConNombre, HouseResponse, Sensor } from '../../shared/interfaces';
 import { HouseService } from './house.service';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, finalize, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { ActivationResponse, ExclusionSensor } from '../interfaces';
 import { cloneDeep } from 'lodash';
 import { SensorService } from './sensor.service';
 import { CentralService } from './central.service';
+import { USER_PREFIX } from '../../env';
+import { ProfileService } from './profile.service';
 
 /** Servicio que funciona como controlador para manejar la casa actual. */
 @Injectable({
@@ -15,12 +17,19 @@ export class CurrentHouseService {
   private houseService = inject(HouseService);
   private sensorService = inject(SensorService);
   private centralService = inject(CentralService);
+  private profileService = inject(ProfileService);
   private houseId = '';
   private _house = signal<HouseResponse | null>(null);
   private _loading = signal(false);
+  private _username = signal('');
   house = this._house.asReadonly();
   loading = this._loading.asReadonly();
-  
+  username = this._username.asReadonly();
+
+  setUsername (email: string) {
+    this._username.set(`${USER_PREFIX}${email}`);
+  }
+
   setHouseId (houseId: string) {
     this.houseId = houseId;
   }
@@ -41,17 +50,19 @@ export class CurrentHouseService {
       }
     }
 
-    return this.houseService.getHouse(this.houseId)
-      .pipe(
-        tap(house => {
-          this._house.set(house);
-          this._loading.set(false);
-        }),
-        catchError(err => {
-          this._loading.set(false);
-          return throwError(() => err);
-        })
-      );
+    return this.houseService.getHouse(this.houseId).pipe(
+      tap(house => this._house.set(house)),
+      switchMap(() => {
+        return this._username()
+          ? of(null)
+          : this.profileService.getUser().pipe(
+            tap(user => this.setUsername(user.email))
+          );
+      }),
+      map(() => this._house() as HouseResponse),
+      catchError(err => throwError(() => err)),
+      finalize(() => this._loading.set(false))
+    );
   }
 
   /** Inicia activación de la alarma. */

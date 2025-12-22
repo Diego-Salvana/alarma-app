@@ -14,10 +14,7 @@ export class AppComponent implements OnInit {
   private router = inject(Router);
 
   ngOnInit () {
-    App.addListener('backButton', (event) => {
-      console.log('Back button pressed', event);
-      window.alert('Back button pressed');
-      
+    App.addListener('backButton', () => {
       if (this.router.url !== '/home') {
         window.history.back();
       } else {

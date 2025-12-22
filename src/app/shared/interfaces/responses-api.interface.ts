@@ -26,6 +26,7 @@ export interface InfoHousesResponse {
 export interface HouseResponse {
   _id: string;
   nombre: string;
+  nombreCasa: string;
   direccion: Direccion;
   alarmaEncendida: Estado;
   sonando?: boolean;

@@ -11,6 +11,7 @@ import { CurrentHouseService, HouseService } from '../../services';
 import { ModalLogoutComponent } from '../../../shared/components';
 import { NgClass } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 
 type ModalType = 'password' | 'profile';
 
@@ -41,16 +42,13 @@ export class ProfileComponent {
   
   constructor () {
     this.profileService.getUser()
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        takeUntilDestroyed(),
+        finalize(() => this.loading.set(false))
+      )
       .subscribe({
-        next: userResponse => {
-          this.user.set(userResponse);
-          this.loading.set(false);
-        },
-        error: e => {
-          this.toastService.error(e.error.message);
-          this.loading.set(false);
-        }
+        next: userResponse => this.user.set(userResponse),
+        error: e => this.toastService.error(e.error.message)
       });
   }
 
@@ -58,35 +56,33 @@ export class ProfileComponent {
   updateProfile (data: ModalDataTransfer) {
     this.submitCompleted.set(false);
         
-    this.profileService.modifyUserData(data).subscribe({
-      next: userResponse => {
-        this.user.set(userResponse);
-        this.submitCompleted.set(true);
-        this.profileModalOpen.set(false);
-      },
-      error: e => {
-        this.toastService.error(e.error.message);
-        this.submitCompleted.set(true);
-        this.profileModalOpen.set(false);
-      }
-    });
+    this.profileService.modifyUserData(data)
+      .pipe(
+        finalize(() => {
+          this.submitCompleted.set(true);
+          this.profileModalOpen.set(false);
+        })
+      )
+      .subscribe({
+        next: userResponse => this.user.set(userResponse),
+        error: e => this.toastService.error(e.error.message)
+      });
   }
 
   /** Cambia la contraseña del usuario. */
   updatePassword (data: ModalDataTransfer) {
     this.submitCompleted.set(false);
 
-    this.profileService.updateUserPassword(data).subscribe({
-      next: () => {
-        this.submitCompleted.set(true);
-        this.passModalOpen.set(false);
-      },
-      error: e => {
-        this.toastService.error(e.error.message);
-        this.submitCompleted.set(true);
-        this.passModalOpen.set(false);
-      }
-    });
+    this.profileService.updateUserPassword(data)
+      .pipe(
+        finalize(() => {
+          this.submitCompleted.set(true);
+          this.passModalOpen.set(false);
+        })
+      )
+      .subscribe({
+        error: e => this.toastService.error(e.error.message)
+      });
   }
 
   /** Navega a la información de la casa. */
