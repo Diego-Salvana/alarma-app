@@ -1,13 +1,17 @@
 import { Estado } from './models.interface';
 
-export interface AlarmActivation {
+export interface AlarmArming {
   state: Estado;
   excludedSensors: string[];
 }
 
-type Topic = 'alarmActivation' | 'ringing';
+enum AlarmAction {
+  SET_ARMED_STATE = 'SET_ARMED_STATE',
+  TRIGGER = 'TRIGGER',
+}
 
-export interface SocketError {
-  event: Topic;
+export interface HouseSocketError {
+  houseName: string;
+  action: AlarmAction;
   message: string;
 }

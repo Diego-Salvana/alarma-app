@@ -1,8 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { AlarmActivation, Estado, HistorialConNombre, HouseResponse, Sensor } from '../../shared/interfaces';
+import { AlarmArming, Estado, HistorialConNombre, HouseResponse, Sensor } from '../../shared/interfaces';
 import { HouseService } from './house.service';
 import { catchError, finalize, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
-import { ActivationResponse, ExclusionSensor } from '../interfaces';
+import { ArmedStateResponse, ExclusionSensor } from '../interfaces';
 import { cloneDeep } from 'lodash';
 import { SensorService } from './sensor.service';
 import { CentralService } from './central.service';
@@ -21,7 +21,7 @@ export class CurrentHouseService {
   private houseId = '';
   private _house = signal<HouseResponse | null>(null);
   private _loading = signal(false);
-  private _username = signal('');
+  private _username = signal<string | null>(null);
   house = this._house.asReadonly();
   loading = this._loading.asReadonly();
   username = this._username.asReadonly();
@@ -66,17 +66,17 @@ export class CurrentHouseService {
   }
 
   /** Inicia activación de la alarma. */
-  armAlarm (exclusionArray: ExclusionSensor[]): Observable<ActivationResponse> {
+  armAlarm (exclusionArray: ExclusionSensor[]): Observable<ArmedStateResponse> {
     return this.houseService.armAlarm(exclusionArray);
   }
 
   /** Inicia desactivación de la alarma. */
-  disarmAlarm (): Observable<ActivationResponse> {
+  disarmAlarm (): Observable<ArmedStateResponse> {
     return this.houseService.disarmAlarm();
   }
 
   /** Actualiza el estado la casa y los sensores con la información recibida por `websocket`. */
-  updateHouse (info: AlarmActivation) {
+  updateHouse (info: AlarmArming) {
     const updatedHouse = cloneDeep(this._house());
   
     if (!updatedHouse) {

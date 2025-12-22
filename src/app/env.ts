@@ -14,6 +14,7 @@ export const alarmArmingEvent = 'alarmaEncendida';
 
 // Eventos WebSocket
 export const WS_ALARM_ARMING = 'alarm/state';
+export const WS_ALARM_ERROR = 'alarm/error';
 
 // Otras constantes
 export const USER_PREFIX = 'user_';

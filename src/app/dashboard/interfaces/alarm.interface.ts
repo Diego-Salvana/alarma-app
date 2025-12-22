@@ -1,6 +1,6 @@
 type RequestState = 'success' | 'pending' | 'error';
 
-export interface ActivationResponse {
+export interface ArmedStateResponse {
   message: string;
   state: RequestState;
 }

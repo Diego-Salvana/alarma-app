@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable, tap, throwError } from 'rxjs';
 import { Casa, HouseResponse, InfoHouseResponse, InfoHousesResponse } from '../../shared/interfaces';
-import { ActivationResponse, ExclusionSensor, ModalDataTransfer } from '../interfaces';
+import { ArmedStateResponse, ExclusionSensor, ModalDataTransfer } from '../interfaces';
 import { API_URL } from '../../env';
 
 interface UpdateHouseBody {
@@ -71,12 +71,12 @@ export class HouseService {
   }
 
   /** Envía solicitud para `activar` la alarma de la casa almacenada en el token. La respuesta de activación se recibe por `websocket`. */
-  armAlarm (exclusionArray: ExclusionSensor[]): Observable<ActivationResponse> {
-    return this.http.post<ActivationResponse>(`${this.baseUrl}/arm`, { exclusionArray });
+  armAlarm (exclusionArray: ExclusionSensor[]): Observable<ArmedStateResponse> {
+    return this.http.post<ArmedStateResponse>(`${this.baseUrl}/arm`, { exclusionArray });
   }
 
   /** Envía solicitud para `desactivar` la alarma de la casa almacenada en el token. La respuesta de desactivación se recibe por `websocket`. */
-  disarmAlarm (): Observable<ActivationResponse> {
-    return this.http.post<ActivationResponse>(`${this.baseUrl}/disarm`, {});
+  disarmAlarm (): Observable<ArmedStateResponse> {
+    return this.http.post<ArmedStateResponse>(`${this.baseUrl}/disarm`, {});
   }
 }

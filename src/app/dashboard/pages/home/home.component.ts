@@ -4,6 +4,7 @@ import { HouseService } from '../../services';
 import { HouseResponse } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -20,16 +21,13 @@ export class HomeComponent {
 
   constructor () {
     this.houseService.getAll()
-      .pipe(takeUntilDestroyed())
+      .pipe(
+        takeUntilDestroyed(),
+        finalize(() => this.loading.set(false))
+      )
       .subscribe({
-        next: houses => {
-          this.loading.set(false);
-          this.sites.set(houses);
-        },
-        error: err => {
-          this.loading.set(false);
-          this.toastService.error(err.error.message);
-        }
+        next: houses => this.sites.set(houses),
+        error: err => this.toastService.error(err.error.message)
       });
   }
 }

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal, s
 import { ButtonModule } from 'primeng/button';
 import { SensorListComponent, ModalExclusionComponent, ExclusionFormValue } from '../../components';
 import { CurrentHouseService } from '../../services';
-import { AlarmActivation, Estado, HouseResponse, Sensor } from '../../../shared/interfaces';
+import { AlarmArming, Estado, HouseResponse, Sensor } from '../../../shared/interfaces';
 import { SocketService, ToastService } from '../../../shared/services';
 import { ConfirmDisarmComponent } from '../../components/modals';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -45,29 +45,20 @@ export class HubComponent {
         });
     }
     
-    // Subscripción a eventos de activación de la alarma.
+    // Subscripción a eventos de armado de la alarma.
     effect(onCleanup => {
-      const sub = this.subscribeToHouseSocket(this.username(), this.house()?.nombreCasa ?? '');
-      
+      const username = this.username();
+      const house = this.house();
+      if (!username || !house) return;
+
+      const sub = this.subscribeToHouseSocket(username, house.nombreCasa);
       onCleanup(() => sub.unsubscribe());
     });
-
-    // Subscripción a eventos de error.
-    // this.socketService.on<SocketError>('error')
-    //   .pipe(takeUntilDestroyed())
-    //   .subscribe(data => {
-    //     if (data.event === 'alarmActivation') {
-    //       this.closeExclusionForm();
-    //       this.submitCompleted.set(true);
-    //       this.toastService.error(data.message);
-    //       clearTimeout(this.timeOutId);
-    //     }
-    //   });
   }
     
   private subscribeToHouseSocket (username: string, houseName: string): Subscription {
     return this.socketService
-      .on<AlarmActivation>(`${WS_ALARM_ARMING}/${username}/${houseName}`)
+      .on<AlarmArming>(`${WS_ALARM_ARMING}/${username}/${houseName}`)
       .subscribe(data => {
         try {
           this.currentHouseService.updateHouse(data);
