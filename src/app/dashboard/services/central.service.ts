@@ -9,8 +9,8 @@ import { API_URL } from '../../env';
   providedIn: 'root'
 })
 export class CentralService {
-  private baseUrl = `${API_URL}/central`;
   private http = inject(HttpClient);
+  private baseUrl = `${API_URL}/central`;
 
   /** Obtiene el historial de eventos de la central. */
   getHistory (): Observable<HistorialConNombre[]> {

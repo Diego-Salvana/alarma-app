@@ -3,8 +3,9 @@ import { TimelineModule } from 'primeng/timeline';
 import { HistorialConNombre } from '../../../shared/interfaces';
 import { DatePipe } from '@angular/common';
 import { ToastService } from '../../../shared/services';
-import { CurrentHouseService } from '../../services';
+import { CentralService } from '../../services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-central-history',
@@ -14,23 +15,21 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CentralHistoryComponent {
-  private currentHouseService = inject(CurrentHouseService);
+  private centralService = inject(CentralService);
   private toastService = inject(ToastService);
-  loading = signal(true);
+  isLoading = signal(true);
   history = signal<HistorialConNombre[]>([]);
   
   constructor () {
-    this.currentHouseService.getHistory()
-      .pipe(takeUntilDestroyed())
+    this.centralService
+      .getHistory()
+      .pipe(
+        takeUntilDestroyed(),
+        finalize(() => this.isLoading.set(false))
+      )
       .subscribe({
-        next: historyResponse => {
-          this.history.set(historyResponse);
-          this.loading.set(false);
-        },
-        error: e => {
-          this.toastService.error(e.error.message);
-          this.loading.set(false);
-        }
+        next: historyResponse => this.history.set(historyResponse),
+        error: err => this.toastService.error(err.message)
       });
   }
 }

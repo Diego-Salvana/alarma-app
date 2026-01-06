@@ -8,17 +8,17 @@ import { PasswordModule } from 'primeng/password';
 import { HouseProp, ModalDataTransfer } from '../../../interfaces';
 
 @Component({
-  selector: 'app-modal-house',
+  selector: 'app-house-modal',
   imports: [DialogModule, ButtonModule, InputTextModule, InputMaskModule, PasswordModule, ReactiveFormsModule],
-  templateUrl: './modal-house.component.html',
-  styleUrl: './modal-house.component.scss',
+  templateUrl: './house-modal.component.html',
+  styleUrl: './house-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalHouseComponent {
+export class HouseModalComponent {
   visible = model(false);
-  submitEnd = input.required<boolean>();
+  submitted = input.required<boolean>();
   houseProp = input.required<HouseProp>();
-  propValue = input<string>();
+  propValue = input.required<string>();
   formControl = new FormControl('', [Validators.required]);
   changeValue = output<ModalDataTransfer>();
   headerText = computed(
@@ -26,8 +26,8 @@ export class ModalHouseComponent {
   );
 
   constructor () {
-    effect(() => (this.formControl.setValue(this.propValue() ?? '')));
-    effect(() => (this.submitEnd() ? this.formControl.enable() : this.formControl.disable()));
+    effect(() => this.formControl.setValue(this.propValue()));
+    effect(() => this.submitted() ? this.formControl.enable() : this.formControl.disable());
   }
 
   onSubmit () {

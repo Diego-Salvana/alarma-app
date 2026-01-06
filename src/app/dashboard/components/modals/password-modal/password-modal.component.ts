@@ -7,13 +7,13 @@ import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../../../au
 import { ModalDataTransfer } from '../../../interfaces';
 
 @Component({
-  selector: 'app-modal-password',
+  selector: 'app-password-modal',
   imports: [DialogModule, ButtonModule, PasswordModule, ReactiveFormsModule],
-  templateUrl: './modal-password.component.html',
-  styleUrl: './modal-password.component.scss',
+  templateUrl: './password-modal.component.html',
+  styleUrl: './password-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalPasswordComponent implements OnInit {
+export class PasswordModalComponent implements OnInit {
   private fb = inject(FormBuilder);
   visible = model<boolean>(false);
   submitEnd = input.required();

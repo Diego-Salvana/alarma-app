@@ -1,1 +1,1 @@
-export * from './modal-logout/modal-logout.component';
+export * from './logout-modal/logout-modal.component';

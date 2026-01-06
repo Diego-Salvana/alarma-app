@@ -1,14 +1,16 @@
-@let houseInfo = house();
-@let _isActivated = isActivated();
+@let _house = house();
+@let _isAlarmArmed = isAlarmArmed();
 
 <p-card styleClass="hover:shadow-md cursor-pointer" (click)="goHouse()">
   <div class="flex items-center justify-center gap-4 w-max m-auto cards-container">
     <div class="flex flex-col justify-center items-center">
-      <i class="pi pi-home home-icon" [ngClass]="_isActivated ? 'red-text' : 'green-text'"></i>
-      <h5 class="text-base font-semibold">{{ houseInfo.nombre | uppercase }}</h5>
-      <h6 class="text-sm leading-none font-medium mb-2">{{ houseInfo.direccion.calle }} {{ houseInfo.direccion.numero }}</h6>
-      <p class="font-semibold" [ngClass]="_isActivated ? 'red-text' : 'green-text'">
-        {{ _isActivated ? 'Activada' : 'Desactivada' | titlecase }}
+      <i class="pi pi-home home-icon" [ngClass]="_isAlarmArmed ? 'red-text' : 'green-text'"></i>
+      <h5 class="text-base font-semibold">{{ _house.nombre | uppercase }}</h5>
+      <h6 class="text-sm leading-none font-medium mb-2">
+        {{ _house.direccion.calle }} {{ _house.direccion.numero }}
+      </h6>
+      <p class="font-semibold" [ngClass]="_isAlarmArmed ? 'red-text' : 'green-text'">
+        {{ _isAlarmArmed ? 'Activada' : 'Desactivada' | titlecase }}
       </p>
     </div>
 

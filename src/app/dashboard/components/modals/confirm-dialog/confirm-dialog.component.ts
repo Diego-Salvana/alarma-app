@@ -4,17 +4,20 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 
 @Component({
-  selector: 'app-confirm-disarm',
+  selector: 'app-confirm-dialog',
   imports: [DialogModule, ButtonModule],
-  templateUrl: './confirm-disarm.component.html',
-  styleUrl: './confirm-disarm.component.scss',
+  templateUrl: './confirm-dialog.component.html',
+  styleUrl: './confirm-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ConfirmationService]
 })
-export class ConfirmDisarmComponent {
+export class ConfirmDialogComponent {
   visible = input.required<boolean>();
-  submitEnd = input.required<boolean>();
+  submitted = input.required<boolean>();
   onCloseDialog = output<boolean>();
+  title = input.required<string>();
+  description = input.required<string>();
+  acceptLabel = input.required<string>();
 
   onAccept () {
     this.onCloseDialog.emit(true);

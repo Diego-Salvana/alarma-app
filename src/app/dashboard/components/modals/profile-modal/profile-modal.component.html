@@ -1,0 +1,76 @@
+@let _submitted = submitted();
+
+<div class="card flex justify-center">
+  <p-dialog 
+    header="Datos de perfil" 
+    [modal]="true" 
+    [(visible)]="visible" 
+    [closable]="_submitted" 
+    styleClass="w-[95%] max-w-screen-sm">
+    <span class="p-text-secondary block mb-8">Actualiza tu información de usuario</span>
+
+      @switch (profileProp()) {
+        @case ('name') {
+          <div class="flex items-start gap-4 mb-4">
+            <label for="name" class="font-semibold w-24">Nombre Titular</label>
+            <div class="grow">
+              <input 
+                pInputText 
+                id="name" 
+                type="text" 
+                autocomplete="off" 
+                value="-" 
+                class="w-full" 
+                [formControl]="formControl"  />
+              <small 
+                class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
+                El campo es requerido.
+              </small>
+            </div>
+          </div>
+        }
+
+        @case ('lastname') {
+          <div class="flex items-start gap-4 mb-4">
+            <label for="name" class="font-semibold w-24">Apellido Titular</label>
+            <div class="grow">
+              <input 
+                pInputText 
+                id="name" 
+                type="text" 
+                autocomplete="off" 
+                value="-" 
+                class="w-full" 
+                [formControl]="formControl" />
+              <small 
+                class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
+                El campo es requerido.
+              </small>
+            </div>
+          </div>
+        }
+
+        @case ('phone') {
+          <div class="flex items-start gap-4 mb-4">
+            <label for="phone" class="font-semibold w-24 pt-2">Teléfono</label>
+            <div class="grow">
+              <p-inputmask 
+                id="phone" 
+                mask="9999-999999999" 
+                styleClass="w-full" 
+                [formControl]="formControl" />
+              <small 
+                class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
+                El formato de teléfono no es válido.
+              </small>
+            </div>
+          </div>
+        }
+      }
+    
+    <ng-template #footer>
+      <p-button label="Cancelar" severity="secondary" [disabled]="!_submitted" (onClick)="close()" />
+      <p-button label="Guardar" type="submit" [disabled]="!_submitted"  (onClick)="onSubmit()" />
+    </ng-template>
+  </p-dialog>
+</div>

@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { Section } from '../interfaces';
@@ -9,34 +9,36 @@ import { Section } from '../interfaces';
 export class ActiveRouteService {
   private router = inject(Router);
   private _activeSection = signal<Section>('home');
-  activeSection = computed(() => this._activeSection());
+  activeSection = this._activeSection.asReadonly();
 
   constructor () {
-    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(ev => {
-      const url = ev.urlAfterRedirects;
-      const path = url.split('/').pop() as Section;
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(ev => {
+        const url = ev.urlAfterRedirects;
+        const path = url.split('/').pop() as Section;
 
-      switch (path) {
-        case 'home':
-          this._activeSection.set('home');
-          break;
-        case 'hub':
-          this._activeSection.set('hub');
-          break;
-        case 'history':
-          this._activeSection.set('history');
-          break;
-        case 'profile':
-          this._activeSection.set('profile');
-          break;
-        case 'preferences':
-          this._activeSection.set('preferences');
-          break;
-        default:
-          if (url.includes('sensor')) this._activeSection.set('sensor');
-          else if (url.includes('house')) this._activeSection.set('house');
-          else this._activeSection.set('home');
-      }
-    });
+        switch (path) {
+          case 'home':
+            this._activeSection.set('home');
+            break;
+          case 'hub':
+            this._activeSection.set('hub');
+            break;
+          case 'history':
+            this._activeSection.set('history');
+            break;
+          case 'profile':
+            this._activeSection.set('profile');
+            break;
+          case 'preferences':
+            this._activeSection.set('preferences');
+            break;
+          default:
+            if (url.includes('sensor')) this._activeSection.set('sensor');
+            else if (url.includes('house')) this._activeSection.set('house');
+            else this._activeSection.set('home');
+        }
+      });
   }
 }

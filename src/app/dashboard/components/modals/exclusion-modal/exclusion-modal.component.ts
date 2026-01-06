@@ -9,13 +9,13 @@ import { Estado, Sensor } from '../../../../shared/interfaces';
 export type ExclusionFormValue = Partial<{ [key: string]: Estado }>;
 
 @Component({
-  selector: 'app-modal-exclusion',
+  selector: 'app-exclusion-modal',
   imports: [ButtonModule, DialogModule, TableModule, ToggleSwitchModule, ReactiveFormsModule],
-  templateUrl: './modal-exclusion.component.html',
-  styleUrl: './modal-exclusion.component.scss',
+  templateUrl: './exclusion-modal.component.html',
+  styleUrl: './exclusion-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalExclusionComponent {
+export class ExclusionModalComponent {
   visible = model<boolean>(false);
   submitEnd = input.required<boolean>();
   sensors = input.required<Sensor[]>();

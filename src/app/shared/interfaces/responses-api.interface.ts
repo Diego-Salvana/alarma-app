@@ -29,8 +29,8 @@ export interface HouseResponse {
   nombreCasa: string;
   direccion: Direccion;
   alarmaEncendida: Estado;
-  sonando?: boolean;
-  sensores?: Sensor[];
+  sonando: boolean;
+  sensores: Sensor[];
   token?: string;
 }
 
@@ -47,6 +47,7 @@ export interface InfoProfileResponse {
 export interface ProfileResponse {
   nombre: string;
   apellido: string;
+  nombreUsuario: string;
   email: string;
   telefono: string;
   habilitado: boolean;

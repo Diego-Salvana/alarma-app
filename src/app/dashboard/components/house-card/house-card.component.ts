@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
-import { CurrentHouseService, HouseService } from '../../services';
-import { HouseResponse } from '../../../shared/interfaces';
+import { CurrentHouseService } from '../../services';
+import { Estado, HouseResponse } from '../../../shared/interfaces';
 
 @Component({
   selector: 'app-house-card',
@@ -13,13 +13,13 @@ import { HouseResponse } from '../../../shared/interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HouseCardComponent {
-  private currentHouseController = inject(CurrentHouseService);
+  private currentHouseService = inject(CurrentHouseService);
   private router = inject(Router);
-  house = input.required<HouseResponse>();
-  isActivated = computed(() => this.house()?.alarmaEncendida === 'On');
+  readonly house = input.required<HouseResponse>();
+  readonly isAlarmArmed = computed(() => this.house()?.alarmaEncendida === Estado.ENCENDIDO);
 
   goHouse () {
-    this.currentHouseController.setHouseId(this.house()._id);
+    this.currentHouseService.setHouseId(this.house()._id);
     this.router.navigate(['/dashboard', 'hub']);
   }
 }

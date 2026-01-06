@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { BtnEditCardComponent, ModalPasswordComponent, ModalProfileComponent } from '../../components';
+import { BtnEditCardComponent, PasswordModalComponent, ProfileModalComponent } from '../../components';
 import { ModalDataTransfer, ProfileProp } from '../../interfaces';
 import { ProfileService } from '../../services/profile.service';
 import { Estado, ProfileResponse } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { CurrentHouseService, HouseService } from '../../services';
-import { ModalLogoutComponent } from '../../../shared/components';
+import { LogoutModalComponent } from '../../../shared/components';
 import { NgClass } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
@@ -17,7 +17,7 @@ type ModalType = 'password' | 'profile';
 
 @Component({
   selector: 'app-profile',
-  imports: [CardModule, ButtonModule, BtnEditCardComponent, ModalPasswordComponent, ModalProfileComponent, ModalLogoutComponent, NgClass],
+  imports: [CardModule, ButtonModule, BtnEditCardComponent, PasswordModalComponent, ProfileModalComponent, LogoutModalComponent, NgClass],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,38 +28,40 @@ export class ProfileComponent {
   private currentHouseService = inject(CurrentHouseService);
   private toastService = inject(ToastService);
   private router = inject(Router);
-  loading = signal(true);
   user = signal<ProfileResponse | null>(null);
-  submitCompleted = signal(true);
+  isLoading = signal(true);
   passModalOpen = signal(false);
   profileModalOpen = signal(false);
   logoutModalOpen = signal(false);
+  submitted = signal(true);
   profileProp?: ProfileProp;
-  propValue?: string;
-  isAlarmOn = computed(() =>
+  propValue = '';
+  isAlarmArmed = computed(() =>
     this.currentHouseService.house()?.alarmaEncendida === Estado.ENCENDIDO
   );
   
   constructor () {
-    this.profileService.getUser()
+    this.profileService
+      .getUser()
       .pipe(
         takeUntilDestroyed(),
-        finalize(() => this.loading.set(false))
+        finalize(() => this.isLoading.set(false))
       )
       .subscribe({
         next: userResponse => this.user.set(userResponse),
-        error: e => this.toastService.error(e.error.message)
+        error: err => this.toastService.error(err.message)
       });
   }
 
   /** Actualiza datos del perfil de usuario. */
   updateProfile (data: ModalDataTransfer) {
-    this.submitCompleted.set(false);
+    this.submitted.set(false);
         
-    this.profileService.modifyUserData(data)
+    this.profileService
+      .modifyUserData(data)
       .pipe(
         finalize(() => {
-          this.submitCompleted.set(true);
+          this.submitted.set(true);
           this.profileModalOpen.set(false);
         })
       )
@@ -71,17 +73,18 @@ export class ProfileComponent {
 
   /** Cambia la contraseña del usuario. */
   updatePassword (data: ModalDataTransfer) {
-    this.submitCompleted.set(false);
+    this.submitted.set(false);
 
-    this.profileService.updateUserPassword(data)
+    this.profileService
+      .updateUserPassword(data)
       .pipe(
         finalize(() => {
-          this.submitCompleted.set(true);
+          this.submitted.set(true);
           this.passModalOpen.set(false);
         })
       )
       .subscribe({
-        error: e => this.toastService.error(e.error.message)
+        error: err => this.toastService.error(err.message)
       });
   }
 
@@ -93,6 +96,9 @@ export class ProfileComponent {
 
   /** Abre una modal de edición según la propiedad de perfil. */
   showDialog (modal: ModalType, prop?: ProfileProp) {
+    const user = this.user();
+    if (!user) return;
+
     switch (modal) {
       case 'password':
         this.passModalOpen.set(true);
@@ -106,15 +112,15 @@ export class ProfileComponent {
     switch (prop) {
       case 'name':
         this.profileProp = 'name';
-        this.propValue = this.user()?.nombre;
+        this.propValue = user.nombre;
         break;
       case 'lastname':
         this.profileProp = 'lastname';
-        this.propValue = this.user()?.apellido;
+        this.propValue = user.apellido;
         break;
       case 'phone':
         this.profileProp = 'phone';
-        this.propValue = this.user()?.telefono;
+        this.propValue = user.telefono;
         break;
     }
   }

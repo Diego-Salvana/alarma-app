@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActiveRouteService } from '../../services';
-import { ModalLogoutComponent } from '../../../shared/components';
+import { LogoutModalComponent } from '../../../shared/components';
 
 @Component({
   selector: 'app-header',
-  imports: [ModalLogoutComponent],
+  imports: [LogoutModalComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

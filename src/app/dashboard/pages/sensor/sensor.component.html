@@ -1,10 +1,10 @@
 @let _sensor = sensor();
-@let _loading = loading();
-@let _modalOpen = modalOpen();
-@let _submitCompleted = submitCompleted();
-@let _isAlarmOn = isAlarmOn();
+@let _isLoading = isLoading();
+@let _submitted = submitted();
+@let _openModal = openModal();
+@let _isAlarmArmed = isAlarmArmed();
 
-@if (_loading) {
+@if (_isLoading) {
   <div class="loading-container">
     <i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: var(--p-primary-color);"></i>
     <h3>Cargando sensor...</h3>
@@ -47,7 +47,7 @@
             <div class="action-subtitle">Cambiar nombre del sensor</div>
           </div>
           <div class="action-button">
-            <app-btn-edit-card (click)="showDialog()" [disabled]="_isAlarmOn" />
+            <app-btn-edit-card (click)="showDialog()" [disabled]="_isAlarmArmed" />
           </div>
         </div>
       </ng-template>
@@ -158,12 +158,10 @@
 }
 
 <!-- Modal de Cambio de Nombre de Sensor -->
-@if (this.houseProp) {
-  <app-modal-house 
-    [visible]="_modalOpen"
-    [houseProp]="houseProp" 
-    [propValue]="_sensor?.nombre" 
-    [submitEnd]="_submitCompleted"
-    (visibleChange)="closeDialog()" 
-    (changeValue)="changeName($event)" />
-}
+<app-house-modal
+  [visible]="_openModal"
+  [houseProp]="houseProp" 
+  [propValue]="_sensor?.nombre ?? ''"
+  [submitted]="_submitted"
+  (visibleChange)="closeDialog()" 
+  (changeValue)="changeName($event)" />

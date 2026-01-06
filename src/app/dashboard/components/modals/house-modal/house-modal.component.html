@@ -1,8 +1,8 @@
 @let houseProperty = houseProp();
-@let _submitEnd = submitEnd();
+@let _submitted = submitted();
 
 <div class="card flex justify-center">
-  <p-dialog [header]="headerText()" [modal]="true" [(visible)]="visible" [closable]="_submitEnd" styleClass="w-[95%] max-w-screen-sm">
+  <p-dialog [header]="headerText()" [modal]="true" [(visible)]="visible" [closable]="_submitted" styleClass="w-[95%] max-w-screen-sm">
     <span class="p-text-secondary block mb-8">
       {{ houseProperty === 'sensorName' ? 'Actualiza información del sensor' : 'Actualiza la información del sitio' }}
     </span>
@@ -70,8 +70,8 @@
     }
 
     <ng-template #footer>
-      <p-button label="Cancelar" severity="secondary" [disabled]="!_submitEnd" (onClick)="close()"/>
-      <p-button label="Guardar" [disabled]="!_submitEnd" (onClick)="onSubmit()" />
+      <p-button label="Cancelar" severity="secondary" [disabled]="!_submitted" (onClick)="close()"/>
+      <p-button label="Guardar" [disabled]="!_submitted" (onClick)="onSubmit()" />
     </ng-template>
   </p-dialog>
 </div>

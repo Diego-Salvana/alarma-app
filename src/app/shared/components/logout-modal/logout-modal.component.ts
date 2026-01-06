@@ -4,14 +4,14 @@ import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
-  selector: 'app-modal-logout',
+  selector: 'app-logout-modal',
   imports: [ConfirmDialogModule],
-  templateUrl: './modal-logout.component.html',
-  styleUrl: './modal-logout.component.scss',
+  templateUrl: './logout-modal.component.html',
+  styleUrl: './logout-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ConfirmationService]
 })
-export class ModalLogoutComponent {
+export class LogoutModalComponent {
   private confirmationService = inject(ConfirmationService);
   private router = inject(Router);
   showModal = input.required<boolean>();

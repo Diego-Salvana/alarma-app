@@ -1,4 +1,4 @@
-import { Estado } from '../../shared/interfaces';
+import { Casa, Estado } from '../../shared/interfaces';
 
 export type ProfileProp = 'name' | 'lastname' | 'phone' | 'password';
 
@@ -21,3 +21,13 @@ export interface ExclusionSensor {
   numeroSensor: string;
   estado: Estado | undefined;
 };
+
+export interface UpdateHouseDto {
+  nombre?: Casa['nombre'];
+  direccion?: Partial<Casa['direccion']>;
+}
+
+export interface PasswordBody {
+  contrasenaActual: string;
+  nuevaContrasena: string;
+}

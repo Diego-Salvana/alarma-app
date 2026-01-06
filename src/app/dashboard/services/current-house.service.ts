@@ -1,33 +1,44 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { AlarmArming, Estado, HistorialConNombre, HouseResponse, Sensor } from '../../shared/interfaces';
+import { effect, inject, Injectable, signal } from '@angular/core';
+import { Estado, HouseResponse } from '../../shared/interfaces';
 import { HouseService } from './house.service';
-import { catchError, finalize, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
-import { ArmedStateResponse, ExclusionSensor } from '../interfaces';
-import { cloneDeep } from 'lodash';
-import { SensorService } from './sensor.service';
-import { CentralService } from './central.service';
-import { USER_PREFIX } from '../../env';
-import { ProfileService } from './profile.service';
+import { finalize, Observable, Subscription } from 'rxjs';
+import { StatusRequest, ExclusionSensor, Lights, AlarmArming, Trigger, TriggeredAlarm } from '../interfaces';
+import { API_URL, WS_ALARM_ARMING } from '../../env';
+import { HttpClient } from '@angular/common/http';
+import { SocketService, ToastService } from '../../shared/services';
+import { CurrentUserService } from './current-user.service';
 
 /** Servicio que funciona como controlador para manejar la casa actual. */
 @Injectable({
   providedIn: 'root'
 })
 export class CurrentHouseService {
+  private http = inject(HttpClient);
+  private userService = inject(CurrentUserService);
   private houseService = inject(HouseService);
-  private sensorService = inject(SensorService);
-  private centralService = inject(CentralService);
-  private profileService = inject(ProfileService);
+  private toastService = inject(ToastService);
+  private socketService = inject(SocketService);
+  private baseUrl = `${API_URL}/houses`;
   private houseId = '';
+  private armingSub?: Subscription;
   private _house = signal<HouseResponse | null>(null);
-  private _loading = signal(false);
-  private _username = signal<string | null>(null);
+  private _isLoading = signal(false);
   house = this._house.asReadonly();
-  loading = this._loading.asReadonly();
-  username = this._username.asReadonly();
+  isLoading = this._isLoading.asReadonly();
 
-  setUsername (email: string) {
-    this._username.set(`${USER_PREFIX}${email}`);
+  constructor () {
+    effect(onCleanup => {
+      const username = this.userService.username();
+      const houseName = this._house()?.nombreCasa;
+      if (!username || !houseName) {
+        this._house.set(null);
+        return;
+      }
+
+      this.initArmingListenter(username, houseName);
+      
+      onCleanup(() => this.stopListeners());
+    });
   }
 
   setHouseId (houseId: string) {
@@ -35,8 +46,8 @@ export class CurrentHouseService {
   }
   
   /** Obtiene la casa actual. Si no existe `houseId` se obtiene del token. */
-  getHouse (): Observable<HouseResponse> {
-    this._loading.set(true);
+  getHouse () {
+    this._isLoading.set(true);
 
     if (!this.houseId) {
       const token = localStorage.getItem('token') ?? '';
@@ -45,72 +56,85 @@ export class CurrentHouseService {
         const payload = JSON.parse(atob(token.split('.')[1]));
         this.houseId = payload.hid;
       } catch (e) {
-        this._loading.set(false);
-        return throwError(() => new Error('Token no válido.'));
+        this._isLoading.set(false);
+        this.toastService.error('Token no válido.');
+        return;
       }
     }
 
-    return this.houseService.getHouse(this.houseId).pipe(
-      tap(house => this._house.set(house)),
-      switchMap(() => {
-        return this._username()
-          ? of(null)
-          : this.profileService.getUser().pipe(
-            tap(user => this.setUsername(user.email))
-          );
-      }),
-      map(() => this._house() as HouseResponse),
-      catchError(err => throwError(() => err)),
-      finalize(() => this._loading.set(false))
-    );
+    return this.houseService
+      .getOne(this.houseId)
+      .pipe(finalize(() => this._isLoading.set(false)))
+      .subscribe({
+        next: house => this._house.set(house),
+        error: err => this.toastService.error(err.message)
+      });
   }
 
-  /** Inicia activación de la alarma. */
-  armAlarm (exclusionArray: ExclusionSensor[]): Observable<ArmedStateResponse> {
-    return this.houseService.armAlarm(exclusionArray);
+  // --- Salida ---
+  /** Envía solicitud para `activar` la alarma de la casa almacenada en el token. La respuesta de activación se recibe por `websocket`. */
+  armAlarm (exclusionArray: ExclusionSensor[]): Observable<StatusRequest> {
+    return this.http.post<StatusRequest>(`${this.baseUrl}/arm`, { exclusionArray });
   }
 
-  /** Inicia desactivación de la alarma. */
-  disarmAlarm (): Observable<ArmedStateResponse> {
-    return this.houseService.disarmAlarm();
+  /** Envía solicitud para `desactivar` la alarma de la casa almacenada en el token. La respuesta de desactivación se recibe por `websocket`. */
+  disarmAlarm (): Observable<StatusRequest> {
+    return this.http.post<StatusRequest>(`${this.baseUrl}/disarm`, {});
   }
 
+  /** Envía solicitud para `activar/desactivar` la sirena de la alarma actual. */
+  toggleRinging (body: Trigger): Observable<StatusRequest> {
+    return this.http.post<StatusRequest>(`${this.baseUrl}/trigger`, body);
+  }
+
+  // Luces
+  setLights (body: Lights): Observable<StatusRequest> {
+    return this.http.post<StatusRequest>(`${this.baseUrl}/lights`, body);
+  }
+
+  // --- Entrada ---
   /** Actualiza el estado la casa y los sensores con la información recibida por `websocket`. */
-  updateHouse (info: AlarmArming) {
-    const updatedHouse = cloneDeep(this._house());
-  
-    if (!updatedHouse) {
-      throw new Error('No se pudo actualizar la casa.');
-    }
-  
-    updatedHouse.alarmaEncendida = info.state;
-    updatedHouse.sensores?.forEach((sensor, index) => {
-      if (!updatedHouse.sensores) return;
-  
-      if (info.excludedSensors.includes(sensor.numeroSensor.toString())) {
-        updatedHouse.sensores[index].estado = Estado.APAGADO;
-      } else {
-        updatedHouse.sensores[index].estado = Estado.ENCENDIDO;
-      }
+  private updateArmingState (info: AlarmArming) {
+    this._house.update(house => {
+      if (!house) return house;
+      
+      return {
+        ...house,
+        alarmaEncendida: info.state,
+        sensores: house.sensores.map(sensor => ({
+          ...sensor,
+          estado: info.excludedSensors.includes(sensor.numeroSensor.toString())
+            ? Estado.APAGADO
+            : Estado.ENCENDIDO
+        }))
+      };
     });
-  
-    this._house.set(updatedHouse);
   }
 
-  // Sensores
-  /** Obtiene un sensor de la casa actual por su número. */
-  getOneSensor (sensorNumber: string): Observable<Sensor> {
-    return this.sensorService.getOne(sensorNumber);
+  /** Sincroniza el estado de la sirena si la alerta proviene de la casa actual. */
+  syncRingigState (info: TriggeredAlarm) {
+    const house = this._house();
+    if (house?.nombreCasa !== info.house) return;
+
+    this._house.update(house => {
+      if (!house) return house;
+      
+      return {
+        ...house,
+        sonando: info.state === Estado.ENCENDIDO
+      };
+    });
   }
 
-  /** Modifica el nombre de un sensor de la casa actual. */
-  modifySensorName (sensorNumber: number, newName: string): Observable<Sensor> {
-    return this.sensorService.modifyName(sensorNumber, newName);
+  private initArmingListenter (username: string, houseName: string) {
+    this.armingSub?.unsubscribe();
+
+    this.armingSub = this.socketService
+      .on<AlarmArming>(`${WS_ALARM_ARMING}/${username}/${houseName}`)
+      .subscribe(data => this.updateArmingState(data));
   }
 
-  // Central
-  /** Obtiene el historial de eventos de la casa actual. */
-  getHistory (): Observable<HistorialConNombre[]> {
-    return this.centralService.getHistory();
+  private stopListeners () {
+    this.armingSub?.unsubscribe();
   }
 }

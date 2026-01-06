@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, input, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, model, output } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -8,24 +8,23 @@ import { PasswordModule } from 'primeng/password';
 import { ProfileProp, ModalDataTransfer } from '../../../interfaces';
 
 @Component({
-  selector: 'app-modal-profile',
+  selector: 'app-profile-modal',
   imports: [DialogModule, ButtonModule, InputTextModule, PasswordModule, InputMaskModule, ReactiveFormsModule],
-  templateUrl: './modal-profile.component.html',
-  styleUrl: './modal-profile.component.scss',
+  templateUrl: './profile-modal.component.html',
+  styleUrl: './profile-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModalProfileComponent {
+export class ProfileModalComponent {
   visible = model<boolean>(false);
-  submitEnd = input.required();
+  submitted = input.required();
   profileProp = input.required<ProfileProp>();
-  propValue = input<string>();
+  propValue = input.required<string>();
   changeValue = output<ModalDataTransfer>();
-  closable = signal(true);
   formControl = new FormControl('', [Validators.required]);
 
   constructor () {
-    effect(() => (this.formControl.setValue(this.propValue() ?? '')));
-    effect(() => (this.submitEnd() ? this.formControl.enable() : this.formControl.disable()));
+    effect(() => (this.formControl.setValue(this.propValue())));
+    effect(() => (this.submitted() ? this.formControl.enable() : this.formControl.disable()));
   }
 
   onSubmit () {

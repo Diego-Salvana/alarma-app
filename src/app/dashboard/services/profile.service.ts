@@ -2,25 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, throwError } from 'rxjs';
 import { InfoProfileResponse, ProfileResponse, User } from '../../shared/interfaces';
-import { ModalDataTransfer } from '../interfaces';
+import { ModalDataTransfer, PasswordBody } from '../interfaces';
 import { API_URL } from '../../env';
-
-interface BodyPassword {
-  contrasenaActual: string;
-  nuevaContrasena: string;
-}
 
 /** Provee acceso a la API para realizar operaciones relacionadas al perfil de usuario. */
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
-  private baseUrl = `${API_URL}/users`;
   private http = inject(HttpClient);
+  private baseUrl = `${API_URL}/users`;
 
   /** Obtiene el perfil del usuario tomando el ``id`` del ``token``. */
   getUser (): Observable<ProfileResponse> {
-    return this.http.get<InfoProfileResponse>(this.baseUrl)
+    return this.http
+      .get<InfoProfileResponse>(this.baseUrl)
       .pipe(map(response => response.data));
   }
 
@@ -32,7 +28,8 @@ export class ProfileService {
       telefono: data.phone
     };
 
-    return this.http.patch<InfoProfileResponse>(this.baseUrl, body)
+    return this.http
+      .patch<InfoProfileResponse>(this.baseUrl, body)
       .pipe(map(response => response.data));
   }
 
@@ -42,12 +39,13 @@ export class ProfileService {
       return throwError(() => new Error('Datos no válidos para contraseña.'));
     }
 
-    const body: BodyPassword = {
+    const body: PasswordBody = {
       contrasenaActual: data.password,
       nuevaContrasena: data.newPassword
     };
 
-    return this.http.patch<InfoProfileResponse>(this.baseUrl, body)
+    return this.http
+      .patch<InfoProfileResponse>(this.baseUrl, body)
       .pipe(map(response => response.data));
   }
 }

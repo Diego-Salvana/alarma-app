@@ -1,22 +1,22 @@
-@let _loading = loading();
-@let _sites = sites();
+@let _isLoading = isloading();
+@let _houses = houses();
 
 <section>
   <h4 class="mb-4 text-muted-color tracking-wide">SITIOS</h4>
 
-  @if (_loading) {
+  @if (_isLoading) {
     <div class="text-center pt-8">
       <h3>Cargando casas...</h3>
     </div>
   } 
-  @else if (_sites.length < 1) {
+  @else if (_houses.length < 1) {
     <div class="text-center pt-8">
       <h3>No se encontraron casas.</h3>
     </div>
   }
   @else {
     <div class="flex flex-col gap-3">
-      @for (site of _sites; track $index) {
+      @for (site of _houses; track $index) {
         <app-house-card [house]="site" />
       }
     </div>

@@ -1,12 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { HeaderComponent, NavBarComponent, SideBarComponent } from './components';
-import { ActiveRouteService, CurrentHouseService } from './services';
-import { SocketService, ToastService } from '../shared/services';
-import { WS_ALARM_ERROR } from '../env';
-import { Subscription } from 'rxjs';
-import { HouseSocketError } from '../shared/interfaces';
+import { ActiveRouteService, CurrentHouseService, CurrentUserService } from './services';
+import { ToastService } from '../shared/services';
+import { AlertService } from './services/alert.service';
+import { Estado } from '../shared/interfaces';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,35 +14,33 @@ import { HouseSocketError } from '../shared/interfaces';
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   private activeRouteService = inject(ActiveRouteService);
-  private toastService = inject(ToastService);
-  private socketService = inject(SocketService);
+  private alertService = inject(AlertService);
+  private userService = inject(CurrentUserService);
   private currentHouseService = inject(CurrentHouseService);
-  private readonly username = this.currentHouseService.username;
+  private toastService = inject(ToastService);
   readonly isHome = computed(() => this.activeRouteService.activeSection() === 'home');
-  private _houseErrorEvent = signal<HouseSocketError | null>(null);
-  houseErrorEvent = this._houseErrorEvent.asReadonly();
 
   constructor () {
-    effect(onCleanup => {
-      const username = this.username();
-      let sub: Subscription | undefined;
-      
-      if (!username) {
-        this.currentHouseService.getHouse().subscribe({
-          error: e => this.toastService.error(e.error?.message || e.message)
-        });
-      } else {
-        sub = this.socketService
-          .on<HouseSocketError>(`${WS_ALARM_ERROR}/${username}`)
-          .subscribe(data => {
-            this.toastService.error(data.message);
-            this._houseErrorEvent.set(data);
-          });
-      }
-
-      onCleanup(() => sub?.unsubscribe());
+    effect(() => {
+      const warning = this.alertService.houseWarning();
+      if (warning) this.toastService.alert(warning.message);
     });
+
+    effect(() => {
+      const triggeredAlert = this.alertService.triggerAlert();
+      if (!triggeredAlert) return;
+      
+      const ringing = triggeredAlert.state === Estado.ENCENDIDO;
+      this.toastService.alert(
+        `Alarma ${ringing ? 'sonando' : 'apagada'} en ${triggeredAlert.house}`
+      );
+    });
+  }
+
+  ngOnInit () {
+    this.userService.loadUser();
+    this.currentHouseService.getHouse();
   }
 }

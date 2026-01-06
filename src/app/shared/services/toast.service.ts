@@ -15,4 +15,8 @@ export class ToastService {
   info (message: string) {
     this.messageService.add({ severity: 'info', summary: 'Info', detail: message });
   }
+
+  alert (message: string) {
+    this.messageService.add({ severity: 'contrast', summary: 'Alerta', detail: message });
+  }
 }

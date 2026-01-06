@@ -13,12 +13,4 @@ import { ActiveRouteService } from '../../services';
 export class NavBarComponent {
   private activeRouteService = inject(ActiveRouteService);
   isHome = computed(() => this.activeRouteService.activeSection() === 'home');
-
-  toggleDarkMode () {
-    const htmlElement = document.querySelector('html');
-
-    if (htmlElement) {
-      htmlElement.classList.toggle('my-app-dark');
-    }
-  }
 }

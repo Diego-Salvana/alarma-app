@@ -1,9 +1,9 @@
-@let _loading = loading();
+@let _isLoading = isLoading();
 @let _house = house();
-@let _submitCompleted = submitCompleted();
+@let _submitted = submitted();
 @let _houseModalOpen = houseModalOpen();
 
-@if (_loading) {
+@if (_isLoading) {
   <div class="text-center pt-8">
     <div class="loading-container">
       <i class="pi pi-spin pi-spinner text-2xl text-primary mb-3"></i>
@@ -138,12 +138,12 @@
 }
 
 <!-- Modal de Edición -->
-@if (this.houseProp) {
-  <app-modal-house 
+@if (houseProp) { 
+  <app-house-modal
     [visible]="_houseModalOpen" 
     [houseProp]="houseProp" 
-    [propValue]="propValue" 
-    [submitEnd]="_submitCompleted"
+    [propValue]="propValue"
+    [submitted]="_submitted"
     (visibleChange)="closeDialog()" 
     (changeValue)="updateHouse($event)" />
 }

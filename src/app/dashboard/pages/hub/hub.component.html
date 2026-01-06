@@ -1,12 +1,15 @@
 @let _house = house();
-@let _loading = loading();
-@let _isActive = isActive();
-@let _sensors = sensorList();
-@let _submitCompleted = submitCompleted();
-@let _disarmConfirmationVisible = disarmConfirmationVisible();
-@let _disarmEnd = disarmEnd();
+@let _isLoading = isLoading();
+@let _isAlarmArmed = isAlarmArmed();
+@let _sensors = sensors();
+@let _isArmingSubmitted = isArmingSubmitted();
+@let _isDisarmingConfirmationVisible = isDisarmingConfirmationVisible();
+@let _isDisarmingSubmitted = isDisarmingSubmitted();
+@let _isRinging = isRinging();
+@let _isRingingConfirmationVisible = isRingingConfirmationVisible();
+@let _isRingingSubmitted = isRingingSubmitted();
 
-@if (_loading) {
+@if (_isLoading) {
   <div class="text-center pt-8">
     <div class="loading-container">
       <i class="pi pi-spin pi-spinner text-2xl text-primary mb-3"></i>
@@ -25,7 +28,7 @@
 @else {
   <!-- Header Casa -->
   <div class="house-header flex items-center gap-4 mb-6">
-    <div class="house-avatar" [ngClass]="{ 'armed': _isActive }">
+    <div class="house-avatar" [ngClass]="{ 'armed': _isAlarmArmed }">
       <i class="pi pi-shield text-3xl"></i>
     </div>
     <div class="header-info">
@@ -43,10 +46,10 @@
     <div class="flex flex-col justify-center items-center mb-8">
       <i 
         class="lock-item mb-4" 
-        [ngClass]="_isActive ? 'pi pi-lock red-text' : 'pi pi-lock-open green-text'"></i>
+        [ngClass]="_isAlarmArmed ? 'pi pi-lock red-text' : 'pi pi-lock-open green-text'"></i>
       <h5 class="text-lg font-semibold">Estado de alarma</h5>
-      <p class="font-semibold" [ngClass]="_isActive ? 'red-text' : 'green-text'">
-        {{ _isActive ? 'ACTIVADA' : 'DESACTIVADA' }}
+      <p class="font-semibold" [ngClass]="_isAlarmArmed ? 'red-text' : 'green-text'">
+        {{ _isAlarmArmed ? 'ACTIVADA' : 'DESACTIVADA' }}
       </p>
     </div>
   
@@ -64,15 +67,18 @@
         (onClick)="showDisarmConfirmation()" />
       <p-button 
         id="panic-btn" 
-        label="Pánico" 
+        label="Sirena" 
         severity="warn" 
-        variant="outlined" 
+        [variant]="_isRinging ? undefined : 'outlined'"
+        [disabled]="_isAlarmArmed && _isRinging"
         raised="true" 
         icon="pi pi-volume-down"
         iconPos="top" 
-        styleClass="w-full orange-text orange-border" 
-        class="action-btn" />
-      <p-button 
+        [styleClass]="_isRinging ? 'w-full' : 'w-full orange-text orange-border'"
+        [ngClass]="{ 'pulse-animation': _isRinging }"
+        class="action-btn"
+        (onClick)="showRingingConfirmation()" />
+      <p-button
         id="arm-btn" 
         label="Activar" 
         severity="danger" 
@@ -89,20 +95,32 @@
   <!-- Sección Sensores -->
   <section class="sensors-section">
     <h4 class="section-title">SENSORES</h4>
-    <app-sensor-list [sensors]="_sensors" [isAlarmOn]="_isActive" />
+    <app-sensor-list [sensors]="_sensors" [isAlarmOn]="_isAlarmArmed" />
   </section>
 }
 
 <!-- Modal de activación -->
-<app-modal-exclusion 
-  [visible]="exclusionFormVisible" 
+<app-exclusion-modal 
+  [visible]="isExclusionFormVisible" 
   [sensors]="_sensors" 
-  [submitEnd]="_submitCompleted" 
+  [submitEnd]="_isArmingSubmitted" 
   (visibleChange)="closeExclusionForm()" 
-  (onActive)="activateAlarm($event)" />
+  (onActive)="onArmAlarm($event)" />
 
 <!-- Modal de desactivación -->
-<app-confirm-disarm 
-  [visible]="_disarmConfirmationVisible" 
-  [submitEnd]="_disarmEnd" 
-  (onCloseDialog)="disarmConfirmationAction($event)" />
+<app-confirm-dialog 
+  [title]="'Desarmado de Alarma'"
+  [acceptLabel]="'Sí, apagar'"
+  [description]="'¿Estás seguro de apagar la alarma?'"
+  [visible]="_isDisarmingConfirmationVisible" 
+  [submitted]="_isDisarmingSubmitted"
+  (onCloseDialog)="onDisarmConfirmation($event)" />
+
+<!-- Modal de pánico -->
+<app-confirm-dialog 
+  [title]="'Sirena 🔈'"
+  [description]="'¿Estás seguro de activar la sirena?'"
+  [acceptLabel]="'Sí, activar'"
+  [visible]="_isRingingConfirmationVisible" 
+  [submitted]="_isRingingSubmitted"
+  (onCloseDialog)="onRingingConfirmation($event)" />

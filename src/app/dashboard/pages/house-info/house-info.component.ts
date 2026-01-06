@@ -2,16 +2,17 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { TitleCasePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { BtnEditCardComponent, ModalHouseComponent } from '../../components';
+import { BtnEditCardComponent, HouseModalComponent } from '../../components';
 import { HouseProp, ModalDataTransfer } from '../../interfaces';
 import { HouseService } from '../../services';
 import { HouseResponse } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-house-info',
-  imports: [CardModule, ButtonModule, BtnEditCardComponent, ModalHouseComponent, TitleCasePipe],
+  imports: [CardModule, ButtonModule, BtnEditCardComponent, HouseModalComponent, TitleCasePipe],
   templateUrl: './house-info.component.html',
   styleUrl: './house-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,64 +20,64 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class HouseInfoComponent {
   private houseService = inject(HouseService);
   private toastService = inject(ToastService);
-  loading = signal(true);
   house = signal<HouseResponse | null>(null);
-  submitCompleted = signal(true);
+  isLoading = signal(true);
   houseModalOpen = signal(false);
-  houseProp!: HouseProp;
-  propValue?: string;
+  submitted = signal(true);
+  houseProp?: HouseProp;
+  propValue = '';
 
   constructor () {
-    this.houseService.getHouseInfo()
-      .pipe(takeUntilDestroyed())
+    this.houseService
+      .getHouseInfo()
+      .pipe(
+        takeUntilDestroyed(),
+        finalize(() => this.isLoading.set(false))
+      )
       .subscribe({
-        next: house => {
-          this.house.set(house);
-          this.loading.set(false);
-        },
-        error: e => {
-          const message = typeof e.message === 'string' ? e.message : e.error.message;
-          this.toastService.error(message);
-          this.loading.set(false);
-        }
+        next: house => this.house.set(house),
+        error: err => this.toastService.error(err.message)
       });
   }
 
   /** Actualiza datos de una casa. */
   updateHouse (data: ModalDataTransfer) {
-    this.submitCompleted.set(false);
+    this.submitted.set(false);
         
-    this.houseService.modifyHouse(data).subscribe({
-      next: house => {
-        this.house.set(house);
-        this.submitCompleted.set(true);
-        this.houseModalOpen.set(false);
-      },
-      error: e => {
-        this.toastService.error(e.error.message);
-        this.submitCompleted.set(true);
-        this.houseModalOpen.set(false);
-      }
-    });
+    this.houseService
+      .modifyHouse(data)
+      .pipe(
+        finalize(() => {
+          this.submitted.set(true);
+          this.houseModalOpen.set(false);
+        })
+      )
+      .subscribe({
+        next: house => this.house.set(house),
+        error: err => this.toastService.error(err.message)
+      });
   }
 
   /** Abre una modal de edición según la propiedad de la casa. */
   showDialog (prop: HouseProp) {
+    const house = this.house();
+    if (!house) return;
+
     this.houseModalOpen.set(true);
     this.houseProp = prop;
 
     switch (prop) {
       case 'houseName':
-        this.propValue = this.house()?.nombre;
+        this.propValue = house.nombre;
         break;
       case 'street':
-        this.propValue = this.house()?.direccion.calle;
+        this.propValue = house.direccion.calle;
         break;
       case 'number':
-        this.propValue = this.house()?.direccion.numero.toString();
+        this.propValue = house.direccion.numero.toString();
         break;
       case 'city':
-        this.propValue = this.house()?.direccion.ciudad;
+        this.propValue = house.direccion.ciudad;
         break;
     }
   }

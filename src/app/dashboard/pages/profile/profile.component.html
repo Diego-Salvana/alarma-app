@@ -1,12 +1,12 @@
 @let _user = user();
-@let _loading = loading();
-@let _submitCompleted = submitCompleted();
+@let _isLoading = isLoading();
+@let _submitted = submitted();
 @let _visiblePassModal = passModalOpen();
 @let _visibleProfileModal = profileModalOpen();
 @let _showModalLogout = logoutModalOpen();
-@let _isAlarmOn = isAlarmOn();
+@let _isAlarmArmed = isAlarmArmed();
 
-@if (_loading) {
+@if (_isLoading) {
   <div class="text-center pt-8">
     <div class="loading-container">
       <i class="pi pi-spin pi-spinner text-2xl text-primary mb-3"></i>
@@ -107,7 +107,7 @@
     </p-card>
 
     <!-- Tarjeta Contraseña -->
-    <p-card styleClass="profile-action-card mb-6" [ngClass]="{ 'opacity-60': _isAlarmOn }">
+    <p-card styleClass="profile-action-card" [ngClass]="{ 'opacity-60': _isAlarmArmed }">
       <ng-template #content>
         <div class="action-card-content">
           <div class="action-icon">
@@ -116,7 +116,7 @@
           <div class="action-details">
             <span class="action-title">Seguridad</span>
             <span class="action-subtitle">Cambiar contraseña</span>
-            <span class="action-subtitle" [ngClass]="{ 'hidden': !_isAlarmOn }">
+            <span class="action-subtitle" [ngClass]="{ 'hidden': !_isAlarmArmed }">
               <i>(Disponible cuando la alarma está desactivada)</i>
             </span>
           </div>
@@ -126,7 +126,7 @@
               label="Cambiar" 
               size="small" 
               variant="outlined"
-              [disabled]="_isAlarmOn"
+              [disabled]="_isAlarmArmed"
               (onClick)="showDialog('password')" />
           </div>
         </div>
@@ -206,22 +206,22 @@
 }
 
 <!-- Modal para Cerrar Sesión -->
-<app-modal-logout [showModal]="_showModalLogout" (closeModal)="cancelLogout()" />
+<app-logout-modal [showModal]="_showModalLogout" (closeModal)="cancelLogout()" />
 
-@if (this.profileProp) {
+@if (profileProp) {
   <!-- Modal de Perfil -->
-  <app-modal-profile 
+  <app-profile-modal 
     [visible]="_visibleProfileModal" 
     [profileProp]="profileProp" 
     [propValue]="propValue" 
-    [submitEnd]="_submitCompleted"
+    [submitted]="_submitted"
     (visibleChange)="closeDialog()" 
     (changeValue)="updateProfile($event)" />
     
   <!-- Modal para Cambiar Contraseña -->
-  <app-modal-password 
+  <app-password-modal 
     [visible]="_visiblePassModal"
-    [submitEnd]="_submitCompleted"
+    [submitEnd]="_submitted"
     (visibleChange)="closeDialog()"
     (changeValue)="updatePassword($event)" />
 }
