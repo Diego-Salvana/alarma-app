@@ -4,11 +4,11 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { BtnEditCardComponent, HouseModalComponent } from '../../components';
 import { HouseProp, ModalDataTransfer } from '../../interfaces';
-import { HouseService } from '../../services';
+import { CurrentUserService, HouseService } from '../../services';
 import { HouseResponse } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 
 @Component({
   selector: 'app-house-info',
@@ -20,6 +20,7 @@ import { finalize } from 'rxjs';
 export class HouseInfoComponent {
   private houseService = inject(HouseService);
   private toastService = inject(ToastService);
+  private userService = inject(CurrentUserService);
   house = signal<HouseResponse | null>(null);
   isLoading = signal(true);
   houseModalOpen = signal(false);
@@ -47,6 +48,7 @@ export class HouseInfoComponent {
     this.houseService
       .modifyHouse(data)
       .pipe(
+        tap(() => this.userService.loadUser()),
         finalize(() => {
           this.submitted.set(true);
           this.houseModalOpen.set(false);

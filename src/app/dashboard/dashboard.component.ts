@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit, untracked } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { HeaderComponent, NavBarComponent, SideBarComponent } from './components';
@@ -34,7 +34,11 @@ export class DashboardComponent implements OnInit {
       
       const ringing = triggeredAlert.state === Estado.ENCENDIDO;
       this.toastService.alert(
-        `Alarma ${ringing ? 'sonando' : 'apagada'} en ${triggeredAlert.house}`
+        `Alarma ${
+          ringing ? 'SONANDO' : 'APAGADA'
+        } en ${
+          this.searchHouse(triggeredAlert.house) ?? 'una de las casas'
+        }`
       );
     });
   }
@@ -42,5 +46,15 @@ export class DashboardComponent implements OnInit {
   ngOnInit () {
     this.userService.loadUser();
     this.currentHouseService.getHouse();
+  }
+
+  /** Busca una casa entre las del usuario. */
+  private searchHouse (houseName: string): string | null {
+    return untracked(() => {
+      const houses = this.userService.houses();
+      const house = houses.find(h => h.nombreCasa === houseName);
+      
+      return house?.nombre ?? null;
+    });
   }
 }

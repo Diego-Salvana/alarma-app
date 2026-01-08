@@ -24,7 +24,7 @@ export class AlertService {
     effect(onCleanup => {
       const username = this.userService.username();
       if (!username) return;
-  
+
       this.initWarningListener(username);
       this.initTriggeredAlarmListenter(username);
   

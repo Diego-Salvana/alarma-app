@@ -84,7 +84,7 @@ export class ProfileComponent {
         })
       )
       .subscribe({
-        error: err => this.toastService.error(err.message)
+        error: err => this.toastService.error(err.error.message)
       });
   }
 
