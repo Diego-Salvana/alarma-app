@@ -6,11 +6,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { MessageService } from 'primeng/api';
 import { markAllAsDirtyAndTouched } from '../../utils';
 import { Login } from '../../interfaces';
 import { AuthService } from '../../services';
 import { LogoComponent } from '../../components';
+import { ToastService } from '../../../shared/services';
+import { emailRexExp } from '../../../shared/utils';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +25,10 @@ export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private authService = inject(AuthService);
-  private messageService = inject(MessageService);
-  private emailRexExp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+  private toastService = inject(ToastService);
   disabled = signal(false);
   loginForm = this.fb.group({
-    username: ['', [Validators.required, Validators.pattern(this.emailRexExp)]],
+    username: ['', [Validators.required, Validators.pattern(emailRexExp)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     rememberMe: [false]
   });
@@ -47,26 +48,21 @@ export class LoginComponent implements OnInit {
     this.disabled.set(true);
     this.loginForm.disable();
 
-    const loginBody: Partial<Login> = {
-      email: this.loginForm.value.username?.trim() ?? undefined,
-      contrasena: this.loginForm.value.password?.trim() ?? undefined
+    const values = this.loginForm.getRawValue();
+    const loginBody: Login = {
+      email: values.username?.trim() ?? '',
+      contrasena: values.password?.trim() ?? ''
     };
     
-    this.authService.loginUser(loginBody, this.loginForm.controls.rememberMe.value ?? false).subscribe({
-      next: (data) => {
+    this.authService
+      .login(loginBody, values.rememberMe ?? false)
+      .pipe(finalize(() => {
         this.disabled.set(false);
         this.loginForm.enable();
-        console.log(data);
-
-        this.router.navigate(['/dashboard', 'home']);
-      },
-      error: (e) => {
-        this.disabled.set(false);
-        this.loginForm.enable();
-        console.error(e); // Borrar en producción
-
-        this.messageService.add({ severity: 'contrast', summary: 'Error', detail: e.error.message });
-      }
-    });
+      }))
+      .subscribe({
+        next: () => this.router.navigate(['/dashboard', 'home']),
+        error: err => this.toastService.error(err.error.message)
+      });
   }
 }

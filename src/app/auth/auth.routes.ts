@@ -1,7 +1,18 @@
 import { Routes } from '@angular/router';
 
 export const authRoutes: Routes = [
-  { path: 'login', loadComponent: () => import('./pages/login/login.component').then(c => c.LoginComponent) },
-  { path: 'register', loadComponent: () => import('./pages/register/register.component').then(c => c.RegisterComponent) },
+  {
+    path: 'register',
+    loadComponent: () => import('./pages/register/register.component').then(c => c.RegisterComponent)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.component').then(c => c.LoginComponent)
+  },
+  {
+    path: 'verify-email/:token',
+    loadComponent: () => import('./pages/verify-email/verify-email.component')
+      .then(c => c.VerifyEmailComponent)
+  },
   { path: '**', redirectTo: 'login' }
 ];

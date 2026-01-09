@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputMaskModule } from 'primeng/inputmask';
-import { MessageService } from 'primeng/api';
 import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../utils';
 import { AuthService } from '../../services';
 import { Register } from '../../interfaces';
 import { LogoComponent } from '../../components';
+import { ToastService } from '../../../shared/services';
+import { finalize } from 'rxjs';
+import { emailRexExp } from '../../../shared/utils';
 
 @Component({
   selector: 'app-register',
@@ -22,14 +24,12 @@ import { LogoComponent } from '../../components';
 export class RegisterComponent implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
-  private router = inject(Router);
-  private messageService = inject(MessageService);
-  private emailRexExp = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+  private toastService = inject(ToastService);
   disabled = signal(false);
   registerForm = this.fb.group({
     name: ['', [Validators.required]],
     lastname: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.pattern(this.emailRexExp)]],
+    email: ['', [Validators.required, Validators.pattern(emailRexExp)]],
     phone: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required, passwordMatchValidator]]
@@ -38,7 +38,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit () {
     this.registerForm.controls.password.valueChanges.subscribe(() => {
       const rePassControl = this.registerForm.controls.confirmPassword;
-      
       rePassControl.setValue(rePassControl.value);
     });
   }
@@ -50,30 +49,29 @@ export class RegisterComponent implements OnInit {
 
     this.disabled.set(true);
     this.registerForm.disable();
-
-    const userBody: Partial<Register> = {
-      nombre: this.registerForm.value.name?.trim() ?? undefined,
-      apellido: this.registerForm.value.lastname?.trim() ?? undefined,
-      email: this.registerForm.value.email?.trim() ?? undefined,
-      telefono: this.registerForm.value.phone?.trim() ?? undefined,
-      contrasena: this.registerForm.value.password?.trim() ?? undefined
+    
+    const values = this.registerForm.getRawValue();
+    const userBody: Register = {
+      nombre: values.name ?? '',
+      apellido: values.lastname?.trim() ?? '',
+      email: values.email?.trim() ?? '',
+      telefono: values.phone?.trim() ?? '',
+      contrasena: values.password?.trim() ?? ''
     };
     
-    this.authService.registerUser(userBody).subscribe({
-      next: (data) => {
+    this.authService
+      .register(userBody)
+      .pipe(finalize(() => {
         this.disabled.set(false);
         this.registerForm.enable();
-        console.log(data);
-
-        this.router.navigate(['/dashboard', 'home']);
-      },
-      error: (e) => {
-        this.disabled.set(false);
-        this.registerForm.enable();
-        console.error(e); // Borrar en producción
-
-        this.messageService.add({ severity: 'contrast', summary: 'Error', detail: e.error.message });
-      }
-    });
+      }))
+      .subscribe({
+        next: () => {
+          this.registerForm.reset();
+          this.toastService.info('Registro exitoso.');
+          this.toastService.info('Verifica la cuenta desde tu email.');
+        },
+        error: err => this.toastService.error(err.error.message)
+      });
   }
 }

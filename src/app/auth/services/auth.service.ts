@@ -9,28 +9,28 @@ import { API_URL } from '../../env';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = `${API_URL}/users`;
   private http = inject(HttpClient);
+  private baseUrl = `${API_URL}/users`;
 
-  registerUser (userBody: Partial<Register>): Observable<InfoLoginResponse> {
-    return this.http.post<InfoLoginResponse>(`${this.baseUrl}/register`, userBody).pipe(
-      tap(response => {
-        localStorage.setItem('token', response.data.token);
-      })
-    );
+  register (userBody: Register): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/register`, userBody);
   }
 
-  loginUser (loginBody: Partial<Login>, rememberMe: boolean) {
-    return this.http.post<InfoLoginResponse>(`${this.baseUrl}/login`, loginBody).pipe(
-      tap(response => {
-        localStorage.setItem('token', response.data.token);
+  login (loginBody: Login, rememberMe: boolean): Observable<InfoLoginResponse> {
+    return this.http
+      .post<InfoLoginResponse>(`${this.baseUrl}/login`, loginBody)
+      .pipe(
+        tap(response => {
+          localStorage.setItem('token', response.data.token);
         
-        if (rememberMe) {
-          localStorage.setItem('username', response.data.email);
-        } else {
-          localStorage.removeItem('username');
-        }
-      })
-    );
+          rememberMe
+            ? localStorage.setItem('username', response.data.email)
+            : localStorage.removeItem('username');
+        })
+      );
+  }
+
+  verifyEmail (token: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/verify-email`, { token });
   }
 }
