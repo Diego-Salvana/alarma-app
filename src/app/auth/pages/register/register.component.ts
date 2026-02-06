@@ -13,6 +13,7 @@ import { LogoComponent } from '../../components';
 import { ToastService } from '../../../shared/services';
 import { finalize } from 'rxjs';
 import { emailRexExp } from '../../../shared/utils';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -71,7 +72,13 @@ export class RegisterComponent implements OnInit {
           this.toastService.info('Registro exitoso.');
           this.toastService.info('Verifica la cuenta desde tu email.');
         },
-        error: err => this.toastService.error(err.error.message)
+        error: err => this.handleRegisterError(err)
       });
+  }
+
+  private handleRegisterError (err: HttpErrorResponse) {
+    err.status === 409
+      ? this.toastService.error('Ya existe un usuario con ese email')
+      : this.toastService.error('Error al registrar el usuario');
   }
 }

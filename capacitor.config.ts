@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.alarma.dev',
-  appName: 'Alarma-v1',
+  appName: 'AlarmsTech',
   webDir: 'dist/front-end-capacitor-v1.0.0/browser'
 };
 

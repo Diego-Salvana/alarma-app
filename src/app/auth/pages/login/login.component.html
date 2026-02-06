@@ -5,16 +5,24 @@
         <div class="flex justify-center pb-4">
           <app-logo />
         </div>
-        <!-- <img src="https://blocks.primeng.org/assets/images/blocks/logos/hyper.svg" alt="Logo" height="50" class="mb-4"> -->
         <div class="text-3xl font-medium mb-4">¡Hola!</div>
         <span class="font-medium">¿No tienes una cuenta?</span>
-        <a routerLink="../register" class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Crear una</a>
+        <a
+          class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
+          routerLink="../register">
+          Crear una
+        </a>
       </div>
 
       <form [formGroup]="loginForm" autocomplete="off" (ngSubmit)="onSubmit()">
         <div class="mb-4">
           <label for="email" class="block font-medium mb-2">Email</label>
-          <input pInputText type="text" id="email" placeholder="Ingresa tu correo" class="w-full"
+          <input
+            pInputText
+            type="text"
+            id="email"
+            placeholder="Ingresa tu correo"
+            class="w-full"
             formControlName="username" />
           <small class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
             Formato de correo no válido.
@@ -23,7 +31,12 @@
 
         <div class="mb-4">
           <label for="password" class="block font-medium mb-2">Contraseña</label>
-          <p-password id="password" placeholder="Ingresa contraseña" toggleMask feedback="false" styleClass="w-full"
+          <p-password 
+            id="password" 
+            placeholder="Ingresa contraseña" 
+            toggleMask 
+            feedback="false" 
+            styleClass="w-full"
             formControlName="password" />
           <small class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
             Mínimo 6 caracteres.
@@ -32,10 +45,18 @@
 
         <div class="flex justify-between items-center mb-12">
           <div class="flex items-center">
-            <p-checkbox id="rememberme" [binary]="true" styleClass="mr-2" formControlName="rememberMe"></p-checkbox>
+            <p-checkbox 
+              id="rememberme" 
+              [binary]="true" 
+              styleClass="mr-2"
+              formControlName="rememberMe"></p-checkbox>
             <label for="rememberme">Recordarme</label>
           </div>
-          <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">¿Olvidaste la contraseña?</a>
+          <a 
+            class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
+            routerLink="../forgot-password">
+            ¿Olvidaste la contraseña?
+          </a>
         </div>
 
         <p-button label="Ingresar" type="submit" [disabled]="disabled()" styleClass="w-full">

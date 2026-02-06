@@ -12,6 +12,7 @@ import { LogoutModalComponent } from '../../../shared/components';
 import { NgClass } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 type ModalType = 'password' | 'profile';
 
@@ -49,7 +50,7 @@ export class ProfileComponent {
       )
       .subscribe({
         next: userResponse => this.user.set(userResponse),
-        error: err => this.toastService.error(err.message)
+        error: err => this.handleProfileError(err)
       });
   }
 
@@ -137,5 +138,11 @@ export class ProfileComponent {
 
   cancelLogout () {
     this.logoutModalOpen.set(false);
+  }
+
+  private handleProfileError (err: HttpErrorResponse) {
+    err.status === 401
+      ? this.toastService.error('No estás autorizado para ver el perfil')
+      : this.toastService.error('Ocurrió un error al obtener el perfil');
   }
 }

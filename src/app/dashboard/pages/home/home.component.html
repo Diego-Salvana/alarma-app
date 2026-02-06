@@ -11,7 +11,14 @@
   } 
   @else if (_houses.length < 1) {
     <div class="text-center pt-8">
-      <h3>No se encontraron casas.</h3>
+      <h3>Aún no hay sitios en tu cuenta.</h3>
+      <p class="text-muted-color mt-2">Solicita agregar un sitio comunicandote con nosotros.</p>
+
+      <p-button 
+        label="Ir a mi perfil" 
+        severity="primary"
+        styleClass="!px-6 mt-16"
+        (click)="navigateToProfile()" />
     </div>
   }
   @else {

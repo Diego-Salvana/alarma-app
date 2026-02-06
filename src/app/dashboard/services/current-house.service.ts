@@ -67,7 +67,7 @@ export class CurrentHouseService {
       .pipe(finalize(() => this._isLoading.set(false)))
       .subscribe({
         next: house => this._house.set(house),
-        error: err => this.toastService.error(err.message)
+        error: err => this.toastService.error(err.error.message)
       });
   }
 

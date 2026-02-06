@@ -1,9 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, input, OnInit, signal } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../services';
+import { finalize } from 'rxjs';
+import { RouterLink } from '@angular/router';
+import { WEB_APP_URL } from '../../../env';
 
 @Component({
   selector: 'app-verify-email',
-  imports: [],
+  imports: [ButtonModule, RouterLink],
   templateUrl: './verify-email.component.html',
   styleUrl: './verify-email.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -11,21 +15,28 @@ import { AuthService } from '../../services';
 export class VerifyEmailComponent implements OnInit {
   private authService = inject(AuthService);
   token = input<string>();
+  isLoading = signal(true);
   successful = signal(false);
+  errorMessage = signal('');
 
   ngOnInit () {
     const token = this.token();
     if (!token) return;
 
-    this.authService.verifyEmail(token).subscribe({
-      next: data => {
-        this.successful.set(true);
-        console.log(data);
-      },
-      error: err => {
-        this.successful.set(false);
-        console.log(err);
-      }
-    });
+    setTimeout(() => this.sendVerification(token), 1000);
+  }
+  
+  openApp () {
+    window.location.href = `${WEB_APP_URL}/app`;
+  }
+
+  private sendVerification (token: string) {
+    this.authService
+      .verifyEmail(token)
+      .pipe(finalize(() => this.isLoading.set(false)))
+      .subscribe({
+        next: () => this.successful.set(true),
+        error: err => this.errorMessage.set(err.error.message)
+      });
   }
 }

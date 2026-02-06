@@ -1,10 +1,21 @@
-// Localhost
-export const API_URL = 'http://localhost:5200/api-alarma';
-export const SOCKET_URL = 'http://localhost:5200';
+type AppEnv = 'local' | 'server';
 
-// Servidor DonWeb
-// export const API_URL = 'https://vps-4920163-x.dattaweb.com:443/api-alarma';
-// export const SOCKET_URL = 'https://vps-4920163-x.dattaweb.com:443';
+const CURRENT_ENV: AppEnv = 'local';
+
+export const CONFIG = {
+  local: {
+    API_URL: 'http://localhost:5200/api-alarma',
+    SOCKET_URL: 'http://localhost:5200'
+  },
+  server: {
+    API_URL: 'https://vps-4920163-x.dattaweb.com:443/api-alarma',
+    SOCKET_URL: 'https://vps-4920163-x.dattaweb.com:443'
+  }
+};
+
+// URLs
+export const API_URL = CONFIG[CURRENT_ENV].API_URL;
+export const SOCKET_URL = CONFIG[CURRENT_ENV].SOCKET_URL;
 
 // Ruta del socket
 export const SOCKET_PATH = '/api-alarma/socket';
@@ -17,3 +28,4 @@ export const WS_LIGHTS = 'alarm/lights';
 
 // Otras constantes
 export const USER_PREFIX = 'user_';
+export const WEB_APP_URL = 'https://alarmstech.vercel.app';

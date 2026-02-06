@@ -25,6 +25,7 @@
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/return-await": "off",
     "@typescript-eslint/member-delimiter-style": "off",
-    "@typescript-eslint/consistent-type-assertions": "off"
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "@typescript-eslint/no-invalid-void-type": "off"
   }
 }

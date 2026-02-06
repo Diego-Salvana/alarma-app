@@ -13,6 +13,7 @@ import { LogoComponent } from '../../components';
 import { ToastService } from '../../../shared/services';
 import { emailRexExp } from '../../../shared/utils';
 import { finalize } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -62,7 +63,13 @@ export class LoginComponent implements OnInit {
       }))
       .subscribe({
         next: () => this.router.navigate(['/dashboard', 'home']),
-        error: err => this.toastService.error(err.error.message)
+        error: err => this.handleLoginError(err)
       });
+  }
+
+  private handleLoginError (err: HttpErrorResponse) {
+    err.status === 401 || err.status === 404
+      ? this.toastService.error('Usuario o contraseña incorrectos')
+      : this.toastService.error('Error al iniciar sesión');
   }
 }

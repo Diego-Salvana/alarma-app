@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Login, Register } from '../interfaces';
+import { EmailVerification, Login, PasswordResetResponse, Register } from '../interfaces';
 import { Observable, tap } from 'rxjs';
 import { InfoLoginResponse } from '../../shared/interfaces';
 import { API_URL } from '../../env';
@@ -30,7 +30,22 @@ export class AuthService {
       );
   }
 
-  verifyEmail (token: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/verify-email`, { token });
+  /** Realiza la verificacion del email, y guarda el sesión token del usuario */
+  verifyEmail (token: string): Observable<EmailVerification> {
+    return this.http
+      .post<EmailVerification>(`${this.baseUrl}/verify-email`, { token })
+      .pipe(tap(response => localStorage.setItem('token', response.token)));
+  }
+
+  /** Solicita envío de correo para restablecer contraseña */
+  forgotPassword (email: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/forgot-password`, { email });
+  }
+
+  /** Restablece la contraseña del usuario */
+  resetPassword (token: string, password: string): Observable<PasswordResetResponse> {
+    return this.http
+      .post<PasswordResetResponse>(`${this.baseUrl}/reset-password`, { token, password })
+      .pipe(tap(response => localStorage.setItem('token', response.token)));
   }
 }

@@ -27,9 +27,7 @@ export class CurrentUserService {
           this._username.set(profile.nombreUsuario);
           this._houses.set(profile.casas);
         },
-        error: () => {
-          this.toastService.error('Error al obtener los datos del usuario');
-        }
+        error: () => this.toastService.error('Error al obtener los datos del usuario')
       });
   }
 

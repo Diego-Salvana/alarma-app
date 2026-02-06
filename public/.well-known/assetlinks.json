@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.alarma.dev",
+      "sha256_cert_fingerprints": [
+        "88:C6:9F:0E:04:D5:11:6B:CD:55:92:92:E3:CC:AC:D5:34:B4:FD:A0:6E:16:20:25:2A:97:D0:BB:21:34:4E:B8"
+      ]
+    }
+  }
+]

@@ -6,6 +6,7 @@ import { ToastService } from '../../../shared/services';
 import { CentralService } from '../../services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-central-history',
@@ -29,7 +30,13 @@ export class CentralHistoryComponent {
       )
       .subscribe({
         next: historyResponse => this.history.set(historyResponse),
-        error: err => this.toastService.error(err.message)
+        error: err => this.handleHistroyError(err)
       });
+  }
+
+  private handleHistroyError (err: HttpErrorResponse) {
+    err.status === 401
+      ? this.toastService.error('No estás autorizado para ver el historial')
+      : this.toastService.error('Ocurrió un error al obtener el historial');
   }
 }
