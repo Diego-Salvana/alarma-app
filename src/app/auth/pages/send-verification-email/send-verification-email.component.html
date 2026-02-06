@@ -1,0 +1,10 @@
+<div class="auth-validation-container">
+  <h2>Verifica tu cuenta</h2>
+  <p>
+    Necesitas verificar tu cuenta para continuar. Ingresa tu correo electrónico y te enviaremos un email de verificacion.
+  </p>
+
+  <app-send-email-form
+    [isSubmitting]="isSubmitting()"
+    (onSubmit)="sendVerificationEmail($event)" />
+</div>

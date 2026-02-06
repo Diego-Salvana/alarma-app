@@ -5,49 +5,59 @@
 *,
 *::after,
 *::before {
-   box-sizing: border-box;
-   margin: 0;
-   padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html,
 body {
-   min-height: 100vh;
-   overflow-x: hidden;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 html {
-   font-family: Inter var;
-   font-size: 14px;
-   background-color: variables.$bg-light;
+    font-family: Inter var;
+    font-size: 14px;
+    background-color: variables.$bg-light;
 
-   .navbar {
-      background-color: variables.$bg-light;
-   }
+    .navbar {
+        background-color: variables.$bg-light;
+    }
 
-   &.my-app-dark {
-      background-color: var(--p-primary-inverse-color);
+    &.my-app-dark {
+        background-color: var(--p-primary-inverse-color);
 
-      .navbar {
-         background-color: var(--p-primary-inverse-color);
-      }
-   }
+        .navbar {
+            background-color: var(--p-primary-inverse-color);
+        }
+    }
 
-   @media (min-width: map.get(variables.$layout-breakpoints, '2xl')) {
-      font-size: 16px;
-   }
+    @media (min-width: map.get(variables.$layout-breakpoints, '2xl')) {
+        font-size: 16px;
+    }
 }
 
 ol,
 ul {
-   list-style: none;
+    list-style: none;
 }
 
 a {
-   text-decoration: none;
+    text-decoration: none;
 }
 
 // Estilo para visualización de los errores de validación
 .ng-dirty.ng-touched.ng-invalid+small {
-   height: 1rem;
+    height: 1rem;
+}
+
+// Páginas de validación de email y recuperación de contraseña
+.auth-validation-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
 }

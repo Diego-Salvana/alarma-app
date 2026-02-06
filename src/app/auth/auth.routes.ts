@@ -24,5 +24,10 @@ export const authRoutes: Routes = [
     loadComponent: () => import('./pages/reset-password/reset-password.component')
       .then(c => c.ResetPasswordComponent)
   },
+  {
+    path: 'send-verification-email',
+    loadComponent: () => import('./pages/send-verification-email/send-verification-email.component')
+      .then(c => c.SendVerificationEmailComponent)
+  },
   { path: '**', redirectTo: 'login' }
 ];

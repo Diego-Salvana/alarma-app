@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { TitleCasePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { BtnEditCardComponent, HouseModalComponent } from '../../components';
+import { HouseModalComponent } from '../../components';
 import { HouseProp, ModalDataTransfer } from '../../interfaces';
 import { CurrentUserService, HouseService } from '../../services';
 import { HouseResponse } from '../../../shared/interfaces';
@@ -12,7 +12,7 @@ import { finalize, tap } from 'rxjs';
 
 @Component({
   selector: 'app-house-info',
-  imports: [CardModule, ButtonModule, BtnEditCardComponent, HouseModalComponent, TitleCasePipe],
+  imports: [CardModule, ButtonModule, HouseModalComponent, TitleCasePipe],
   templateUrl: './house-info.component.html',
   styleUrl: './house-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

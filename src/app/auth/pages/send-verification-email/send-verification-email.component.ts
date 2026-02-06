@@ -1,28 +1,28 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../services';
-import { finalize } from 'rxjs';
 import { ToastService } from '../../../shared/services';
+import { finalize } from 'rxjs';
 import { SendEmailFormComponent } from '../../components';
 
 @Component({
-  selector: 'app-forgot-password',
+  selector: 'app-send-verification-email',
   imports: [SendEmailFormComponent],
-  templateUrl: './forgot-password.component.html',
-  styleUrl: './forgot-password.component.scss',
+  templateUrl: './send-verification-email.component.html',
+  styleUrl: './send-verification-email.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ForgotPasswordComponent {
+export class SendVerificationEmailComponent {
   private authService = inject(AuthService);
   private toastService = inject(ToastService);
   isSubmitting = signal(false);
-
-  sendForgotPassEmail (email: string) {
+  
+  sendVerificationEmail (email: string) {
     this.isSubmitting.set(true);
     this.authService
-      .forgotPassword(email)
+      .sendVerificationEmail(email)
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
-        next: () => this.toastService.info('Revisa tu correo para restablecer la contraseña'),
+        next: () => this.toastService.info('Revisa tu correo para verificar tu cuenta'),
         error: err => this.toastService.error(err.error.message)
       });
   }

@@ -21,13 +21,18 @@ export class AuthService {
       .post<InfoLoginResponse>(`${this.baseUrl}/login`, loginBody)
       .pipe(
         tap(response => {
-          localStorage.setItem('token', response.data.token);
-        
+          if (response.data.habilitado) localStorage.setItem('token', response.data.token);
+          
           rememberMe
             ? localStorage.setItem('username', response.data.email)
             : localStorage.removeItem('username');
         })
       );
+  }
+
+  /** Solicita envío de correo de verificación de cuenta */
+  sendVerificationEmail (email: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/send-verification-email`, { email });
   }
 
   /** Realiza la verificacion del email, y guarda el sesión token del usuario */
@@ -42,7 +47,7 @@ export class AuthService {
     return this.http.post<void>(`${this.baseUrl}/forgot-password`, { email });
   }
 
-  /** Restablece la contraseña del usuario */
+  /** Restablece la contraseña del usuario y guarda el sesión token del usuario */
   resetPassword (token: string, password: string): Observable<PasswordResetResponse> {
     return this.http
       .post<PasswordResetResponse>(`${this.baseUrl}/reset-password`, { token, password })
