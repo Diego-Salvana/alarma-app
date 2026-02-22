@@ -5,7 +5,7 @@ import { TimelineModule } from 'primeng/timeline';
 import { BtnEditCardComponent, HouseModalComponent } from '../../components';
 import { ModalDataTransfer, HouseProp } from '../../interfaces';
 import { CurrentHouseService, SensorService } from '../../services';
-import { Estado, Sensor } from '../../../shared/interfaces';
+import { Sensor, State } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
@@ -29,7 +29,7 @@ export class SensorComponent implements OnInit {
   openModal = signal(false);
   submitted = signal(true);
   readonly isAlarmArmed = computed(
-    () => this.currentHouseService.house()?.alarmaEncendida === Estado.ENCENDIDO
+    () => this.currentHouseService.house()?.alarmaEncendida === State.ON
   );
 
   ngOnInit () {

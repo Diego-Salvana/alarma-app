@@ -5,7 +5,6 @@ import { HeaderComponent, NavBarComponent, SideBarComponent } from './components
 import { ActiveRouteService, CurrentHouseService, CurrentUserService } from './services';
 import { ToastService } from '../shared/services';
 import { AlertService } from './services/alert.service';
-import { Estado } from '../shared/interfaces';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,13 +15,21 @@ import { Estado } from '../shared/interfaces';
 })
 export class DashboardComponent implements OnInit {
   private activeRouteService = inject(ActiveRouteService);
-  private alertService = inject(AlertService);
   private userService = inject(CurrentUserService);
   private currentHouseService = inject(CurrentHouseService);
+  private alertService = inject(AlertService);
   private toastService = inject(ToastService);
   readonly isHome = computed(() => this.activeRouteService.activeSection() === 'home');
 
   constructor () {
+    effect(onCleanup => {
+      const username = this.userService.username();
+      if (!username) return;
+
+      this.alertService.initListeners(username);
+      onCleanup(() => this.alertService.stopListeners());
+    });
+
     effect(() => {
       const warning = this.alertService.houseWarning();
       if (warning) this.toastService.alert(warning.message);
@@ -32,10 +39,9 @@ export class DashboardComponent implements OnInit {
       const triggeredAlert = this.alertService.triggerAlert();
       if (!triggeredAlert) return;
       
-      const ringing = triggeredAlert.state === Estado.ENCENDIDO;
       this.toastService.alert(
         `Alarma ${
-          ringing ? 'SONANDO' : 'APAGADA'
+          triggeredAlert.ringing ? 'SONANDO' : 'APAGADA'
         } en ${
           this.searchHouse(triggeredAlert.house) ?? 'una de las casas'
         }`
@@ -45,7 +51,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit () {
     this.userService.loadUser();
-    this.currentHouseService.getHouse();
+    this.currentHouseService.loadCurrentHouse();
   }
 
   /** Busca una casa entre las del usuario. */

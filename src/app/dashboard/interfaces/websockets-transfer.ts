@@ -1,18 +1,22 @@
-import { Estado } from '../../shared/interfaces/models.interface';
+import { State } from '../../shared/interfaces';
 
-export interface AlarmArming {
-  state: Estado;
+interface WebSocketTransferBase {
+  house: string;
+}
+
+export interface AlarmArming extends WebSocketTransferBase {
+  state: State;
   excludedSensors: string[];
 }
 
 export interface Lights {
   sector: string;
-  state: Estado
+  state: State
 }
 
-export interface TriggeredAlarm {
-  house: string;
-  state: Estado;
+export interface TriggeredAlarm extends WebSocketTransferBase {
+  ringing: boolean;
+  sensorNumber: number | null;
 }
 
 export enum HouseAction {

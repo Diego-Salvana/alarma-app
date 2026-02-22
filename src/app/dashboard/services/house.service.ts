@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable, tap, throwError } from 'rxjs';
-import { HouseResponse, InfoHouseResponse, InfoHousesResponse } from '../../shared/interfaces';
-import { ModalDataTransfer, UpdateHouseDto } from '../interfaces';
+import { HouseResponse, InfoHouseResponse, InfoHousesResponse, UpdateHouseDTO } from '../../shared/interfaces';
+import { ModalDataTransfer } from '../interfaces';
 import { API_URL } from '../../env';
+import { HttpHeaders } from '@capacitor/core';
 
 /** Provee acceso a la API para realizar operaciones relacionadas a las casas. */
 @Injectable({
@@ -28,15 +29,24 @@ export class HouseService {
   }
 
   /** Obtiene información de la casa que será utilizada como `currentHouse` y actualiza el `token`. */
-  getOne (houseId: string): Observable<HouseResponse> {
+  getOne (houseId: string, setCurrent = false): Observable<HouseResponse> {
+    const headers: HttpHeaders = { 'set-house': setCurrent.toString() };
+    
     return this.http
-      .get<InfoHouseResponse>(`${this.baseUrl}/${houseId}`, { headers: { 'set-house': 'true' } })
+      .get<InfoHouseResponse>(`${this.baseUrl}/${houseId}`, { headers })
       .pipe(
         map(response => response.data),
         tap(response => {
           if (response.token) localStorage.setItem('token', response.token);
         })
       );
+  }
+
+  /** Obtiene la casa actual del usuario (a través del token) desde la API y devuelve su data. */
+  getCurrent (): Observable<HouseResponse> {
+    return this.http
+      .get<InfoHouseResponse>(`${this.baseUrl}/current`)
+      .pipe(map(response => response.data));
   }
 
   /** Obtiene información la casa con id `houseInfoID` para ver y modificar sus datos. */
@@ -55,7 +65,7 @@ export class HouseService {
   modifyHouse (data: ModalDataTransfer): Observable<HouseResponse> {
     if (!this.houseID) return throwError(() => new Error('No se encontró la casa.'));
 
-    const body: UpdateHouseDto = {
+    const body: UpdateHouseDTO = {
       nombre: data.houseName,
       direccion: {
         calle: data.street,

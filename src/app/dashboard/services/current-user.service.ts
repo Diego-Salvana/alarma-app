@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { ToastService } from '../../shared/services';
-import { HouseResponse } from '../../shared/interfaces';
+import { HouseResponse, State } from '../../shared/interfaces';
 import { finalize } from 'rxjs';
 
 @Injectable({
@@ -32,6 +32,18 @@ export class CurrentUserService {
         },
         error: () => this.toastService.error('Error al obtener los datos del usuario')
       });
+  }
+
+  updateHousesState (houseName: string, info: { state?: State, ringing?: boolean }) {
+    this._houses.update(houses => houses.map(house => {
+      if (house.nombreCasa !== houseName) return house;
+        
+      return {
+        ...house,
+        alarmaEncendida: info.state ?? house.alarmaEncendida,
+        sonando: info.ringing ?? house.sonando
+      };
+    }));
   }
 
   setUserNull () {

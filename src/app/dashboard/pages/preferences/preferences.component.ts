@@ -3,7 +3,7 @@ import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitc
 import { CardModule } from 'primeng/card';
 import { FormsModule } from '@angular/forms';
 import { SocketService, ThemeService, ToastService } from '../../../shared/services';
-import { Estado } from '../../../shared/interfaces';
+import { State } from '../../../shared/interfaces';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CurrentHouseService, CurrentUserService } from '../../services';
 import { WS_LIGHTS } from '../../../env';
@@ -32,7 +32,7 @@ export class PreferencesComponent {
     const lightsState = localStorage.getItem('lightsState');
     
     if (lightsState) {
-      this.lightsOn = lightsState === Estado.ENCENDIDO;
+      this.lightsOn = lightsState === State.ON;
     }
 
     this.socketService
@@ -41,7 +41,7 @@ export class PreferencesComponent {
       .subscribe(data => {
         console.log(data);
         
-        this.lightsOn = data.state === Estado.ENCENDIDO;
+        this.lightsOn = data.state === State.ON;
         localStorage.setItem('lightsState', data.state);
         this.changeDetectorRef.detectChanges();
       });
@@ -49,7 +49,7 @@ export class PreferencesComponent {
   
   changeLightsState (event: ToggleSwitchChangeEvent) {
     const sector = 'patio';
-    const state = event.checked ? Estado.ENCENDIDO : Estado.APAGADO;
+    const state = event.checked ? State.ON : State.OFF;
 
     this.currentHouseService.setLights({ sector, state }).subscribe({
       error: err => this.toastService.error(err.error.message)

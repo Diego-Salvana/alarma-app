@@ -4,9 +4,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { Estado, Sensor } from '../../../../shared/interfaces';
+import { Sensor, State } from '../../../../shared/interfaces';
 
-export type ExclusionFormValue = Partial<{ [key: string]: Estado }>;
+export type ExclusionFormValue = Partial<{ [key: string]: State }>;
 
 @Component({
   selector: 'app-exclusion-modal',
@@ -20,9 +20,9 @@ export class ExclusionModalComponent {
   submitEnd = input.required<boolean>();
   sensors = input.required<Sensor[]>();
   onActive = output<ExclusionFormValue>();
-  exclusionForm = computed<FormGroup<{ [key: string]: FormControl<Estado> }>>(() => {
+  exclusionForm = computed<FormGroup<{ [key: string]: FormControl<State> }>>(() => {
     return this.sensors().reduce((form, sensor) => {
-      form.addControl(sensor.numeroSensor.toString(), new FormControl(Estado.ENCENDIDO));
+      form.addControl(sensor.numeroSensor.toString(), new FormControl(State.ON));
       return form;
     }, new FormGroup({}));
   });

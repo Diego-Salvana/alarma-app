@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { BtnEditCardComponent, PasswordModalComponent, ProfileModalComponent } from '../../components';
 import { ModalDataTransfer, ProfileProp } from '../../interfaces';
 import { ProfileService } from '../../services/profile.service';
-import { Estado, ProfileResponse } from '../../../shared/interfaces';
+import { Estado, ProfileResponse, State } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { CurrentHouseService, HouseService } from '../../services';
 import { LogoutModalComponent } from '../../../shared/components';
@@ -37,9 +37,7 @@ export class ProfileComponent {
   submitted = signal(true);
   profileProp?: ProfileProp;
   propValue = '';
-  isAlarmArmed = computed(() =>
-    this.currentHouseService.house()?.alarmaEncendida === Estado.ENCENDIDO
-  );
+  isAlarmArmed = computed(() => this.currentHouseService.house()?.alarmaEncendida === State.ON);
   
   constructor () {
     this.profileService

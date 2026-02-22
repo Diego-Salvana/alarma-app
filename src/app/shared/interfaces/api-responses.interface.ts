@@ -1,4 +1,5 @@
-import { Direccion, Estado, HistorialConNombre, Sensor } from './models.interface';
+import { State } from './domain.interfaces';
+import { Direccion, HistorialConNombre, Sensor } from './models.interface';
 
 export interface InfoLoginResponse {
   message: string;
@@ -28,7 +29,7 @@ export interface HouseResponse {
   nombre: string;
   nombreCasa: string;
   direccion: Direccion;
-  alarmaEncendida: Estado;
+  alarmaEncendida: State;
   sonando: boolean;
   sensores: Sensor[];
   token?: string;

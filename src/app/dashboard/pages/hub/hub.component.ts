@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } 
 import { ButtonModule } from 'primeng/button';
 import { SensorListComponent, ExclusionModalComponent, ExclusionFormValue } from '../../components';
 import { CurrentHouseService } from '../../services';
-import { Estado } from '../../../shared/interfaces';
+import { State } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { ConfirmDialogComponent } from '../../components/modals';
 
@@ -20,8 +20,8 @@ export class HubComponent {
   private actionTimeOut!: ReturnType<typeof setTimeout>;
   readonly house = this.currentHouseService.house;
   readonly isLoading = this.currentHouseService.isLoading;
-  readonly isAlarmArmed = computed(() => this.house()?.alarmaEncendida === Estado.ENCENDIDO);
-  readonly isRinging = computed(() => this.house()?.sonando === true);
+  readonly isAlarmArmed = computed(() => this.house()?.alarmaEncendida === State.ON);
+  readonly isRinging = computed(() => this.house()?.sonando);
   readonly sensors = computed(() => this.house()?.sensores ?? []);
   isExclusionFormVisible = false;
   isArmingSubmitted = signal(true);
@@ -69,11 +69,13 @@ export class HubComponent {
   onArmAlarm (value: ExclusionFormValue) {
     this.isArmingSubmitted.set(false);
 
-    const exclusionArray = Object
+    const sensorsConfig = Object
       .entries(value)
-      .map(([numeroSensor, estado]) => ({ numeroSensor, estado }));
+      .map(([numeroSensor, estado]) => {
+        return { numeroSensor: parseInt(numeroSensor), estado: estado ?? State.ON };
+      });
 
-    this.currentHouseService.armAlarm(exclusionArray).subscribe({
+    this.currentHouseService.armAlarm(sensorsConfig).subscribe({
       next: _ => {
         this.actionTimeOut = setTimeout(() => {
           this.isArmingSubmitted.set(true);
@@ -139,8 +141,9 @@ export class HubComponent {
 
   /** Alterna el estado de `sonando` de la casa actual. */
   toggleRinging () {
-    const nextState = this.isRinging() ? Estado.APAGADO : Estado.ENCENDIDO;
-    this.currentHouseService.toggleRinging({ state: nextState }).subscribe({
+    const nextState = !this.isRinging();
+
+    this.currentHouseService.toggleRinging({ sonando: nextState }).subscribe({
       next: _ => {
         this.actionTimeOut = setTimeout(() => {
           this.isRingingSubmitted.set(true);
