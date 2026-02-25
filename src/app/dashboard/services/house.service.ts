@@ -2,8 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable, tap, throwError } from 'rxjs';
-import { HouseResponse, InfoHouseResponse, InfoHousesResponse, UpdateHouseDTO } from '../../shared/interfaces';
-import { ModalDataTransfer } from '../interfaces';
+import { HouseResponse, HouseUpdate, InfoHouseResponse, InfoHousesResponse, NewCode, AlarmCodeUpdateDTO, HouseUpdateDTO, AddressResponse } from '../../shared/interfaces';
 import { API_URL } from '../../env';
 import { HttpHeaders } from '@capacitor/core';
 
@@ -61,17 +60,35 @@ export class HouseService {
       .pipe(map(response => response.data));
   }
 
-  /** Modifica datos de la casa con id `houseInfoID`. */
-  modifyHouse (data: ModalDataTransfer): Observable<HouseResponse> {
+  /** Modifica código de activación de la casa con id `houseInfoID`. */
+  updateAlarmCode (data: NewCode): Observable<void> {
     if (!this.houseID) return throwError(() => new Error('No se encontró la casa.'));
 
-    const body: UpdateHouseDTO = {
-      nombre: data.houseName,
-      direccion: {
-        calle: data.street,
-        numero: isNaN(Number(data.number)) ? undefined : Number(data.number),
-        ciudad: data.city
-      }
+    const { password, currentCode, newCode } = data;
+    const currentCodeNumber = parseInt(currentCode);
+    const newCodeNumber = parseInt(newCode);
+
+    const info: AlarmCodeUpdateDTO = {
+      contrasena: password,
+      codigoActual: currentCodeNumber,
+      nuevoCodigo: newCodeNumber
+    };
+
+    return this.http.patch<void>(`${API_URL}/central/code/${this.houseID}`, info);
+  }
+
+  updateHouseInfo (data: HouseUpdate): Observable<HouseResponse> {
+    if (!this.houseID) return throwError(() => new Error('No se encontró la casa.'));
+
+    const address: Partial<AddressResponse> = {
+      ...(data.addressStreet && { calle: data.addressStreet }),
+      ...(data.addressNumber && { numero: data.addressNumber }),
+      ...(data.city && { ciudad: data.city })
+    };
+
+    const body: HouseUpdateDTO = {
+      ...(data.houseName && { nombre: data.houseName }),
+      ...(Object.keys(address).length && { direccion: address })
     };
 
     return this.http

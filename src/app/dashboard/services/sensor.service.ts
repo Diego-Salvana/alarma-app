@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { InfoSensorResponse, Sensor } from '../../shared/interfaces';
+import { DeviceResponse, InfoSensorResponse, SensorNameDTO } from '../../shared/interfaces';
 import { API_URL } from '../../env';
 
 /** Provee acceso a la API para realizar operaciones relacionadas a los sensores. */
@@ -13,17 +13,17 @@ export class SensorService {
   private baseUrl = `${API_URL}/sensors`;
 
   /** Obtiene un sensor por su número. */
-  getOne (sensorNumber: string): Observable<Sensor> {
+  getOne (sensorNumber: string): Observable<DeviceResponse> {
     return this.http
       .get<InfoSensorResponse>(`${this.baseUrl}/${sensorNumber}`)
       .pipe(map(res => res.data));
   }
 
   /** Modifica el nombre de un sensor. */
-  modifyName (sensorNumber: number, newName: string): Observable<Sensor> {
-    const body: Pick<Sensor, 'nombre' | 'numeroSensor'> = {
-      nombre: newName,
-      numeroSensor: isNaN(sensorNumber) ? 0 : sensorNumber
+  modifyName (sensorNumber: number, newName: string): Observable<DeviceResponse> {
+    const body: SensorNameDTO = {
+      numeroSensor: isNaN(sensorNumber) ? 0 : sensorNumber,
+      nombre: newName
     };
 
     return this.http

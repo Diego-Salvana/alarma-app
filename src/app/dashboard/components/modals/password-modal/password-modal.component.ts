@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, input, model, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, model, OnInit, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../../../auth/utils';
-import { ModalDataTransfer } from '../../../interfaces';
+import { NewPassword } from '../../../../shared/interfaces';
 
 @Component({
   selector: 'app-password-modal',
@@ -16,13 +16,24 @@ import { ModalDataTransfer } from '../../../interfaces';
 export class PasswordModalComponent implements OnInit {
   private fb = inject(FormBuilder);
   visible = model<boolean>(false);
-  submitEnd = input.required();
-  changeValue = output<ModalDataTransfer>();
+  isSubmitted = input.required<boolean>();
+  onSave = output<NewPassword>();
   passForm = this.fb.group({
     currentPassword: ['', [Validators.required, Validators.minLength(3)]],
     newPassword: ['', [Validators.required, Validators.minLength(3)]],
     confirmPassword: ['', [passwordMatchValidator]]
   });
+
+  constructor () {
+    effect(() => {
+      const isSubmitted = this.isSubmitted();
+
+      if (isSubmitted) {
+        this.close();
+        this.passForm.reset();
+      };
+    });
+  }
 
   ngOnInit () {
     this.passForm.controls.newPassword.valueChanges.subscribe(() => {
@@ -37,12 +48,13 @@ export class PasswordModalComponent implements OnInit {
     
     if (this.passForm.invalid) return;
     
-    const data: ModalDataTransfer = {
-      password: this.passForm.controls.currentPassword.value,
-      newPassword: this.passForm.controls.newPassword.value
+    const values = this.passForm.getRawValue();
+    const data: NewPassword = {
+      currentPassword: values.currentPassword ?? '',
+      newPassword: values.newPassword ?? ''
     };
 
-    this.changeValue.emit(data);
+    this.onSave.emit(data);
   }
 
   close () {

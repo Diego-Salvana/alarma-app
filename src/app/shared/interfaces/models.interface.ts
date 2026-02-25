@@ -1,3 +1,5 @@
+import { DeviceResponse } from './api-models.interfaces';
+
 export enum Estado {
   ENCENDIDO = 'On',
   APAGADO = 'Off'
@@ -27,7 +29,7 @@ export interface Dispositivo {
   historial: Historial[];
 }
 
-export interface Sensor extends Dispositivo { }
+export interface Sensor extends DeviceResponse { }
 
 // Central Interface
 export interface Central {

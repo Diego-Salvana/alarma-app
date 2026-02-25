@@ -1,14 +1,16 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { ToastService } from '../../shared/services';
 import { HouseResponse, State } from '../../shared/interfaces';
 import { finalize } from 'rxjs';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CurrentUserService {
   private profileService = inject(ProfileService);
+  private alertService = inject(AlertService);
   private toastService = inject(ToastService);
   private _username = signal<string | null>(null);
   private _email = signal<string | null>(null);
@@ -18,6 +20,22 @@ export class CurrentUserService {
   email = this._email.asReadonly();
   houses = this._houses.asReadonly();
   isLoading = this._isLoading.asReadonly();
+
+  constructor () {
+    effect(() => {
+      const armAlert = this.alertService.armAlert();
+      if (armAlert) {
+        this.updateHousesState(armAlert.house, { state: armAlert.state });
+      }
+    });
+
+    effect(() => {
+      const triggerAlert = this.alertService.triggerAlert();
+      if (triggerAlert) {
+        this.updateHousesState(triggerAlert.house, { ringing: triggerAlert.ringing });
+      }
+    });
+  }
 
   loadUser () {
     this._isLoading.set(true);
@@ -34,7 +52,14 @@ export class CurrentUserService {
       });
   }
 
-  updateHousesState (houseName: string, info: { state?: State, ringing?: boolean }) {
+  logout () {
+    this._username.set(null);
+    this._email.set(null);
+    this._houses.set([]);
+    localStorage.removeItem('token');
+  }
+
+  private updateHousesState (houseName: string, info: { state?: State, ringing?: boolean }) {
     this._houses.update(houses => houses.map(house => {
       if (house.nombreCasa !== houseName) return house;
         
@@ -44,11 +69,5 @@ export class CurrentUserService {
         sonando: info.ringing ?? house.sonando
       };
     }));
-  }
-
-  setUserNull () {
-    this._username.set(null);
-    this._email.set(null);
-    this._houses.set([]);
   }
 }

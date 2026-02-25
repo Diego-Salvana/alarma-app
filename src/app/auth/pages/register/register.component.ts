@@ -38,8 +38,9 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit () {
     this.registerForm.controls.password.valueChanges.subscribe(() => {
-      const rePassControl = this.registerForm.controls.confirmPassword;
-      rePassControl.setValue(rePassControl.value);
+      const confirmControl = this.registerForm.controls.confirmPassword;
+
+      confirmControl.setValue(confirmControl.value);
     });
   }
 

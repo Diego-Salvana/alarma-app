@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, throwError } from 'rxjs';
-import { InfoProfileResponse, ProfileResponse, User } from '../../shared/interfaces';
-import { ModalDataTransfer, PasswordBody } from '../interfaces';
+import { map, Observable } from 'rxjs';
+import { InfoProfileResponse, NewPassword, PasswordBodyDTO, ProfileResponse, ProfileUpdate, ProfileUpdateDTO } from '../../shared/interfaces';
 import { API_URL } from '../../env';
 
 /** Provee acceso a la API para realizar operaciones relacionadas al perfil de usuario. */
@@ -21,11 +20,11 @@ export class ProfileService {
   }
 
   /** Modifica los datos del perfil del usuario. */
-  modifyUserData (data: ModalDataTransfer): Observable<ProfileResponse> {
-    const body: Partial<Pick<User, 'nombre' | 'apellido' | 'telefono'>> = {
-      nombre: data.name,
-      apellido: data.lastname,
-      telefono: data.phone
+  modifyUserData (data: ProfileUpdate): Observable<ProfileResponse> {
+    const body: ProfileUpdateDTO = {
+      ...(data.name && { nombre: data.name }),
+      ...(data.lastname && { apellido: data.lastname }),
+      ...(data.phone && { telefono: data.phone })
     };
 
     return this.http
@@ -34,13 +33,9 @@ export class ProfileService {
   }
 
   /** Cambia la contraseña del usuario. */
-  updateUserPassword (data: ModalDataTransfer): Observable<ProfileResponse> {
-    if (!data.password || !data.newPassword) {
-      return throwError(() => new Error('Datos no válidos para contraseña.'));
-    }
-
-    const body: PasswordBody = {
-      contrasenaActual: data.password,
+  updateUserPassword (data: NewPassword): Observable<ProfileResponse> {
+    const body: PasswordBodyDTO = {
+      contrasenaActual: data.currentPassword,
       nuevaContrasena: data.newPassword
     };
 

@@ -1,0 +1,82 @@
+@let _isSubmitted = isSubmitted();
+
+<div class="card flex justify-center">
+  <p-dialog 
+    header="Código de Alarma"
+    [modal]="true" 
+    [(visible)]="visible" 
+    [closable]="_isSubmitted"
+    styleClass="w-[95%] max-w-screen-sm">
+    <span class="p-text-secondary block mb-8">
+      Establece un nuevo código de activación de alarma.
+    </span>
+
+    <form [formGroup]="codeForm" autocomplete="off" (ngSubmit)="onSubmit()" >
+      <div class="flex items-center gap-4 mb-4">
+        <label for="password" class="font-semibold w-24">Contraseña</label>
+        <div class="grow">
+          <p-password 
+            id="password"
+            placeholder="Ingresa la contraseña"
+            toggleMask 
+            feedback="false" 
+            formControlName="password" />
+          <small class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
+            Mínimo 6 caracteres.
+          </small>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 mb-4">
+        <label for="current-code" class="font-semibold w-24">Código actual</label>
+        <div class="grow">
+          <p-password 
+            id="current-code"
+            placeholder="ej: 123456"
+            toggleMask 
+            feedback="false" 
+            formControlName="currentCode" />
+          <small class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
+            Debe contener 6 dígitos (0-9).
+          </small>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 mb-4">
+        <label for="new-code" class="font-semibold w-24">Nuevo código</label>
+        <div class="grow">
+          <p-password 
+            id="new-code"
+            placeholder="Nuevo código"
+            toggleMask 
+            feedback="false"
+            formControlName="newCode" />
+          <small class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
+            Debe contener 6 dígitos (0-9).
+          </small>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 mb-4">
+        <label for="re-new-code" class="font-semibold w-24">Repite código</label>
+        <div class="grow">
+          <p-password 
+            id="re-new-code" 
+            toggleMask 
+            placeholder="Nuevo código"
+            feedback="false" 
+            formControlName="confirmCode" />
+          <small class="block h-0 overflow-hidden text-red-600 transition-all duration-100 ease-out">
+            Los códigos no coinciden.
+          </small>
+        </div>
+      </div>
+    </form>
+
+    <ng-template #footer>
+      <p-button 
+        label="Cancelar"
+        severity="secondary"
+        [disabled]="!_isSubmitted"
+        (onClick)="close()" />
+      <p-button label="Guardar" [disabled]="!_isSubmitted" (onClick)="onSubmit()" />
+    </ng-template>
+  </p-dialog>
+</div>

@@ -2,17 +2,16 @@ import { DatePipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
-import { BtnEditCardComponent, HouseModalComponent } from '../../components';
-import { ModalDataTransfer, HouseProp } from '../../interfaces';
 import { CurrentHouseService, SensorService } from '../../services';
-import { Sensor, State } from '../../../shared/interfaces';
+import { HouseUpdate, Sensor, State } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
+import { DetailsCardComponent } from '../../components';
 
 @Component({
   selector: 'app-sensor',
-  imports: [CardModule, TimelineModule, BtnEditCardComponent, HouseModalComponent, TitleCasePipe, DatePipe, UpperCasePipe],
+  imports: [CardModule, TimelineModule, TitleCasePipe, DatePipe, UpperCasePipe, DetailsCardComponent],
   templateUrl: './sensor.component.html',
   styleUrl: './sensor.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,14 +22,13 @@ export class SensorComponent implements OnInit {
   private toastService = inject(ToastService);
   private destroyRef = inject(DestroyRef);
   readonly sensorNumber = input<string>(''); // Toma "sensorNumber" de la ruta.
-  readonly houseProp: HouseProp = 'sensorName';
-  sensor = signal<Sensor | null>(null);
-  isLoading = signal(true);
-  openModal = signal(false);
-  submitted = signal(true);
   readonly isAlarmArmed = computed(
     () => this.currentHouseService.house()?.alarmaEncendida === State.ON
   );
+
+  sensor = signal<Sensor | null>(null);
+  isLoading = signal(true);
+  submitted = signal(true);
 
   ngOnInit () {
     this.sensorService
@@ -41,12 +39,12 @@ export class SensorComponent implements OnInit {
       )
       .subscribe({
         next: sensor => this.sensor.set(sensor),
-        error: err => this.toastService.error(err.message)
+        error: err => this.toastService.error(err.error.message)
       });
   }
 
   /** Cambia el nombre del sensor. */
-  changeName (data: ModalDataTransfer) {
+  updateName (data: HouseUpdate) {
     this.submitted.set(false);
 
     if (!data.sensorName) {
@@ -56,26 +54,11 @@ export class SensorComponent implements OnInit {
     }
 
     this.sensorService
-      .modifyName(Number(this.sensorNumber()), data.sensorName)
-      .pipe(
-        finalize(() => {
-          this.submitted.set(true);
-          this.openModal.set(false);
-        })
-      )
+      .modifyName(parseInt(this.sensorNumber()), data.sensorName)
+      .pipe(finalize(() => this.submitted.set(true)))
       .subscribe({
         next: sensor => this.sensor.set(sensor),
-        error: err => this.toastService.error(err.message)
+        error: err => this.toastService.error(err.error.message)
       });
-  }
-
-  /** Muestra el modal de cambio de nombre. */
-  showDialog () {
-    this.openModal.set(true);
-  }
-
-  /** Cierra el modal de cambio de nombre. */
-  closeDialog () {
-    this.openModal.set(false);
   }
 }

@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
-import { ProfileProp, ModalDataTransfer } from '../../../interfaces';
+import { ProfileModalField, ProfileUpdate } from '../../../../shared/interfaces';
 
 @Component({
   selector: 'app-profile-modal',
@@ -16,22 +16,36 @@ import { ProfileProp, ModalDataTransfer } from '../../../interfaces';
 })
 export class ProfileModalComponent {
   visible = model<boolean>(false);
-  submitted = input.required();
-  profileProp = input.required<ProfileProp>();
+  submitted = input.required<boolean>();
+  profileProp = input.required<ProfileModalField>();
   propValue = input.required<string>();
-  changeValue = output<ModalDataTransfer>();
+  onSave = output<ProfileUpdate>();
   formControl = new FormControl('', [Validators.required]);
 
   constructor () {
-    effect(() => (this.formControl.setValue(this.propValue())));
-    effect(() => (this.submitted() ? this.formControl.enable() : this.formControl.disable()));
+    effect(() => {
+      const propValue = this.propValue();
+
+      this.formControl.setValue(propValue);
+    });
+    
+    effect(() => {
+      const isSubmitted = this.submitted();
+
+      if (isSubmitted) {
+        this.formControl.enable();
+        this.close();
+      } else {
+        this.formControl.disable();
+      }
+    });
   }
 
   onSubmit () {
     if (this.formControl.invalid) return;
 
-    const data: ModalDataTransfer = { [this.profileProp()]: this.formControl.value };
-    this.changeValue.emit(data);
+    const data: ProfileUpdate = { [this.profileProp()]: this.formControl.value };
+    this.onSave.emit(data);
   }
   
   close () {

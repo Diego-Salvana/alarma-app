@@ -3,279 +3,179 @@
 
 // Header Perfil 
 .profile-header {
-   .profile-avatar {
-      @include dashboard.house-avatar-base(var(--p-primary-500),
-         var(--p-primary-600),
-         rgb(50, 50, 50));
-   }
+    .profile-avatar {
+        @include dashboard.house-avatar-base(var(--p-primary-500),
+            var(--p-primary-600),
+            rgb(50, 50, 50));
+    }
 }
 
-.info-card-content {
-   display: flex;
-   align-items: center;
-   gap: 0.75rem;
-
-   .info-icon {
-      width: 35px;
-      height: 35px;
-      border-radius: 8px;
-      background-color: var(--p-primary-50);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-
-      :host-context(.my-app-dark) & {
-         background-color: var(--p-primary-800);
-      }
-   }
-
-   .info-details {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-
-      .info-label {
-         font-size: 0.75rem;
-         font-weight: 500;
-         color: var(--p-text-muted-color);
-         text-transform: uppercase;
-         letter-spacing: 0.025em;
-      }
-
-      .info-value {
-         font-size: 0.95rem;
-         font-weight: 600;
-      }
-   }
-
-   .info-actions {
-      margin-left: auto;
-   }
-}
-
-// Tarjetas con Acciones
-.action-card-content {
-   display: flex;
-   align-items: center;
-   gap: 0.75rem;
-
-   .action-icon {
-      width: 35px;
-      height: 35px;
-      border-radius: 8px;
-      background-color: var(--p-primary-50);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-
-      :host-context(.my-app-dark) & {
-         background-color: var(--p-primary-800);
-      }
-   }
-
-   .action-details {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-
-      .action-title {
-         font-size: 0.95rem;
-         font-weight: 600;
-      }
-
-      .action-subtitle {
-         font-size: 0.8rem;
-         color: var(--p-text-muted-color);
-      }
-   }
-
-   .action-button {
-      margin-left: auto;
-   }
-}
-
+// Sitios
 .sites-grid {
-   display: grid;
-   gap: 1rem;
-   grid-template-columns: 1fr;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
 
-   @media (min-width: 640px) {
-      grid-template-columns: repeat(2, 1fr);
-   }
+    @media (min-width: 640px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-   @media (min-width: 1024px) {
-      grid-template-columns: repeat(3, 1fr);
-   }
+    @media (min-width: 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .site-card-content {
-   display: flex;
-   align-items: center;
-   gap: 0.75rem;
-   height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 100%;
 
-   .site-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--p-emerald-500), var(--p-emerald-600));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 1.3rem;
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
-   }
+    .site-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--p-emerald-500), var(--p-emerald-600));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.3rem;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+    }
 
-   .site-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+    .site-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
 
-      .site-name {
-         font-size: 1rem;
-         font-weight: 600;
-         margin: 0;
-         text-transform: uppercase;
-         letter-spacing: 0.025em;
-      }
+        .site-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
 
-      .site-status {
-         font-size: 0.8rem;
-         font-weight: 500;
-         margin: 0;
-         display: flex;
-         align-items: center;
-      }
-   }
+        .site-status {
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+    }
 
-   .site-arrow {
-      color: var(--p-text-muted-color);
-      font-size: 1.25rem;
-      transition: transform 0.2s ease;
-   }
+    .site-arrow {
+        color: var(--p-text-muted-color);
+        font-size: 1.25rem;
+        transition: transform 0.2s ease;
+    }
 
-   &:hover .site-arrow {
-      transform: translateX(4px);
-   }
+    &:hover .site-arrow {
+        transform: translateX(4px);
+    }
 }
 
 // Estado Vacío
 :host::ng-deep .empty-state-card {
-   .p-card {
-      border: 2px dashed var(--p-content-border-color);
-   }
+    .p-card {
+        border: 2px dashed var(--p-content-border-color);
+    }
 }
 
 .empty-state {
-   text-align: center;
-   padding: 1rem;
+    text-align: center;
+    padding: 1rem;
 
-   h5 {
-      margin: 0;
-      font-weight: 600;
-   }
+    h5 {
+        margin: 0;
+        font-weight: 600;
+    }
 
-   p {
-      margin: 0;
-   }
+    p {
+        margin: 0;
+    }
 }
 
 // Sección de Cerrar Sesión
 .logout-section {
-   margin-top: 2rem;
-   margin-bottom: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 :host::ng-deep .logout-card {
-   .p-card {
-      border: 1px solid var(--p-red-200);
-      background: linear-gradient(135deg, var(--p-red-25), var(--p-red-50));
-   }
+    .p-card {
+        border: 1px solid var(--p-red-200);
+        background: linear-gradient(135deg, var(--p-red-25), var(--p-red-50));
+    }
 }
 
 .logout-content {
-   display: flex;
-   align-items: center;
-   gap: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 
-   .logout-icon {
-      width: 35px;
-      height: 35px;
-      border-radius: 8px;
-      background-color: var(--p-red-100);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--p-red-700);
-      font-size: 1rem;
+    .logout-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        background-color: var(--p-red-100);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--p-red-700);
+        font-size: 1rem;
 
-      :host-context(.my-app-dark) & {
-         background-color: var(--p-red-900);
-         color: var(--p-red-300);
-      }
-   }
+        :host-context(.my-app-dark) & {
+            background-color: var(--p-red-900);
+            color: var(--p-red-300);
+        }
+    }
 
-   .logout-details {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
+    .logout-details {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
 
-      .logout-title {
-         font-size: 0.95rem;
-         font-weight: 600;
-         color: var(--p-text-color);
-      }
+        .logout-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--p-text-color);
+        }
 
-      .logout-subtitle {
-         font-size: 0.8rem;
-         color: var(--p-text-muted-color);
-      }
-   }
+        .logout-subtitle {
+            font-size: 0.8rem;
+            color: var(--p-text-muted-color);
+        }
+    }
 
-   .logout-button {
-      margin-left: auto;
-   }
+    .logout-button {
+        margin-left: auto;
+    }
 }
 
 // Diseño Responsivo
 @media (min-width: 768px) {
+    .site-card-content {
+        gap: 1rem;
 
-   .info-card-content,
-   .action-card-content {
-      gap: 1rem;
+        .site-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 1.5rem;
+        }
+    }
 
-      .info-icon,
-      .action-icon {
-         width: 40px;
-         height: 40px;
-         font-size: 1.125rem;
-      }
-   }
+    .logout-content {
+        gap: 1rem;
 
-   .site-card-content {
-      gap: 1rem;
-
-      .site-icon {
-         width: 48px;
-         height: 48px;
-         font-size: 1.5rem;
-      }
-   }
-
-   .logout-content {
-      gap: 1rem;
-
-      .logout-icon {
-         width: 40px;
-         height: 40px;
-         font-size: 1.125rem;
-      }
-   }
+        .logout-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1.125rem;
+        }
+    }
 }

@@ -1,5 +1,11 @@
-import { State } from './domain.interfaces';
-import { Direccion, HistorialConNombre, Sensor } from './models.interface';
+import { DeviceType, EventLog, State } from './domain.interfaces';
+import { HistorialConNombre, Sensor } from './models.interface';
+
+/* Estructura general de respuesta */
+export interface ApiResponse<T> {
+  message: string;
+  data?: T;
+}
 
 export interface InfoLoginResponse {
   message: string;
@@ -28,11 +34,26 @@ export interface HouseResponse {
   _id: string;
   nombre: string;
   nombreCasa: string;
-  direccion: Direccion;
+  direccion: AddressResponse;
   alarmaEncendida: State;
-  sonando: boolean;
-  sensores: Sensor[];
+  sonando?: boolean;
+  sensores?: DeviceResponse[];
   token?: string;
+}
+
+export interface DeviceResponse {
+  dispositivoId: string;
+  numeroSensor: number;
+  nombre: string;
+  tipo: DeviceType;
+  estado: State;
+  historial: EventLog[];
+}
+
+export interface AddressResponse {
+  calle: string;
+  numero: string;
+  ciudad: string;
 }
 
 export interface InfoSensorResponse {
@@ -46,6 +67,7 @@ export interface InfoProfileResponse {
 }
 
 export interface ProfileResponse {
+  _id: string;
   nombre: string;
   apellido: string;
   nombreUsuario: string;
@@ -58,4 +80,9 @@ export interface ProfileResponse {
 export interface InfoHistoryResponse {
   message: string;
   data: HistorialConNombre[];
+}
+
+export interface EmailVerification {
+  message: string;
+  token: string;
 }

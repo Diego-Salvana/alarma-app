@@ -1,5 +1,5 @@
 import { effect, inject, Injectable, signal, untracked } from '@angular/core';
-import { SensorArmConfigDTO, Estado, HouseResponse, TriggerDTO } from '../../shared/interfaces';
+import { SensorArmConfigDTO, HouseResponse, TriggerDTO, State } from '../../shared/interfaces';
 import { HouseService } from './house.service';
 import { finalize, Observable } from 'rxjs';
 import { StatusRequest, Lights, AlarmArming, TriggeredAlarm } from '../interfaces';
@@ -98,11 +98,11 @@ export class CurrentHouseService {
       return {
         ...house,
         alarmaEncendida: info.state,
-        sensores: house.sensores.map(sensor => ({
+        sensores: house.sensores?.map(sensor => ({
           ...sensor,
           estado: info.excludedSensors.includes(sensor.numeroSensor.toString())
-            ? Estado.APAGADO
-            : Estado.ENCENDIDO
+            ? State.ON
+            : State.OFF
         }))
       };
     });

@@ -1,7 +1,7 @@
 @let _isLoading = isLoading();
 @let _house = house();
-@let _submitted = submitted();
-@let _houseModalOpen = houseModalOpen();
+@let _isSubmitted = isSubmitted();
+@let _isAlarmArmed = isAlarmArmed();
 
 @if (_isLoading) {
   <div class="text-center pt-8">
@@ -37,80 +37,59 @@
   
   <section class="section-container">
     <h4 class="section-title">INFORMACIÓN DE LA CASA</h4>
-    <!-- Card de Acción de Nombre de la Casa -->
-    <p-card styleClass="house-action-card mb-4">
-      <ng-template #content>
-        <div class="action-card-content">
-          <div class="action-icon">
-            <i class="pi pi-pencil"></i>
-          </div>
-          <div class="action-details">
-            <span class="action-title">Nombre de la casa</span>
-            <span class="action-subtitle">Cambiar identificación</span>
-          </div>
-          <div class="action-button">
-            <p-button 
-              icon="pi pi-pencil" 
-              label="Editar" 
-              size="small" 
-              variant="outlined"
-              (onClick)="showDialog('houseName')" />
-          </div>
-        </div>
-      </ng-template>
-    </p-card>
+    <!-- Tarjeta de Nombre -->
+    <div class="mb-4">
+      <app-details-card 
+        type="house"
+        icon="pi pi-pencil"
+        title="Nombre de la casa"
+        description="Cambiar identificación"
+        [editable]="true"
+        [accentuated]="true"
+        houseField="houseName"
+        [initialPropValue]="_house?.nombre ?? ''"
+        [isSubmitted]="_isSubmitted"
+        (onSaveHouse)="udpdateHouseInfo($event)" />
+    </div>
 
-    <!-- Tarjetas de Dirección -->
-    <p-card styleClass="house-info-card mb-4">
-      <ng-template #content>
-        <div class="info-card-content">
-          <div class="info-icon">
-            <i class="pi pi-map-marker"></i>
-          </div>
-          <div class="info-details">
-            <span class="info-label">Calle</span>
-            <span class="info-value">{{ _house?.direccion?.calle | titlecase }}</span>
-          </div>
-          <div class="info-actions">
-            <!-- <app-btn-edit-card (click)="showDialog('street')" /> -->
-          </div>
-        </div>
-      </ng-template>
-    </p-card>
+    <!-- Tarjetas de Dirección (Calle) -->
+    <div class="mb-4">
+      <app-details-card 
+        type="house"
+        icon="pi pi-map-marker"
+        title="Calle"
+        [description]="(_house?.direccion?.calle | titlecase) ?? ''" />
+    </div>
 
-    <p-card styleClass="house-info-card mb-4">
-      <ng-template #content>
-        <div class="info-card-content">
-          <div class="info-icon">
-            <i class="pi pi-hashtag"></i>
-          </div>
-          <div class="info-details">
-            <span class="info-label">Número</span>
-            <span class="info-value">{{ _house?.direccion?.numero }}</span>
-          </div>
-          <div class="info-actions">
-            <!-- <app-btn-edit-card (click)="showDialog('number')" /> -->
-          </div>
-        </div>
-      </ng-template>
-    </p-card>
+    <!-- Tarjetas de Dirección (Número) -->
+    <div class="mb-4">
+      <app-details-card 
+        type="house"
+        icon="pi pi-hashtag"
+        title="Número"
+        [description]="(_house?.direccion?.numero) ?? ''" />
+    </div>
+ 
+    <!-- Tarjetas de Dirección (Ciudad) -->
+    <div class="mb-4">
+      <app-details-card 
+        type="house"
+        icon="pi pi-building"
+        title="Ciudad"
+        [description]="(_house?.direccion?.ciudad | titlecase) ?? ''" />
+    </div>
 
-    <p-card styleClass="house-info-card mb-4">
-      <ng-template #content>
-        <div class="info-card-content">
-          <div class="info-icon">
-            <i class="pi pi-building"></i>
-          </div>
-          <div class="info-details">
-            <span class="info-label">Ciudad</span>
-            <span class="info-value">{{ _house?.direccion?.ciudad | titlecase }}</span>
-          </div>
-          <div class="info-actions">
-            <!-- <app-btn-edit-card (click)="showDialog('city')" /> -->
-          </div>
-        </div>
-      </ng-template>
-    </p-card>
+    <!-- Tarjeta Código de Alarma -->
+    <div class="mb-4">
+      <app-security-card 
+      type="code"
+      iconClass="pi pi-calculator"
+      title="Código de Alarma"
+      subtitle="Cambiar código de activación"
+      [isAlarmArmed]="_isAlarmArmed"
+      [isSubmitted]="_isSubmitted"
+      (onSaveCode)="updateCode($event)" />
+    </div>
 
     <!-- Tarjeta Estadística Sensores -->
     <p-card styleClass="house-stats-card mb-6">
@@ -135,15 +114,4 @@
       </ng-template>
     </p-card>
   </section>
-}
-
-<!-- Modal de Edición -->
-@if (houseProp) { 
-  <app-house-modal
-    [visible]="_houseModalOpen" 
-    [houseProp]="houseProp" 
-    [propValue]="propValue"
-    [submitted]="_submitted"
-    (visibleChange)="closeDialog()" 
-    (changeValue)="updateHouse($event)" />
 }

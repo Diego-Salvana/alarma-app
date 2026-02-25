@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { PasswordModule } from 'primeng/password';
-import { HouseProp, ModalDataTransfer } from '../../../interfaces';
+import { HouseModalField, HouseUpdate } from '../../../../shared/interfaces';
 
 @Component({
   selector: 'app-house-modal',
@@ -17,24 +17,34 @@ import { HouseProp, ModalDataTransfer } from '../../../interfaces';
 export class HouseModalComponent {
   visible = model(false);
   submitted = input.required<boolean>();
-  houseProp = input.required<HouseProp>();
+  houseProp = input.required<HouseModalField>();
   propValue = input.required<string>();
   formControl = new FormControl('', [Validators.required]);
-  changeValue = output<ModalDataTransfer>();
+  onSave = output<HouseUpdate>();
   headerText = computed(
     () => this.houseProp() === 'sensorName' ? 'Datos de sensor' : 'Datos del sitio'
   );
 
   constructor () {
     effect(() => this.formControl.setValue(this.propValue()));
-    effect(() => this.submitted() ? this.formControl.enable() : this.formControl.disable());
+    
+    effect(() => {
+      const isSubmitted = this.submitted();
+
+      if (isSubmitted) {
+        this.formControl.enable();
+        this.close();
+      } else {
+        this.formControl.disable();
+      }
+    });
   }
 
   onSubmit () {
     if (this.formControl.invalid) return;
 
-    const data: ModalDataTransfer = { [this.houseProp()]: this.formControl.value };
-    this.changeValue.emit(data);
+    const data: HouseUpdate = { [this.houseProp()]: this.formControl.value };
+    this.onSave.emit(data);
   }
 
   close () {

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, effect, inject, input, output } fro
 import { Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CurrentUserService } from '../../../dashboard/services';
 
 @Component({
   selector: 'app-logout-modal',
@@ -12,8 +13,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   providers: [ConfirmationService]
 })
 export class LogoutModalComponent {
-  private confirmationService = inject(ConfirmationService);
   private router = inject(Router);
+  private userService = inject(CurrentUserService);
+  private confirmationService = inject(ConfirmationService);
   showModal = input.required<boolean>();
   closeModal = output();
 
@@ -41,7 +43,7 @@ export class LogoutModalComponent {
         styleClass: '!px-6'
       },
       accept: () => {
-        localStorage.removeItem('token');
+        this.userService.logout();
         this.router.navigate(['/auth']);
       }
     });

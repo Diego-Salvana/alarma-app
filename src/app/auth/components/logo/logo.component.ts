@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ThemeService } from '../../../shared/services';
 
 @Component({
   selector: 'app-logo',
@@ -7,4 +8,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './logo.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LogoComponent { }
+export class LogoComponent {
+  private themeService = inject(ThemeService);
+  isDarkTheme = this.themeService.isDarkTheme;
+}

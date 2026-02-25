@@ -1,10 +1,20 @@
 @let _house = house();
 @let _isAlarmArmed = isAlarmArmed();
+@let _isRinging = isRinging();
 
 <p-card styleClass="hover:shadow-md cursor-pointer" (click)="goHouse()">
   <div class="flex items-center justify-center gap-4 w-max m-auto cards-container">
     <div class="flex flex-col justify-center items-center">
-      <i class="pi pi-home home-icon" [ngClass]="_isAlarmArmed ? 'red-text' : 'green-text'"></i>
+      <div class="relative">
+        <i class="pi pi-home home-icon" [ngClass]="_isAlarmArmed ? 'red-text' : 'green-text'"></i>
+        <i 
+          class="pi pi-volume-up absolute top-0 bottom-0 right-0" 
+          [ngClass]="{ 
+            'red-text': _isAlarmArmed, 
+            'orange-text': !_isAlarmArmed, 
+            'pulse-animation': _isRinging
+          }"></i>
+      </div>
       <h5 class="text-base font-semibold">{{ _house.nombre | uppercase }}</h5>
       <h6 class="text-sm leading-none font-medium mb-2">
         {{ _house.direccion.calle }} {{ _house.direccion.numero }}

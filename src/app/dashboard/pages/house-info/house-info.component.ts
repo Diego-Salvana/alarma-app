@@ -1,18 +1,17 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { HouseModalComponent } from '../../components';
-import { HouseProp, ModalDataTransfer } from '../../interfaces';
-import { CurrentUserService, HouseService } from '../../services';
-import { HouseResponse } from '../../../shared/interfaces';
+import { DetailsCardComponent, SecurityCardComponent } from '../../components';
+import { HouseService } from '../../services';
+import { HouseResponse, HouseUpdate, NewCode, State } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize, tap } from 'rxjs';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-house-info',
-  imports: [CardModule, ButtonModule, HouseModalComponent, TitleCasePipe],
+  imports: [CardModule, ButtonModule, TitleCasePipe, SecurityCardComponent, DetailsCardComponent],
   templateUrl: './house-info.component.html',
   styleUrl: './house-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,13 +19,10 @@ import { finalize, tap } from 'rxjs';
 export class HouseInfoComponent {
   private houseService = inject(HouseService);
   private toastService = inject(ToastService);
-  private userService = inject(CurrentUserService);
   house = signal<HouseResponse | null>(null);
+  isAlarmArmed = computed(() => this.house()?.alarmaEncendida === State.ON);
   isLoading = signal(true);
-  houseModalOpen = signal(false);
-  submitted = signal(true);
-  houseProp?: HouseProp;
-  propValue = '';
+  isSubmitted = signal(true);
 
   constructor () {
     this.houseService
@@ -37,55 +33,32 @@ export class HouseInfoComponent {
       )
       .subscribe({
         next: house => this.house.set(house),
-        error: err => this.toastService.error(err.message)
+        error: err => this.toastService.error(err.error?.message ?? 'Error al obtener la casa')
       });
   }
 
-  /** Actualiza datos de una casa. */
-  updateHouse (data: ModalDataTransfer) {
-    this.submitted.set(false);
+  /** Actualiza códgigo de activación de una casa. */
+  updateCode (data: NewCode) {
+    this.isSubmitted.set(false);
         
     this.houseService
-      .modifyHouse(data)
-      .pipe(
-        tap(() => this.userService.loadUser()),
-        finalize(() => {
-          this.submitted.set(true);
-          this.houseModalOpen.set(false);
-        })
-      )
+      .updateAlarmCode(data)
+      .pipe(finalize(() => this.isSubmitted.set(true)))
       .subscribe({
-        next: house => this.house.set(house),
-        error: err => this.toastService.error(err.message)
+        next: _ => this.toastService.info('Código actualizado'),
+        error: err => this.toastService.error(err.error.message)
       });
   }
 
-  /** Abre una modal de edición según la propiedad de la casa. */
-  showDialog (prop: HouseProp) {
-    const house = this.house();
-    if (!house) return;
+  /** Actualiza información de una casa. */
+  udpdateHouseInfo (data: HouseUpdate) {
+    this.isSubmitted.set(false);
 
-    this.houseModalOpen.set(true);
-    this.houseProp = prop;
-
-    switch (prop) {
-      case 'houseName':
-        this.propValue = house.nombre;
-        break;
-      case 'street':
-        this.propValue = house.direccion.calle;
-        break;
-      case 'number':
-        this.propValue = house.direccion.numero.toString();
-        break;
-      case 'city':
-        this.propValue = house.direccion.ciudad;
-        break;
-    }
-  }
-
-  /** Cierra modal de edición. */
-  closeDialog () {
-    this.houseModalOpen.set(false);
+    this.houseService.updateHouseInfo(data)
+      .pipe(finalize(() => this.isSubmitted.set(true)))
+      .subscribe({
+        next: houseResponse => this.house.set(houseResponse),
+        error: err => this.toastService.error(err.error.message)
+      });
   }
 }

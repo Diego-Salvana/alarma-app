@@ -1,0 +1,56 @@
+@let _editable = editable();
+@let _accentuated = accentuated();
+@let _type = type();
+@let _isVisible = isModalOpen();
+@let _isSubmitted = isSubmitted();
+@let _initialPropValue = initialPropValue();
+@let _disabled = disabled();
+
+<p-card>
+  <ng-template #content>
+    <div
+      [class]="_type"
+      [ngClass]="_accentuated ? 'accentuated-card-content' : 'info-card-content'">
+      <div class="info-icon">
+        <i [class]="icon()"></i>
+      </div>
+      <div class="info-details">
+        <span class="info-title">{{ title() }}</span>
+        <span class="info-description">{{ description() }}</span>
+      </div>
+      <div class="info-actions">
+        @if (_editable && _accentuated) {
+          <p-button
+            icon="pi pi-pencil"
+            label="Editar"
+            size="small"
+            variant="outlined"
+            [disabled]="_disabled"
+            (click)="showModal()" />
+        } @else if (_editable) {
+          <app-btn-edit-card [disabled]="_disabled" (click)="showModal()" />
+        }
+      </div>
+    </div>
+  </ng-template>
+</p-card>
+
+@if (_type === 'profile') {
+  <app-profile-modal 
+    [visible]="_isVisible" 
+    [profileProp]="profileField()"
+    [propValue]="_initialPropValue"
+    [submitted]="_isSubmitted"
+    (visibleChange)="resetModalVisibility()" 
+    (onSave)="saveProfile($event)" />
+}
+
+@if (_type === 'house' || _type === 'sensor') {
+  <app-house-modal
+    [visible]="_isVisible"
+    [houseProp]="houseField()" 
+    [propValue]="_initialPropValue"
+    [submitted]="_isSubmitted"
+    (visibleChange)="resetModalVisibility()" 
+    (onSave)="saveHouse($event)" />
+}

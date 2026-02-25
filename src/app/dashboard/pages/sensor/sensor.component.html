@@ -1,8 +1,6 @@
 @let _sensor = sensor();
 @let _isLoading = isLoading();
 @let _submitted = submitted();
-@let _openModal = openModal();
-@let _isAlarmArmed = isAlarmArmed();
 
 @if (_isLoading) {
   <div class="loading-container">
@@ -36,52 +34,34 @@
   <section class="section-container">
     <div class="section-title">Información del Sensor</div>
     <!-- Tarjeta Nombre de Sensor -->
-    <p-card styleClass="sensor-action-card mb-4">
-      <ng-template #content>
-        <div class="action-card-content">
-          <div class="action-icon">
-            <i class="pi pi-tag"></i>
-          </div>
-          <div class="action-details">
-            <div class="action-title">{{ _sensor?.nombre | titlecase }}</div>
-            <div class="action-subtitle">Cambiar nombre del sensor</div>
-          </div>
-          <div class="action-button">
-            <app-btn-edit-card (click)="showDialog()" [disabled]="_isAlarmArmed" />
-          </div>
-        </div>
-      </ng-template>
-    </p-card>
+    <div class="mb-4">
+      <app-details-card 
+        type="sensor"
+        icon="pi pi-tag"
+        [title]="(_sensor?.nombre | titlecase) ?? ''"
+        description="Cambiar nombre del sensor"
+        [editable]="true"
+        [accentuated]="true"
+        [isSubmitted]="_submitted"
+        houseField="sensorName"
+        [initialPropValue]="_sensor?.nombre ?? ''"
+        [disabled]="isAlarmArmed()"
+        (onSaveHouse)="updateName($event)" />
+    </div>
 
     <!-- Tarjetas Detalles Sensor -->
     <div class="sensor-details-grid">
-      <p-card styleClass="sensor-info-card">
-        <ng-template #content>
-          <div class="info-card-content">
-            <div class="info-icon">
-              <i class="pi pi-id-card"></i>
-            </div>
-            <div class="info-details">
-              <div class="info-label">Número de Sensor</div>
-              <div class="info-value">#{{ _sensor?.numeroSensor }}</div>
-            </div>
-          </div>
-        </ng-template>
-      </p-card>
+      <app-details-card 
+        type="sensor"
+        icon="pi pi-id-card"
+        title="Número de Sensor"
+        [description]="`#${_sensor?.numeroSensor}`" />
 
-      <p-card styleClass="sensor-info-card">
-        <ng-template #content>
-          <div class="info-card-content">
-            <div class="info-icon">
-              <i class="pi pi-cog"></i>
-            </div>
-            <div class="info-details">
-              <div class="info-label">Tipo de Sensor</div>
-              <div class="info-value">{{ _sensor?.tipo | titlecase }}</div>
-            </div>
-          </div>
-        </ng-template>
-      </p-card>
+      <app-details-card 
+        type="sensor"
+        icon="pi pi-cog"
+        title="Tipo de Sensor"
+        [description]="(_sensor?.tipo | titlecase) ?? ''" />
     </div>
   </section>
 
@@ -156,12 +136,3 @@
     }
   </section>
 }
-
-<!-- Modal de Cambio de Nombre de Sensor -->
-<app-house-modal
-  [visible]="_openModal"
-  [houseProp]="houseProp" 
-  [propValue]="_sensor?.nombre ?? ''"
-  [submitted]="_submitted"
-  (visibleChange)="closeDialog()" 
-  (changeValue)="changeName($event)" />

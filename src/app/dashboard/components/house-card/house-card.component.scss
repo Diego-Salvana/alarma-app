@@ -5,3 +5,27 @@
 // .cards-container {
 //    transform: translateX(1rem);
 // }
+
+.pi-volume-up {
+   display: none;
+   font-size: 1.5rem;
+   font-weight: bold;
+
+
+   &::before {
+      align-self: center;
+      transform: translateX(150%);
+   }
+}
+
+.pulse-animation {
+   display: flex;
+   animation: pulse 1.2s infinite ease-in;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.2; }
+  70% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0.2; }
+}

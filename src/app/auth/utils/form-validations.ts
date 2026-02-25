@@ -1,10 +1,14 @@
 import { FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 
-export function passwordMatchValidator (confirmPassword: FormControl): ValidationErrors | null {
-  const password = confirmPassword.root.get('password') ?? confirmPassword.root.get('newPassword');
+export function passwordMatchValidator (checkControl: FormControl):
+ValidationErrors | null {
+  const targetControl =
+    checkControl.root.get('password') ??
+    checkControl.root.get('newPassword') ??
+    checkControl.root.get('newCode');
 
-  return password && password.value !== confirmPassword.value
-    ? { passwordMismatch: true }
+  return targetControl && targetControl.value !== checkControl.value
+    ? { valueMismatch: true }
     : null;
 };
 

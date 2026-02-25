@@ -17,6 +17,7 @@ export class HouseCardComponent {
   private router = inject(Router);
   readonly house = input.required<HouseResponse>();
   readonly isAlarmArmed = computed(() => this.house()?.alarmaEncendida === State.ON);
+  readonly isRinging = computed(() => this.house()?.sonando);
 
   goHouse () {
     this.currentHouseService.loadHouseById(this.house()._id);

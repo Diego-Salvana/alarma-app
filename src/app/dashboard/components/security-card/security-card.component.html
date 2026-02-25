@@ -1,0 +1,46 @@
+@let _isVisible = isModalOpen();
+@let _isAlarmArmed = isAlarmArmed();
+@let _isSubmitted = isSubmitted();
+@let _type = type();
+
+<p-card styleClass="profile-action-card" [ngClass]="{ 'opacity-60': _isAlarmArmed }">
+  <ng-template #content>
+    <div class="action-card-content" [ngClass]="{ 'house-details': _type === 'code' }">
+      <div class="action-icon">
+        <i [class]="iconClass()"></i>
+      </div>
+      <div class="action-details">
+        <span class="action-title">{{ title() }}</span>
+        <span class="action-subtitle">{{ subtitle() }}</span>
+        <span class="action-subtitle" [ngClass]="{ 'hidden': !_isAlarmArmed }">
+          <i>(Disponible cuando la alarma está desactivada)</i>
+        </span>
+      </div>
+      <div class="action-button">
+        <p-button
+        icon="pi pi-key"
+        label="Cambiar"
+        size="small"
+        variant="outlined"
+        [disabled]="_isAlarmArmed"
+        (onClick)="showModal()" />
+      </div>
+    </div>
+  </ng-template>
+</p-card>
+
+@if (_type === 'password') {
+  <app-password-modal
+    [visible]="_isVisible"
+    [isSubmitted]="_isSubmitted"
+    (onSave)="onSavePassHandler($event)"
+    (visibleChange)="resetModalVisibility()" />
+}
+
+@if (_type === 'code') {
+  <app-code-modal 
+    [visible]="_isVisible"
+    [isSubmitted]="_isSubmitted"
+    (onSave)="onSaveCodeHandler($event)"
+    (visibleChange)="resetModalVisibility()" />
+}

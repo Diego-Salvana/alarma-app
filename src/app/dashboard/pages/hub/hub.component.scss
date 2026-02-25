@@ -28,6 +28,10 @@
 // Tamaño de candado
 .lock-item {
    font-size: 5rem;
+
+   &.pi-lock-open {
+      transform: translateX(14%);
+   }
 }
 
 // Estilos para botones de acción
