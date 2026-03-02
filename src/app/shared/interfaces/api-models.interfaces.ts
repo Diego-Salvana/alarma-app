@@ -1,64 +1,16 @@
 import { DeviceType, EventLog, State } from './domain.interfaces';
-import { HistorialConNombre, Sensor } from './models.interface';
 
 /* Estructura general de respuesta */
 export interface ApiResponse<T> {
   message: string;
-  data?: T;
+  data: T;
 }
 
-export interface InfoLoginResponse {
-  message: string;
-  data: LoginResponse;
-}
-
-export interface LoginResponse {
-  nombre: string;
-  email: string;
-  habilitado: boolean;
+// -------------------
+// Login
+// -------------------
+export interface LoginResponse extends ProfileResponse {
   token: string;
-  casas: HouseResponse[];
-}
-
-export interface InfoHouseResponse {
-  message: string;
-  data: HouseResponse;
-}
-
-export interface InfoHousesResponse {
-  message: string;
-  data: HouseResponse[];
-}
-
-export interface HouseResponse {
-  _id: string;
-  nombre: string;
-  nombreCasa: string;
-  direccion: AddressResponse;
-  alarmaEncendida: State;
-  sonando?: boolean;
-  sensores?: DeviceResponse[];
-  token?: string;
-}
-
-export interface DeviceResponse {
-  dispositivoId: string;
-  numeroSensor: number;
-  nombre: string;
-  tipo: DeviceType;
-  estado: State;
-  historial: EventLog[];
-}
-
-export interface AddressResponse {
-  calle: string;
-  numero: string;
-  ciudad: string;
-}
-
-export interface InfoSensorResponse {
-  message: string;
-  data: Sensor;
 }
 
 export interface InfoProfileResponse {
@@ -77,12 +29,56 @@ export interface ProfileResponse {
   casas: HouseResponse[];
 }
 
-export interface InfoHistoryResponse {
-  message: string;
-  data: HistorialConNombre[];
-}
-
-export interface EmailVerification {
-  message: string;
+export interface TokenResponse {
   token: string;
 }
+
+// -------------------
+// Houses
+// -------------------
+export interface InfoHouseResponse {
+  message: string;
+  data: HouseResponse;
+}
+
+export interface HouseResponse {
+  _id: string;
+  nombre: string;
+  nombreCasa: string;
+  direccion: AddressResponse;
+  alarmaEncendida: State;
+  sonando?: boolean;
+  sensores?: DeviceResponse[];
+  token?: string;
+}
+
+export interface AddressResponse {
+  calle: string;
+  numero: string;
+  ciudad: string;
+}
+
+export interface CentralHistoryResponse {
+  history: CentralEventResponse[];
+}
+
+export interface CentralEventResponse {
+  fechaHora: Date;
+  nombreDispositivo: string;
+}
+
+// -------------------
+// Devices
+// -------------------
+export interface DeviceResponse {
+  dispositivoId: string;
+  numeroSensor: number;
+  nombre: string;
+  tipo: DeviceType;
+  estado: State;
+  historial: EventLog[];
+}
+
+// -------------------
+// Profile
+// -------------------

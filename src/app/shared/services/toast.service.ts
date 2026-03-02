@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
 
-// Servicio para mostrar mensajes de toast
 @Injectable({
   providedIn: 'root'
 })

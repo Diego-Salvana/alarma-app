@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { EmailVerification, Login, PasswordResetResponse, Register } from '../interfaces';
-import { Observable, tap } from 'rxjs';
-import { InfoLoginResponse } from '../../shared/interfaces';
+import { Login, Register } from '../interfaces';
+import { map, Observable, tap } from 'rxjs';
+import { ApiResponse, TokenResponse, LoginResponse, User } from '../../shared/interfaces';
 import { API_URL } from '../../env';
+import { mapLoginResponseToUser } from '../../shared/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +13,22 @@ export class AuthService {
   private http = inject(HttpClient);
   private baseUrl = `${API_URL}/users`;
 
-  register (userBody: Register): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.baseUrl}/register`, userBody);
+  register (userBody: Register): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/register`, userBody);
   }
 
-  login (loginBody: Login, rememberMe: boolean): Observable<InfoLoginResponse> {
+  login (loginBody: Login, rememberMe: boolean): Observable<User> {
     return this.http
-      .post<InfoLoginResponse>(`${this.baseUrl}/login`, loginBody)
+      .post<ApiResponse<LoginResponse>>(`${this.baseUrl}/login`, loginBody)
       .pipe(
-        tap(response => {
-          if (response.data.habilitado) localStorage.setItem('token', response.data.token);
+        tap(({ data }) => {
+          if (data.habilitado) localStorage.setItem('token', data.token);
           
           rememberMe
-            ? localStorage.setItem('username', response.data.email)
+            ? localStorage.setItem('username', data.email)
             : localStorage.removeItem('username');
-        })
+        }),
+        map(({ data }) => mapLoginResponseToUser(data))
       );
   }
 
@@ -36,10 +38,10 @@ export class AuthService {
   }
 
   /** Realiza la verificacion del email, y guarda el sesión token del usuario */
-  verifyEmail (token: string): Observable<EmailVerification> {
+  verifyEmail (token: string): Observable<ApiResponse<TokenResponse>> {
     return this.http
-      .post<EmailVerification>(`${this.baseUrl}/verify-email`, { token })
-      .pipe(tap(response => localStorage.setItem('token', response.token)));
+      .post<ApiResponse<TokenResponse>>(`${this.baseUrl}/verify-email`, { token })
+      .pipe(tap(({ data }) => localStorage.setItem('token', data.token)));
   }
 
   /** Solicita envío de correo para restablecer contraseña */
@@ -48,9 +50,9 @@ export class AuthService {
   }
 
   /** Restablece la contraseña del usuario y guarda el sesión token del usuario */
-  resetPassword (token: string, password: string): Observable<PasswordResetResponse> {
+  resetPassword (token: string, password: string): Observable<ApiResponse<TokenResponse>> {
     return this.http
-      .post<PasswordResetResponse>(`${this.baseUrl}/reset-password`, { token, password })
-      .pipe(tap(response => localStorage.setItem('token', response.token)));
+      .post<ApiResponse<TokenResponse>>(`${this.baseUrl}/reset-password`, { token, password })
+      .pipe(tap(({ data }) => localStorage.setItem('token', data.token)));
   }
 }

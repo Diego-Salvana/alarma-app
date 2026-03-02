@@ -13,7 +13,7 @@ import { LogoutModalComponent } from '../../../shared/components';
 export class HeaderComponent {
   private router = inject(Router);
   private activeRouteService = inject(ActiveRouteService);
-  title = 'AlarmsTech';
+  title = 'Alarma';
   showDialog = signal(false);
   isHome = computed(() => this.activeRouteService.activeSection() === 'home');
 

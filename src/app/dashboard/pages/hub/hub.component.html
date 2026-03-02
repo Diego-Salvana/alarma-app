@@ -2,12 +2,7 @@
 @let _isLoading = isLoading();
 @let _isAlarmArmed = isAlarmArmed();
 @let _sensors = sensors();
-@let _isArmingSubmitted = isArmingSubmitted();
-@let _isDisarmingConfirmationVisible = isDisarmingConfirmationVisible();
-@let _isDisarmingSubmitted = isDisarmingSubmitted();
 @let _isRinging = isRinging();
-@let _isRingingConfirmationVisible = isRingingConfirmationVisible();
-@let _isRingingSubmitted = isRingingSubmitted();
 
 @if (_isLoading) {
   <div class="text-center pt-8">
@@ -32,10 +27,10 @@
       <i class="pi pi-shield text-3xl"></i>
     </div>
     <div class="header-info">
-      <h2 class="header-title">{{ _house?.nombre }}</h2>
+      <h2 class="header-title">{{ _house?.displayName }}</h2>
       <p class="header-subtitle">
-        {{ _house?.direccion?.calle | titlecase }} {{ _house?.direccion?.numero }}, 
-        {{ _house?.direccion?.ciudad | titlecase }}
+        {{ _house?.address?.street | titlecase }} {{ _house?.address?.number }}, 
+        {{ _house?.address?.city | titlecase }}
       </p>
     </div>
   </div>
@@ -54,41 +49,22 @@
     </div>
   
     <div class="grid grid-cols-3 gap-4 px-4 max-w-md m-auto">
-      <p-button 
-        id="disarm-btn" 
-        label="Desactivar" 
-        severity="success" 
-        variant="outlined" 
-        raised="true" 
-        icon="pi pi-lock-open" 
-        iconPos="top" 
-        styleClass="w-full green-text green-border" 
-        class="action-btn" 
-        (onClick)="showDisarmConfirmation()" />
-      <p-button 
-        id="panic-btn" 
-        label="Sirena" 
-        severity="warn" 
-        [variant]="_isRinging ? undefined : 'outlined'"
-        [disabled]="_isAlarmArmed && _isRinging"
-        raised="true" 
-        icon="pi pi-volume-down"
-        iconPos="top" 
-        [styleClass]="_isRinging ? 'w-full' : 'w-full orange-text orange-border'"
-        [ngClass]="{ 'pulse-animation': _isRinging }"
-        class="action-btn"
-        (onClick)="showRingingConfirmation()" />
-      <p-button
-        id="arm-btn" 
-        label="Activar" 
-        severity="danger" 
-        variant="outlined" 
-        raised="true" 
-        icon="pi pi-lock"
-        iconPos="top" 
-        styleClass="w-full red-text red-border" 
-        class="action-btn" 
-        (onClick)="showExclusionForm()" />
+      <app-disarm-action
+        [isAlarmArmed]="_isAlarmArmed"
+        [isSubmitted]="isDisarmingSubmitted()"
+        (disarmRequested)="onDisarmConfirmation()" />
+
+      <app-ringing-action
+        [isAlarmArmed]="_isAlarmArmed"
+        [isRinging]="_isRinging"
+        [isSubmitted]="isRingingSubmitted()"
+        (ringingRequested)="onToggleRinging()" />
+
+      <app-arm-action
+        [sensors]="_sensors"
+        [isAlarmArmed]="_isAlarmArmed"
+        [isSubmitted]="isArmingSubmitted()"
+        (armRequested)="onArmAlarm($event)" />
     </div>
   </section>
   
@@ -98,29 +74,3 @@
     <app-sensor-list [sensors]="_sensors" [isAlarmOn]="_isAlarmArmed" />
   </section>
 }
-
-<!-- Modal de activación -->
-<app-exclusion-modal 
-  [visible]="isExclusionFormVisible" 
-  [sensors]="_sensors" 
-  [submitEnd]="_isArmingSubmitted" 
-  (visibleChange)="closeExclusionForm()" 
-  (onActive)="onArmAlarm($event)" />
-
-<!-- Modal de desactivación -->
-<app-confirm-dialog 
-  [title]="'Desarmado de Alarma'"
-  [acceptLabel]="'Sí, apagar'"
-  [description]="'¿Estás seguro de apagar la alarma?'"
-  [visible]="_isDisarmingConfirmationVisible" 
-  [submitted]="_isDisarmingSubmitted"
-  (onCloseDialog)="onDisarmConfirmation($event)" />
-
-<!-- Modal de pánico -->
-<app-confirm-dialog 
-  [title]="'Sirena 🔈'"
-  [description]="'¿Estás seguro de activar la sirena?'"
-  [acceptLabel]="'Sí, activar'"
-  [visible]="_isRingingConfirmationVisible" 
-  [submitted]="_isRingingSubmitted"
-  (onCloseDialog)="onRingingConfirmation($event)" />

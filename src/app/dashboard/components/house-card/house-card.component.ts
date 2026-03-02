@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { CurrentHouseService } from '../../services';
-import { HouseResponse, State } from '../../../shared/interfaces';
+import { House, State } from '../../../shared/interfaces';
 
 @Component({
   selector: 'app-house-card',
@@ -15,12 +15,12 @@ import { HouseResponse, State } from '../../../shared/interfaces';
 export class HouseCardComponent {
   private currentHouseService = inject(CurrentHouseService);
   private router = inject(Router);
-  readonly house = input.required<HouseResponse>();
-  readonly isAlarmArmed = computed(() => this.house()?.alarmaEncendida === State.ON);
-  readonly isRinging = computed(() => this.house()?.sonando);
+  readonly house = input.required<House>();
+  readonly isAlarmArmed = computed(() => this.house().alarmState === State.ON);
+  readonly isRinging = computed(() => this.house().isRinging);
 
   goHouse () {
-    this.currentHouseService.loadHouseById(this.house()._id);
+    this.currentHouseService.loadHouseById(this.house().id);
     this.router.navigate(['/dashboard', 'hub']);
   }
 }

@@ -26,10 +26,10 @@
         <i class="pi pi-home text-3xl"></i>
       </div>
       <div class="header-info">
-        <h2 class="header-title">{{ _house?.nombre }}</h2>
+        <h2 class="header-title">{{ _house?.displayName }}</h2>
         <p class="header-subtitle">
-          {{ _house?.direccion?.calle }} {{ _house?.direccion?.numero }}, 
-          {{ _house?.direccion?.ciudad | titlecase }}
+          {{ _house?.address?.street }} {{ _house?.address?.number }}, 
+          {{ _house?.address?.city | titlecase }}
         </p>
       </div>
   </div>
@@ -47,7 +47,7 @@
         [editable]="true"
         [accentuated]="true"
         houseField="houseName"
-        [initialPropValue]="_house?.nombre ?? ''"
+        [initialPropValue]="_house?.displayName ?? ''"
         [isSubmitted]="_isSubmitted"
         (onSaveHouse)="udpdateHouseInfo($event)" />
     </div>
@@ -58,7 +58,7 @@
         type="house"
         icon="pi pi-map-marker"
         title="Calle"
-        [description]="(_house?.direccion?.calle | titlecase) ?? ''" />
+        [description]="(_house?.address?.city | titlecase) ?? ''" />
     </div>
 
     <!-- Tarjetas de Dirección (Número) -->
@@ -67,7 +67,7 @@
         type="house"
         icon="pi pi-hashtag"
         title="Número"
-        [description]="(_house?.direccion?.numero) ?? ''" />
+        [description]="(_house?.address?.number) ?? ''" />
     </div>
  
     <!-- Tarjetas de Dirección (Ciudad) -->
@@ -76,7 +76,7 @@
         type="house"
         icon="pi pi-building"
         title="Ciudad"
-        [description]="(_house?.direccion?.ciudad | titlecase) ?? ''" />
+        [description]="(_house?.address?.city | titlecase) ?? ''" />
     </div>
 
     <!-- Tarjeta Código de Alarma -->
@@ -101,7 +101,7 @@
             </div>
             <div class="stats-info">
               <span class="stats-label">Sensores Instalados</span>
-              <span class="stats-value">{{ _house?.sensores?.length || 0 }}</span>
+              <span class="stats-value">{{ _house?.sensors?.length || 0 }}</span>
             </div>
           </div>
           <div class="stats-badge">

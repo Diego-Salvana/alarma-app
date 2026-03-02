@@ -41,8 +41,8 @@
       <ng-template #opposite let-event>
         <div class="timeline-date">
           <div class="date-display">
-            <span class="date-text">{{ event.fechaHora | date: 'dd/MM/yyyy' }}</span>
-            <span class="time-text">{{ event.fechaHora | date: 'HH:mm' }}</span>
+            <span class="date-text">{{ event.timestamp | date: 'dd/MM/yyyy' }}</span>
+            <span class="time-text">{{ event.timestamp | date: 'HH:mm' }}</span>
           </div>
         </div>
       </ng-template>
@@ -56,7 +56,7 @@
                 <i class="pi pi-exclamation-triangle"></i>
               </div>
               <div class="event-info">
-                <h5 class="event-title">{{ event.nombreDispositivo }}</h5>
+                <h5 class="event-title">{{ event.deviceName }}</h5>
                 <p class="event-time">Disparo de alarma</p>
               </div>
             </div>

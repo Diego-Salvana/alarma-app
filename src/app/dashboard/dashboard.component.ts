@@ -58,9 +58,9 @@ export class DashboardComponent implements OnInit {
   private searchHouse (houseName: string): string | null {
     return untracked(() => {
       const houses = this.userService.houses();
-      const house = houses.find(h => h.nombreCasa === houseName);
+      const house = houses.find(h => h.houseName === houseName);
       
-      return house?.nombre ?? null;
+      return house?.displayName ?? null;
     });
   }
 }

@@ -23,9 +23,9 @@
       <i class="pi pi-wifi text-xl md:text-2xl"></i>
     </div>
     <div class="header-info">
-      <h2 class="header-title">{{ _sensor?.nombre | titlecase }}</h2>
+      <h2 class="header-title">{{ _sensor?.name | titlecase }}</h2>
       <p class="header-subtitle">
-        Sensor {{ _sensor?.tipo | titlecase }} • N° {{ _sensor?.numeroSensor }}
+        Sensor {{ _sensor?.type | titlecase }} • N° {{ _sensor?.number }}
       </p>
     </div>
   </div>
@@ -38,13 +38,13 @@
       <app-details-card 
         type="sensor"
         icon="pi pi-tag"
-        [title]="(_sensor?.nombre | titlecase) ?? ''"
+        [title]="(_sensor?.name | titlecase) ?? ''"
         description="Cambiar nombre del sensor"
         [editable]="true"
         [accentuated]="true"
         [isSubmitted]="_submitted"
         houseField="sensorName"
-        [initialPropValue]="_sensor?.nombre ?? ''"
+        [initialPropValue]="_sensor?.name ?? ''"
         [disabled]="isAlarmArmed()"
         (onSaveHouse)="updateName($event)" />
     </div>
@@ -55,13 +55,13 @@
         type="sensor"
         icon="pi pi-id-card"
         title="Número de Sensor"
-        [description]="`#${_sensor?.numeroSensor}`" />
+        [description]="`#${_sensor?.number}`" />
 
       <app-details-card 
         type="sensor"
         icon="pi pi-cog"
         title="Tipo de Sensor"
-        [description]="(_sensor?.tipo | titlecase) ?? ''" />
+        [description]="(_sensor?.type | titlecase) ?? ''" />
     </div>
   </section>
 
@@ -69,7 +69,7 @@
   <section>
     <div class="section-title">Historial de Disparos</div>
 
-    @if (_sensor && _sensor.historial.length > 0) {
+    @if (_sensor && _sensor.history.length > 0) {
       <!-- Resumen Historial -->
       <p-card styleClass="history-summary-card mb-6">
         <ng-template #content>
@@ -80,7 +80,7 @@
               </div>
               <div class="summary-info">
                 <div class="summary-label">Total de Disparos</div>
-                <div class="summary-value">{{ _sensor?.historial?.length }}</div>
+                <div class="summary-value">{{ _sensor?.history?.length }}</div>
               </div>
             </div>
             <div class="summary-badge">
@@ -92,7 +92,7 @@
 
       <!-- Cronología Ampliada -->
       <div class="timeline-container">
-        <p-timeline [value]="_sensor?.historial" styleClass="custom-timeline">
+        <p-timeline [value]="_sensor?.history" styleClass="custom-timeline">
           <ng-template #opposite let-event let-i="index">
             <div class="timeline-date-card">
               <div class="date-main">{{ event.fechaHora | date:'dd' }}</div>

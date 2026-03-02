@@ -7,7 +7,12 @@ import { SOCKET_URL, SOCKET_PATH } from '../../env';
   providedIn: 'root'
 })
 export class SocketService {
-  private socket = io(SOCKET_URL, { path: SOCKET_PATH });
+  private socket = io(SOCKET_URL, {
+    path: SOCKET_PATH,
+    auth: {
+      token: localStorage.getItem('token')
+    }
+  });
 
   emit (event: string, data: string) {
     this.socket.emit(event, data);

@@ -1,9 +1,9 @@
 import { DatePipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
 import { CurrentHouseService, SensorService } from '../../services';
-import { HouseUpdate, Sensor, State } from '../../../shared/interfaces';
+import { HouseUpdate, Sensor } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
@@ -22,9 +22,7 @@ export class SensorComponent implements OnInit {
   private toastService = inject(ToastService);
   private destroyRef = inject(DestroyRef);
   readonly sensorNumber = input<string>(''); // Toma "sensorNumber" de la ruta.
-  readonly isAlarmArmed = computed(
-    () => this.currentHouseService.house()?.alarmaEncendida === State.ON
-  );
+  readonly isAlarmArmed = this.currentHouseService.isAlarmArmed;
 
   sensor = signal<Sensor | null>(null);
   isLoading = signal(true);
@@ -53,11 +51,16 @@ export class SensorComponent implements OnInit {
       return;
     }
 
+    const sensorInt = parseInt(this.sensorNumber());
+
     this.sensorService
-      .modifyName(parseInt(this.sensorNumber()), data.sensorName)
+      .modifyName(sensorInt, data.sensorName)
       .pipe(finalize(() => this.submitted.set(true)))
       .subscribe({
-        next: sensor => this.sensor.set(sensor),
+        next: sensor => {
+          this.sensor.set(sensor);
+          this.currentHouseService.syncSensorName(sensorInt, sensor.name);
+        },
         error: err => this.toastService.error(err.error.message)
       });
   }

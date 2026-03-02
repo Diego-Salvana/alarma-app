@@ -3,8 +3,8 @@ import { TitleCasePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DetailsCardComponent, SecurityCardComponent } from '../../components';
-import { HouseService } from '../../services';
-import { HouseResponse, HouseUpdate, NewCode, State } from '../../../shared/interfaces';
+import { CurrentHouseService, CurrentUserService, HouseService } from '../../services';
+import { House, HouseUpdate, NewCode, State } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
@@ -17,10 +17,12 @@ import { finalize } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HouseInfoComponent {
+  private currentUserService = inject(CurrentUserService);
+  private currentHouseService = inject(CurrentHouseService);
   private houseService = inject(HouseService);
   private toastService = inject(ToastService);
-  house = signal<HouseResponse | null>(null);
-  isAlarmArmed = computed(() => this.house()?.alarmaEncendida === State.ON);
+  readonly isAlarmArmed = computed(() => this.house()?.alarmState === State.ON);
+  house = signal<House | null>(null);
   isLoading = signal(true);
   isSubmitted = signal(true);
 
@@ -57,7 +59,11 @@ export class HouseInfoComponent {
     this.houseService.updateHouseInfo(data)
       .pipe(finalize(() => this.isSubmitted.set(true)))
       .subscribe({
-        next: houseResponse => this.house.set(houseResponse),
+        next: houseResponse => {
+          this.house.set(houseResponse);
+          this.currentUserService.syncHouseInfo(houseResponse);
+          this.currentHouseService.syncHouseInfo(houseResponse);
+        },
         error: err => this.toastService.error(err.error.message)
       });
   }

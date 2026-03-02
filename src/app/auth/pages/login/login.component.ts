@@ -62,8 +62,8 @@ export class LoginComponent implements OnInit {
         this.loginForm.enable();
       }))
       .subscribe({
-        next: userInfo =>
-          userInfo.data.habilitado
+        next: user =>
+          user.isEnabled
             ? this.router.navigate(['/dashboard', 'home'])
             : this.router.navigate(['/auth', 'send-verification-email']),
         error: err => this.handleLoginError(err)

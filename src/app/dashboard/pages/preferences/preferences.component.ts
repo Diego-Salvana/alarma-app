@@ -36,7 +36,7 @@ export class PreferencesComponent {
     }
 
     this.socketService
-      .on<Lights>(`${WS_LIGHTS}/${this.username() ?? ''}/${this.house()?.nombreCasa ?? ''}`)
+      .on<Lights>(`${WS_LIGHTS}/${this.username() ?? ''}/${this.house()?.displayName ?? ''}`)
       .pipe(takeUntilDestroyed())
       .subscribe(data => {
         console.log(data);

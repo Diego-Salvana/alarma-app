@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { SecurityCardComponent } from '../../components';
 import { ProfileService } from '../../services/profile.service';
-import { ProfileResponse, State, NewPassword, ProfileUpdate } from '../../../shared/interfaces';
+import { NewPassword, ProfileUpdate, User } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { CurrentHouseService, HouseService } from '../../services';
 import { LogoutModalComponent } from '../../../shared/components';
@@ -26,11 +26,11 @@ export class ProfileComponent {
   private houseService = inject(HouseService);
   private currentHouseService = inject(CurrentHouseService);
   private toastService = inject(ToastService);
-  user = signal<ProfileResponse | null>(null);
+  readonly isAlarmArmed = this.currentHouseService.isAlarmArmed;
+  user = signal<User | null>(null);
   isLoading = signal(true);
   logoutModalOpen = signal(false);
   submitted = signal(true);
-  isAlarmArmed = computed(() => this.currentHouseService.house()?.alarmaEncendida === State.ON);
   
   constructor () {
     this.profileService

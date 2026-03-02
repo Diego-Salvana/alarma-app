@@ -30,23 +30,53 @@ export interface EventLog {
   fechaHora: Date;
 }
 
+export interface CentralEvent {
+  timestamp: Date;
+  deviceName: string;
+}
+
 // -------------------
 // Entidades
 // -------------------
-
-export interface CentralD {
-  sonando: boolean;
+export interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  phone: string;
+  isEnabled: boolean;
+  houses: House[];
 }
 
-export interface DeviceD {
-  numeroSensor: number;
-  estado: State;
+export interface House {
+  id: string;
+  displayName: string;
+  houseName: string;
+  address: Address;
+  alarmState: State;
+  isRinging: boolean;
+  sensors: Sensor[];
+}
+
+export interface Address {
+  street: string;
+  number: string;
+  city: string;
+}
+
+export interface Sensor {
+  id: string;
+  number: number;
+  name: string;
+  type: DeviceType;
+  state: State;
+  history: EventLog[];
 }
 
 // -------------------
-// Varios
+// Formularios
 // -------------------
-
 export interface NewPassword {
   currentPassword: string;
   newPassword: string;
@@ -57,6 +87,12 @@ export interface NewCode {
   currentCode: string;
   newCode: string;
 }
+
+export type ExclusionFormValues = Partial<{ [key: string]: State }>;
+
+// -------------------
+// Varios
+// -------------------
 
 export type ProfileUpdate = { [key in ProfileModalField]?: string };
 export type HouseUpdate = { [key in HouseModalField]?: string };

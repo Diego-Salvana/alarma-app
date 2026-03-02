@@ -25,7 +25,7 @@
       <i class="pi pi-user text-3xl"></i>
     </div>
     <div class="header-info">
-      <h2 class="header-title">{{ _user?.nombre }} {{ _user?.apellido }}</h2>
+      <h2 class="header-title">{{ _user?.firstName }} {{ _user?.lastName }}</h2>
       <p class="header-subtitle">{{ _user?.email }}</p>
     </div>
   </div>
@@ -41,7 +41,7 @@
         icon="pi pi-envelope"
         title="Email"
         [description]="_user?.email ?? ''"
-        [initialPropValue]="_user?.nombre ?? ''"
+        [initialPropValue]="_user?.firstName ?? ''"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
@@ -52,10 +52,10 @@
         type="profile"
         icon="pi pi-user"
         title="Nombre"
-        [description]="_user?.nombre ?? ''"
+        [description]="_user?.firstName ?? ''"
         profileField="name"
         [editable]="true"
-        [initialPropValue]="_user?.nombre ?? ''"
+        [initialPropValue]="_user?.firstName ?? ''"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
@@ -66,10 +66,10 @@
         type="profile"
         icon="pi pi-user"
         title="Apellido"
-        [description]="_user?.apellido ?? ''"
+        [description]="_user?.lastName ?? ''"
         profileField="lastname"
         [editable]="true"
-        [initialPropValue]="_user?.apellido ?? ''"
+        [initialPropValue]="_user?.lastName ?? ''"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
@@ -80,10 +80,10 @@
         type="profile"
         icon="pi pi-phone"
         title="Teléfono"
-        [description]="_user?.telefono ?? ''"
+        [description]="_user?.phone ?? ''"
         profileField="phone"
         [editable]="true"
-        [initialPropValue]="_user?.telefono ?? ''"
+        [initialPropValue]="_user?.phone ?? ''"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
@@ -105,20 +105,20 @@
   <!-- Sección de Sitios -->
   <section class="mb-8">
     <h4 class="section-title">MIS SITIOS</h4>
-    @if (_user && _user.casas.length > 0) {
+    @if (_user && _user.houses.length > 0) {
       <!-- Lista de Sitios -->
       <div class="sites-grid">
-        @for (house of _user.casas; track $index) {
+        @for (house of _user.houses; track $index) {
           <p-card 
             styleClass="site-card hover:shadow-lg transition-shadow cursor-pointer" 
-            (click)="goToHouseInfo(house._id)">
+            (click)="goToHouseInfo(house.id)">
             <ng-template #content>
               <div class="site-card-content">
                 <div class="site-icon">
                   <i class="pi pi-home"></i>
                 </div>
                 <div class="site-info">
-                  <h5 class="site-name">{{ house.nombre }}</h5>
+                  <h5 class="site-name">{{ house.displayName }}</h5>
                   <p class="site-status">
                     <!-- <i class="pi pi-circle-fill text-xs mr-1"></i> -->
                     <span class="text-muted-color">Info</span>

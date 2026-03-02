@@ -1,0 +1,20 @@
+<p-button
+  id="disarm-btn"
+  label="Desactivar"
+  severity="success"
+  variant="outlined"
+  raised="true"
+  icon="pi pi-lock-open"
+  iconPos="top"
+  styleClass="w-full green-text green-border"
+  class="action-btn"
+  (onClick)="onClick()" />
+
+<!-- Modal de desactivación -->
+<app-confirm-dialog
+  title="Desarmado de Alarma"
+  acceptLabel="Sí, apagar"
+  description="¿Estás seguro de apagar la alarma?"
+  [visible]="isModalVisible()"
+  [submitted]="isSubmitted()"
+  (onCloseDialog)="onConfirmation($event)" />

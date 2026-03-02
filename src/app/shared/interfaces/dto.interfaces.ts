@@ -1,5 +1,4 @@
 import { DeviceResponse, HouseResponse, ProfileResponse } from '.';
-import { CentralD, DeviceD } from './domain.interfaces';
 
 // ---------------
 // Usuario
@@ -30,13 +29,13 @@ export interface SensorNameDTO {
 }
 
 export interface TriggerDTO {
-  sonando: CentralD['sonando'],
-  numeroSensor?: DeviceD['numeroSensor']
+  sonando: HouseResponse['sonando'],
+  numeroSensor?: DeviceResponse['numeroSensor']
 }
 
 export interface SensorArmConfigDTO {
-  numeroSensor: DeviceD['numeroSensor'];
-  estado: DeviceD['estado'];
+  numeroSensor: DeviceResponse['numeroSensor'];
+  estado: DeviceResponse['estado'];
 };
 
 export interface AlarmCodeUpdateDTO {

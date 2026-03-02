@@ -1,5 +1,5 @@
-import { effect, inject, Injectable, signal, untracked } from '@angular/core';
-import { SensorArmConfigDTO, HouseResponse, TriggerDTO, State } from '../../shared/interfaces';
+import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
+import { SensorArmConfigDTO, TriggerDTO, State, ExclusionFormValues, House } from '../../shared/interfaces';
 import { HouseService } from './house.service';
 import { finalize, Observable } from 'rxjs';
 import { StatusRequest, Lights, AlarmArming, TriggeredAlarm } from '../interfaces';
@@ -18,10 +18,12 @@ export class CurrentHouseService {
   private toastService = inject(ToastService);
   private alertService = inject(AlertService);
   private baseUrl = `${API_URL}/houses`;
-  private _house = signal<HouseResponse | null>(null);
+  private _house = signal<House | null>(null);
   private _isLoading = signal(false);
   house = this._house.asReadonly();
   isLoading = this._isLoading.asReadonly();
+  isAlarmArmed = computed(() => this._house()?.alarmState === State.ON);
+  isRinging = computed(() => this._house()?.isRinging ?? false);
 
   constructor () {
     effect(() => {
@@ -64,7 +66,13 @@ export class CurrentHouseService {
   // --------------
 
   /** Envía solicitud para `activar` la alarma de la casa almacenada en el token. La respuesta de activación se recibe por `websocket`. */
-  armAlarm (sensorsConfig: SensorArmConfigDTO[]): Observable<StatusRequest> {
+  armAlarm (excludedSensors: ExclusionFormValues): Observable<StatusRequest> {
+    const sensorsConfig: SensorArmConfigDTO[] = Object
+      .entries(excludedSensors)
+      .map(([numeroSensor, estado]) => {
+        return { numeroSensor: parseInt(numeroSensor), estado: estado ?? State.ON };
+      });
+
     return this.http.post<StatusRequest>(`${this.baseUrl}/arm`, { sensors: sensorsConfig });
   }
 
@@ -86,33 +94,56 @@ export class CurrentHouseService {
   // ---------------
   /*    Entrada   */
   // ---------------
-  
+
+  /** Acutaliza la signal cuando el usuario cambia la info de la Casa */
+  syncHouseInfo (house: House) {
+    this._house.update(h => {
+      if (!h) return null;
+      
+      return h.houseName !== house.houseName
+        ? h
+        : { ...h, ...house };
+    });
+  }
+
+  /** Acutaliza la signal cuando el usuario cambia el nombre de un sensor */
+  syncSensorName (sensorNumber: number, newName: string) {
+    this._house.update(house => {
+      if (!house) return null;
+      
+      return {
+        ...house,
+        sensors: house.sensors.map(s => s.number === sensorNumber ? { ...s, name: newName } : s)
+      };
+    });
+  }
+
   /** Actualiza el estado la casa y los sensores con la información recibida por `websocket`. */
   private syncArmingState (info: AlarmArming) {
     const currentHouse = untracked(() => this._house());
-    if (currentHouse?.nombreCasa !== info.house) return;
+    if (currentHouse?.houseName !== info.house) return;
 
     this._house.update(house => {
       if (!house) return null;
       
       return {
         ...house,
-        alarmaEncendida: info.state,
-        sensores: house.sensores?.map(sensor => ({
+        alarmState: info.state,
+        sensors: house.sensors.map(sensor => ({
           ...sensor,
-          estado: info.excludedSensors.includes(sensor.numeroSensor.toString())
-            ? State.ON
-            : State.OFF
+          state: info.excludedSensors.includes(sensor.number.toString())
+            ? State.OFF
+            : State.ON
         }))
       };
     });
   }
 
   /** Sincroniza el estado de la sirena si la alerta proviene de la casa actual. */
-  syncRingigState (info: TriggeredAlarm) {
+  private syncRingigState (info: TriggeredAlarm) {
     const currentHouse = untracked(() => this._house());
-    if (currentHouse?.nombreCasa !== info.house) return;
+    if (currentHouse?.houseName !== info.house) return;
   
-    this._house.update(house => !house ? null : { ...house, sonando: info.ringing });
+    this._house.update(house => !house ? null : { ...house, isRinging: info.ringing });
   }
 }

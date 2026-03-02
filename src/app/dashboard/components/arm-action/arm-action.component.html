@@ -1,0 +1,19 @@
+<p-button
+  id="arm-btn"
+  label="Activar"
+  severity="danger"
+  variant="outlined"
+  raised="true"
+  icon="pi pi-lock"
+  iconPos="top"
+  styleClass="w-full red-text red-border"
+  class="action-btn"
+  (onClick)="onClick()" />
+
+<!-- Modal de activación y exclusión -->
+<app-exclusion-modal
+  [visible]="isModalVisible()"
+  [sensors]="sensors()"
+  [submitEnd]="isSubmitted()"
+  (visibleChange)="resetVisibilityState()"
+  (onActive)="onArmAlarm($event)" />

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { TimelineModule } from 'primeng/timeline';
-import { HistorialConNombre } from '../../../shared/interfaces';
+import { CentralEvent } from '../../../shared/interfaces';
 import { DatePipe } from '@angular/common';
 import { ToastService } from '../../../shared/services';
 import { CentralService } from '../../services';
@@ -19,7 +19,7 @@ export class CentralHistoryComponent {
   private centralService = inject(CentralService);
   private toastService = inject(ToastService);
   isLoading = signal(true);
-  history = signal<HistorialConNombre[]>([]);
+  history = signal<CentralEvent[]>([]);
   
   constructor () {
     this.centralService

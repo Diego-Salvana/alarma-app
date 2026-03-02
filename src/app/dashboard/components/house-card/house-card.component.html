@@ -15,9 +15,9 @@
             'pulse-animation': _isRinging
           }"></i>
       </div>
-      <h5 class="text-base font-semibold">{{ _house.nombre | uppercase }}</h5>
+      <h5 class="text-base font-semibold">{{ _house.displayName | uppercase }}</h5>
       <h6 class="text-sm leading-none font-medium mb-2">
-        {{ _house.direccion.calle }} {{ _house.direccion.numero }}
+        {{ _house.address.street }} {{ _house.address.number }}
       </h6>
       <p class="font-semibold" [ngClass]="_isAlarmArmed ? 'red-text' : 'green-text'">
         {{ _isAlarmArmed ? 'Activada' : 'Desactivada' | titlecase }}

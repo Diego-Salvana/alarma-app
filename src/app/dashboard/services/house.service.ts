@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable, tap, throwError } from 'rxjs';
-import { HouseResponse, HouseUpdate, InfoHouseResponse, InfoHousesResponse, NewCode, AlarmCodeUpdateDTO, HouseUpdateDTO, AddressResponse } from '../../shared/interfaces';
+import { HouseResponse, HouseUpdate, NewCode, AlarmCodeUpdateDTO, HouseUpdateDTO, AddressResponse, House, ApiResponse } from '../../shared/interfaces';
 import { API_URL } from '../../env';
 import { HttpHeaders } from '@capacitor/core';
+import { mapHouseResponseToDomain } from '../../shared/utils';
 
 /** Provee acceso a la API para realizar operaciones relacionadas a las casas. */
 @Injectable({
@@ -20,44 +21,37 @@ export class HouseService {
     this.houseID = id;
   }
 
-  /** Obtiene todas las casas del usuario. */
-  getAll (): Observable<HouseResponse[]> {
-    return this.http
-      .get<InfoHousesResponse>(`${this.baseUrl}`)
-      .pipe(map(response => response.data));
-  }
-
   /** Obtiene información de la casa que será utilizada como `currentHouse` y actualiza el `token`. */
-  getOne (houseId: string, setCurrent = false): Observable<HouseResponse> {
+  getOne (houseId: string, setCurrent = false): Observable<House> {
     const headers: HttpHeaders = { 'set-house': setCurrent.toString() };
     
     return this.http
-      .get<InfoHouseResponse>(`${this.baseUrl}/${houseId}`, { headers })
+      .get<ApiResponse<HouseResponse>>(`${this.baseUrl}/${houseId}`, { headers })
       .pipe(
-        map(response => response.data),
-        tap(response => {
-          if (response.token) localStorage.setItem('token', response.token);
-        })
+        tap(({ data }) => {
+          if (data.token) localStorage.setItem('token', data.token);
+        }),
+        map(({ data }) => mapHouseResponseToDomain(data))
       );
   }
 
   /** Obtiene la casa actual del usuario (a través del token) desde la API y devuelve su data. */
-  getCurrent (): Observable<HouseResponse> {
+  getCurrent (): Observable<House> {
     return this.http
-      .get<InfoHouseResponse>(`${this.baseUrl}/current`)
-      .pipe(map(response => response.data));
+      .get<ApiResponse<HouseResponse>>(`${this.baseUrl}/current`)
+      .pipe(map(({ data }) => mapHouseResponseToDomain(data)));
   }
 
   /** Obtiene información la casa con id `houseInfoID` para ver y modificar sus datos. */
-  getHouseInfo (): Observable<HouseResponse> {
+  getHouseInfo (): Observable<House> {
     if (!this.houseID) {
       this.router.navigate(['/dashboard', 'profile']);
       return throwError(() => new Error('No se encontró la casa.'));
     }
 
     return this.http
-      .get<InfoHouseResponse>(`${this.baseUrl}/${this.houseID}`)
-      .pipe(map(response => response.data));
+      .get<ApiResponse<HouseResponse>>(`${this.baseUrl}/${this.houseID}`)
+      .pipe(map(({ data }) => mapHouseResponseToDomain(data)));
   }
 
   /** Modifica código de activación de la casa con id `houseInfoID`. */
@@ -77,7 +71,7 @@ export class HouseService {
     return this.http.patch<void>(`${API_URL}/central/code/${this.houseID}`, info);
   }
 
-  updateHouseInfo (data: HouseUpdate): Observable<HouseResponse> {
+  updateHouseInfo (data: HouseUpdate): Observable<House> {
     if (!this.houseID) return throwError(() => new Error('No se encontró la casa.'));
 
     const address: Partial<AddressResponse> = {
@@ -92,7 +86,7 @@ export class HouseService {
     };
 
     return this.http
-      .patch<InfoHouseResponse>(`${this.baseUrl}/name-dir/${this.houseID}`, body)
-      .pipe(map(response => response.data));
+      .patch<ApiResponse<HouseResponse>>(`${this.baseUrl}/name-dir/${this.houseID}`, body)
+      .pipe(map(({ data }) => mapHouseResponseToDomain(data)));
   }
 }

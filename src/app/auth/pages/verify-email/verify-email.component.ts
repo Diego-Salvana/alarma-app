@@ -3,7 +3,6 @@ import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../services';
 import { finalize } from 'rxjs';
 import { RouterLink } from '@angular/router';
-import { WEB_APP_URL } from '../../../env';
 
 @Component({
   selector: 'app-verify-email',
@@ -25,17 +24,13 @@ export class VerifyEmailComponent implements OnInit {
 
     setTimeout(() => this.sendVerification(token), 1000);
   }
-  
-  openApp () {
-    window.location.href = `${WEB_APP_URL}/app`;
-  }
 
   private sendVerification (token: string) {
     this.authService
       .verifyEmail(token)
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
-        next: () => this.successful.set(true),
+        next: _ => this.successful.set(true),
         error: err => this.errorMessage.set(err.error.message)
       });
   }

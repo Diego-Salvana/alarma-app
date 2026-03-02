@@ -19,11 +19,11 @@
           <tr class="row">
             <td>
               <i class="pi pi-hashtag !text-xs mr-1"></i>
-              <span>{{ sensor.nombre }}</span>
+              <span>{{ sensor.name }}</span>
             </td>
             <td class="!text-right md:!text-right !font-semibold !text-muted-color-emphasis">
               <p-toggle-switch 
-                [formControlName]="sensor.numeroSensor"
+                [formControlName]="sensor.number"
                 trueValue="On"
                 falseValue="Off" />
             </td>

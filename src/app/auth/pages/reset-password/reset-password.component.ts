@@ -5,12 +5,12 @@ import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../utils';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../services';
 import { finalize } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ToastService } from '../../../shared/services';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [PasswordModule, ButtonModule, ReactiveFormsModule],
+  imports: [PasswordModule, ButtonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,6 +27,7 @@ export class ResetPasswordComponent implements OnInit {
 
   token = input.required<string>();
   isSubmitting = signal(false);
+  showAppButton = signal(false);
 
   ngOnInit () {
     this.passForm.controls.password.valueChanges.subscribe(() => {
@@ -48,7 +49,10 @@ export class ResetPasswordComponent implements OnInit {
       .resetPassword(this.token(), pass)
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
-        next: () => this.router.navigateByUrl('/dashboard/hub'),
+        next: _ => {
+          this.passForm.reset();
+          this.showAppButton.set(true);
+        },
         error: err => this.toastService.error(err.error.message)
       });
   }

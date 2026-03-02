@@ -1,6 +1,6 @@
 type AppEnv = 'local' | 'server';
 
-const CURRENT_ENV: AppEnv = 'local';
+const CURRENT_ENV: AppEnv = 'server';
 
 export const CONFIG = {
   local: {
@@ -16,6 +16,7 @@ export const CONFIG = {
 // URLs
 export const API_URL = CONFIG[CURRENT_ENV].API_URL;
 export const SOCKET_URL = CONFIG[CURRENT_ENV].SOCKET_URL;
+export const WEB_APP_URL = 'https://alarmstech.vercel.app';
 
 // Ruta del socket
 export const SOCKET_PATH = '/api-alarma/socket';
@@ -28,4 +29,3 @@ export const WS_LIGHTS = 'alarm/lights';
 
 // Otras constantes
 export const USER_PREFIX = 'user_';
-export const WEB_APP_URL = 'https://alarmstech.vercel.app';

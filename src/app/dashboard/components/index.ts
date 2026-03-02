@@ -7,3 +7,4 @@ export * from './sensor-list/sensor-list.component';
 export * from './side-bar/side-bar.component';
 export * from './security-card/security-card.component';
 export * from './details-card/details-card.component';
+export * from './ringing-action/ringing-action.component';

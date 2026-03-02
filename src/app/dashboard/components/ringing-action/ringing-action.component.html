@@ -1,0 +1,24 @@
+@let _isAlarmArmed = isAlarmArmed();
+@let _isRinging = isRinging();
+
+<p-button
+  id="panic-btn"
+  label="Sirena"
+  severity="warn"
+  [variant]="_isRinging ? undefined : 'outlined'"
+  [disabled]="_isAlarmArmed && _isRinging"
+  raised="true"
+  icon="pi pi-volume-down"
+  iconPos="top"
+  [styleClass]="_isRinging ? 'w-full' : 'w-full orange-text orange-border'"
+  [class.pulse-animation]="_isRinging"
+  class="action-btn"
+  (onClick)="onClick()" />
+
+<app-confirm-dialog
+  title="Sirena 🔈"
+  description="¿Estás seguro de activar la sirena?"
+  acceptLabel="Sí, activar"
+  [visible]="isModalVisible()"
+  [submitted]="isSubmitted()"
+  (onCloseDialog)="onConfirmation($event)" />

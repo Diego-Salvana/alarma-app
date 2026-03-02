@@ -8,12 +8,3 @@ export interface Register extends Login {
   apellido: string;
   telefono: string;
 }
-
-export interface EmailVerification {
-  message: string;
-  token: string;
-}
-
-export interface PasswordResetResponse {
-  token: string;
-}
