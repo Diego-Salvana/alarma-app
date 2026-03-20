@@ -34,7 +34,6 @@
       </div>
   </div>
 
-  
   <section class="section-container">
     <h4 class="section-title">INFORMACIÓN DE LA CASA</h4>
     <!-- Tarjeta de Nombre -->
@@ -58,7 +57,7 @@
         type="house"
         icon="pi pi-map-marker"
         title="Calle"
-        [description]="(_house?.address?.city | titlecase) ?? ''" />
+        [description]="(_house?.address?.street | titlecase) ?? ''" />
     </div>
 
     <!-- Tarjetas de Dirección (Número) -->

@@ -1,101 +1,207 @@
- # Alarma-v1 (Front-end Capacitor)
+# Sistema de Alarmas — Frontend
 
- Aplicación móvil y web para monitoreo y control de un sistema de alarma. Desarrollada en Angular 19 con integración de Capacitor 7 para empaquetar a Android, usando PrimeNG para UI y TailwindCSS para estilos. Se conecta a un backend REST y a un servidor de WebSockets (Socket.IO) para control en tiempo real.
+Aplicación frontend para un **sistema de alarmas domóticas**, desarrollada con **Angular** y desplegable tanto como **aplicación web** como **app móvil** mediante Capacitor.
 
- ## Funcionalidades clave
+La aplicación permite a los usuarios **monitorear, controlar y configurar** sus sistemas de alarma en tiempo real desde una interfaz centralizada.
 
- - **Autenticación**: flujo de acceso/registro y verificación.
- - **Dashboard**: vista principal con estado de la alarma, acciones rápidas y secciones (sensores, historial, perfil, etc.).
- - **Tiempo real**: integración con Socket.IO para eventos de alarma y actualizaciones instantáneas.
- - **Historial**: timeline de eventos de la alarma.
- - **Gestión de sitios/sensores**: visualización y control.
- - **Diseño responsivo**: soporte móvil y desktop. Dark mode soportado en estilos.
+## Vista Previa
 
- ## Tecnologías utilizadas
+### Dashboard
+<div align="center">
+  <img src="./src/assets/images/dashboard.png" width="180px"/>
+  <img src="./src/assets/images/dashboard-desktop.png" width="620px"/>
+</div>
 
- - **Framework**: Angular 19 (standalone APIs, rutas lazy-loaded).
- - **Mobile runtime**: Capacitor 7 (`@capacitor/core`, `@capacitor/android`).
- - **UI**: PrimeNG 19, PrimeIcons, `@primeng/themes`, TailwindCSS 3 (`tailwindcss-primeui`).
- - **Estado/reactividad**: RxJS 7.
- - **Realtime**: `socket.io-client` 4.
- - **Build & tooling**: Angular CLI 19, ESLint, Prettier, TypeScript 5.
+### Armado de alarma + Sensores
+<div align="center">
+  <img src="./src/assets/images/arming.png" width="180px"/>
+  <img src="./src/assets/images/arming-dark.png" width="180px"/>
+  <img src="./src/assets/images/sensor.png" width="180px"/>
+  <img src="./src/assets/images/sensor-dark.png" width="180px"/>
+</div>
 
- ## Estructura del proyecto
+## Descripción General
 
- Ruta principal: `src/`
+Este proyecto forma parte de un **ecosistema full stack de alarmas inteligentes**, donde:
 
- - **src/app/**
-   - **app.routes.ts**: definición de rutas principales con lazy loading y guards (`authGuard`, `dashboardGuard`).
-   - **auth/**: módulo/área de autenticación (componentes, rutas propias, guards).
-   - **dashboard/**: módulo/área principal (home, historial, sensores, perfil, etc.).
-   - **shared/**: componentes, páginas y utilitarios compartidos (incluye `verification`).
-   - **env.ts**: constantes de configuración (API/Socket, pruebas).
- - **src/styles.scss**: hoja de estilos global (integra Tailwind y temas PrimeNG).
- - **public/**: recursos estáticos copiados al build.
+* El **frontend** se encarga de la interfaz y la experiencia de usuario
+* El **backend** gestiona la lógica de negocio y persistencia
+* Los dispositivos se comunican mediante **MQTT**
+* Las actualizaciones en tiempo real se manejan con **WebSockets**
 
- Capacitor está configurado en:
+El sistema está diseñado con foco en la **escalabilidad, modularidad y mantenibilidad**.
 
- - `capacitor.config.ts` (webDir apunta a `dist/front-end-capacitor-v1.0.0/browser`).
- - Proyecto Android en `android/`.
+## Funcionalidades Principales
 
- ## Scripts disponibles (npm)
+* 🔐 Autenticación de usuarios (login / registro)
+* 🏠 Gestión de múltiples hogares
+* 🚨 Control del sistema de alarma (activar / desactivar)
+* 📡 Actualizaciones en tiempo real
+* 🔔 Notificaciones de eventos y alertas
+* ⚙️ Configuración de dispositivos y sensores
+* 📱 Soporte mobile mediante Capacitor
 
- - `npm start`: inicia servidor de desarrollo (Angular dev server).
- - `npm run build`: compila para producción.
- - `npm run watch`: compila en modo watch (development).
- - `npm test`: ejecuta pruebas con Karma/Jasmine.
+## Arquitectura
 
- ## Ejecución en desarrollo (web)
+La aplicación sigue una **arquitectura basada en features**, con una clara separación de responsabilidades.
 
- ```bash
- npm install
- npm start
- # abre http://localhost:4200
- ```
+```
+src/app/
+│
+├── auth/              → Funcionalidad de autenticación
+├── dashboard/         → Aplicación principal (zona protegida)
+├── shared/            → Componentes, servicios y utilidades reutilizables
+```
 
- Si usas endpoints locales, ajusta `src/app/env.ts`.
+### Principios Clave
 
- ## Build de producción (web)
+* **Aislamiento por feature**
+* **Patrón Component → Service**
+* **Responsabilidad única por capa**
+* **Reutilización de lógica común**
+* **Estructura escalable**
 
- ```bash
- npm run build
- # salida en dist/front-end-capacitor-v1.0.0
- ```
+## Stack Tecnológico
 
- ## Android (Capacitor)
+* **Angular 19**
+* **TypeScript**
+* **RxJS**
+* **Socket.IO Client**
+* **Capacitor**
+* **SCSS**
 
- Asegúrate de tener Android Studio y SDK instalados.
+## Comunicación en Tiempo Real
 
- ```bash
- # 1) Compilar la app web
- npm run build
+El frontend se integra con sistemas en tiempo real mediante:
 
- # 2) Sincronizar artefactos web con Capacitor
- npx cap sync android
+* **WebSockets (Socket.IO)** → actualización de la UI
+* **MQTT (a través del backend)** → comunicación con dispositivos
 
- # 3) Abrir en Android Studio
- npx cap open android
- ```
+### Flujo típico
 
- - El `webDir` ya está configurado: `dist/front-end-capacitor-v1.0.0/browser`.
- - Puedes ejecutar en emulador/dispositivo desde Android Studio.
+1. El usuario ejecuta una acción (ej: activar alarma)
+2. Se envía un request HTTP al backend
+3. El backend publica un mensaje MQTT
+4. El dispositivo responde
+5. El backend emite un evento por WebSocket
+6. El frontend actualiza la interfaz en tiempo real
 
- ## Estilos y UI
+## Guía de Desarrollo
 
- - TailwindCSS configurado (ver `tailwind.config.js`).
- - PrimeNG + PrimeIcons integrados con temas desde `@primeng/themes`.
- - Diseño responsivo con soporte de dark mode.
+Estas guías definen las buenas prácticas y convenciones del proyecto.
 
- ## Calidad de código y formateo
+### Reglas obligatorias
 
- - ESLint para linting (`.eslintrc.json`).
- - Prettier para formateo.
- - Recomendado: ejecutar linters/prettier antes de commits.
+* Seguir el flujo **Component → Service → API**
+* Colocar lógica reutilizable en `shared/`
+* Mantener aisladas las features (`auth/`, `dashboard/`)
+* Manejar asincronía con **RxJS**
 
- ## Notas
+### Restricciones
 
- - Rutas principales:
-   - `/auth` (autenticación, protegido por `authGuard`).
-   - `/dashboard` (área principal, protegido por `dashboardGuard`).
-   - `/verification` (página compartida de verificación).
- - Realtime: `socket.io-client` configurado hacia `SOCKET_URL` y `SOCKET_PATH`.
+* Crear nuevas carpetas en el nivel raíz de `app/`
+* Mezclar responsabilidades entre features
+* Implementar lógica de negocio en componentes
+* Generar efectos secundarios fuera de servicios
+
+## Desarrollo Asistido por IA
+
+El proyecto incluye soporte para desarrollo asistido mediante agentes de IA, definido en:
+
+* `AGENT.md`
+* Carpeta `skills/`
+
+### Sistema de Skills
+
+Se define un conjunto de **skills de desarrollo** para asegurar consistencia:
+
+* API Communication
+* Architecture Enforcement
+* State Management
+* Real-Time Communication
+* Error Handling
+
+Estas reglas garantizan que el código:
+
+* Sea consistente con la arquitectura
+* Evite anti-patrones
+* Sea escalable
+
+## Puesta en Marcha
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/tu-usuario/alarm-frontend.git
+cd alarm-frontend
+```
+
+### 2. Instalar dependencias
+
+```bash
+bun install
+# o
+npm install
+```
+
+### 3. Ejecutar la aplicación
+
+```bash
+ng serve
+```
+
+Disponible en:
+
+```
+http://localhost:4200
+```
+
+## Build Mobile (Capacitor)
+
+```bash
+ng build
+npx cap sync
+npx cap open android
+```
+
+## Configuración de Entorno
+
+La aplicación utiliza una configuración centralizada para manejar distintos entornos (`local` y `server`).
+
+```ts
+type AppEnv = 'local' | 'server';
+
+const CURRENT_ENV: AppEnv = 'local';
+
+export const CONFIG = {
+  local: {
+    API_URL: 'http://localhost:<PUERTO>/api-alarma',
+    SOCKET_URL: 'http://localhost:<PUERTO>'
+  },
+  server: {
+    API_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>/api-alarma',
+    SOCKET_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>'
+  }
+};
+```
+
+## Integración con Backend
+
+Este frontend está diseñado para integrarse con un backend que incluye:
+
+* API REST (Express + MongoDB)
+* WebSockets (Socket.IO)
+* Broker MQTT (Mosquitto)
+
+## Mejoras Futuras
+
+* 📊 Dashboard con analíticas avanzadas
+* 🔔 Notificaciones push
+* 🌐 Soporte multi-idioma
+* 🎨 Mejoras de UI/UX
+
+## Autor
+
+**Diego Salvañá**
+
+*Desarrollador Frontend / Full Stack*
