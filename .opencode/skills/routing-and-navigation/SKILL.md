@@ -1,3 +1,8 @@
+---
+name: routing-and-navigation
+description: Keep feature-based routing in auth.routes.ts and dashboard.routes.ts, with pages inside pages/ and guards for access control only.
+---
+
 # Skill: Routing and Navigation
 
 ## Purpose

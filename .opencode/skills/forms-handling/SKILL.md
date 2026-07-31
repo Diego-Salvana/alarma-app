@@ -1,3 +1,8 @@
+---
+name: forms-handling
+description: Use Reactive Forms for non-trivial forms, keeping form logic in components with explicit and readable validation.
+---
+
 # Skill: Forms Handling
 
 ## Purpose

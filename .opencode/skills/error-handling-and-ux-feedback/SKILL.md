@@ -1,3 +1,8 @@
+---
+name: error-handling-and-ux-feedback
+description: Propagate errors from services and surface consistent UX feedback in components without swallowing errors or breaking architecture.
+---
+
 # Skill: Error Handling and UX Feedback
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: frontend-architecture-enforcement
+description: Enforce the project's feature-based architecture and separation of responsibilities (auth/, dashboard/, shared/) when adding new code.
+---
+
 # Skill: Frontend Architecture Enforcement
 
 ## Purpose

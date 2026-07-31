@@ -108,8 +108,8 @@ Estas guías definen las buenas prácticas y convenciones del proyecto.
 
 El proyecto incluye soporte para desarrollo asistido mediante agentes de IA, definido en:
 
-* `AGENT.md`
-* Carpeta `skills/`
+* `AGENTS.md`
+* Carpeta `.opencode/skills/`
 
 ### Sistema de Skills
 

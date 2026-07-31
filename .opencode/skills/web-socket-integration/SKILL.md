@@ -1,3 +1,8 @@
+---
+name: web-socket-integration
+description: Handle Socket.IO real-time updates only in services, flowing WebSocket → RxJS → Signals → UI, read-only from the frontend.
+---
+
 # Skill: WebSocket Integration
 
 ## Purpose

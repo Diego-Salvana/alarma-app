@@ -1,3 +1,8 @@
+---
+name: http-and-data-handling
+description: Keep all HTTP calls in services via HttpClient, map API responses before storing state, and never call HTTP from components.
+---
+
 # Skill: HTTP and Data Handling
 
 ## Purpose

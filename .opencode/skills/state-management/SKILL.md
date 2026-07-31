@@ -1,3 +1,8 @@
+---
+name: state-management
+description: Use Angular Signals as the single source of truth in services and integrate RxJS streams correctly without duplicating state.
+---
+
 # Skill: State Management with Signals
 
 ## Purpose

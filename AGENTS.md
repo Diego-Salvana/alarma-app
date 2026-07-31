@@ -341,7 +341,7 @@ Agents must always preserve this model.
 
 ## Skills
 
-This project uses a set of specialized skills located in the `skills/` directory.
+This project uses a set of specialized skills located in the `.opencode/skills/` directory.
 
 Agents must consult and follow these skills when implementing functionality, especially for:
 
