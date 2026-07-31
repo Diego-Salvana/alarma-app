@@ -5,9 +5,9 @@ def keystorePropertiesFile = rootProject.file("app/keystore.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
-def signingStorePassword = keystoreProperties['storePassword'] ?: System.getenv('***REDACTED***') ?: ''
-def signingKeyAlias = keystoreProperties['keyAlias'] ?: System.getenv('***REDACTED***') ?: ''
-def signingKeyPassword = keystoreProperties['keyPassword'] ?: System.getenv('***REDACTED***') ?: ''
+def signingStorePassword = keystoreProperties['storePassword'] ?: System.getenv('SIGNING_STORE_PASSWORD') ?: ''
+def signingKeyAlias = keystoreProperties['keyAlias'] ?: System.getenv('SIGNING_KEY_ALIAS') ?: ''
+def signingKeyPassword = keystoreProperties['keyPassword'] ?: System.getenv('SIGNING_KEY_PASSWORD') ?: ''
 
 android {
     namespace "com.alarma.dev"
