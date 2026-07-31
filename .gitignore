@@ -43,3 +43,5 @@ notas.sql
 .DS_Store
 Thumbs.db
 .vercel
+*~
+auditoria.md
