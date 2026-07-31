@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { ApiResponse, NewPassword, PasswordBodyDTO, ProfileResponse, ProfileUpdate, ProfileUpdateDTO, User } from '../../shared/interfaces';
-import { API_URL } from '../../env';
+import { ENV } from '../../env';
 import { mapProfileResponseToDomain } from '../../shared/utils';
 
 /** Provee acceso a la API para realizar operaciones relacionadas al perfil de usuario. */
@@ -11,7 +11,7 @@ import { mapProfileResponseToDomain } from '../../shared/utils';
 })
 export class ProfileService {
   private http = inject(HttpClient);
-  private baseUrl = `${API_URL}/users`;
+  private baseUrl = `${ENV.API_URL}/users`;
 
   /** Obtiene el perfil del usuario tomando el ``id`` del ``token``. */
   getUser (): Observable<User> {

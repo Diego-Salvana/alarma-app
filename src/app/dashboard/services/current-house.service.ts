@@ -3,7 +3,7 @@ import { SensorArmConfigDTO, TriggerDTO, State, ExclusionFormValues, House } fro
 import { HouseService } from './house.service';
 import { finalize, Observable } from 'rxjs';
 import { StatusRequest, Lights, AlarmArming, TriggeredAlarm } from '../interfaces';
-import { API_URL } from '../../env';
+import { ENV } from '../../env';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../shared/services';
 import { AlertService } from './alert.service';
@@ -17,7 +17,7 @@ export class CurrentHouseService {
   private houseService = inject(HouseService);
   private toastService = inject(ToastService);
   private alertService = inject(AlertService);
-  private baseUrl = `${API_URL}/houses`;
+  private baseUrl = `${ENV.API_URL}/houses`;
   private _house = signal<House | null>(null);
   private _isLoading = signal(false);
   house = this._house.asReadonly();

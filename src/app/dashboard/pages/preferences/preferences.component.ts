@@ -6,7 +6,7 @@ import { SocketService, ThemeService, ToastService } from '../../../shared/servi
 import { State } from '../../../shared/interfaces';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CurrentHouseService, CurrentUserService } from '../../services';
-import { WS_LIGHTS } from '../../../env';
+import { WS_LIGHTS } from '../../../shared/constants';
 import { Lights } from '../../interfaces';
 
 @Component({

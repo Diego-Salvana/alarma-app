@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ApiResponse, CentralEvent, CentralHistoryResponse } from '../../shared/interfaces';
 import { map, Observable } from 'rxjs';
-import { API_URL } from '../../env';
+import { ENV } from '../../env';
 import { mapCentralEventResponseToDomain } from '../../shared/utils';
 
 /** Provee acceso a la API para realizar operaciones relacionadas a la central. */
@@ -11,7 +11,7 @@ import { mapCentralEventResponseToDomain } from '../../shared/utils';
 })
 export class CentralService {
   private http = inject(HttpClient);
-  private baseUrl = `${API_URL}/central`;
+  private baseUrl = `${ENV.API_URL}/central`;
 
   /** Obtiene el historial de eventos de la central. */
   getHistory (): Observable<CentralEvent[]> {

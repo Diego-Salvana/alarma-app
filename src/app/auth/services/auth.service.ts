@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Login, Register } from '../interfaces';
 import { map, Observable, tap } from 'rxjs';
 import { ApiResponse, TokenResponse, LoginResponse, User } from '../../shared/interfaces';
-import { API_URL } from '../../env';
+import { ENV } from '../../env';
 import { mapLoginResponseToUser } from '../../shared/utils';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { mapLoginResponseToUser } from '../../shared/utils';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private baseUrl = `${API_URL}/users`;
+  private baseUrl = `${ENV.API_URL}/users`;
 
   register (userBody: Register): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/register`, userBody);

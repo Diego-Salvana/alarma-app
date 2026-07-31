@@ -164,24 +164,20 @@ npx cap open android
 
 ## Configuración de Entorno
 
-La aplicación utiliza una configuración centralizada para manejar distintos entornos (`local` y `server`).
+La aplicación maneja los entornos mediante `fileReplacements` de Angular:
+
+- `src/app/env.ts` → entorno de desarrollo (usado por `ng serve`)
+- `src/app/env.prod.ts` → entorno de producción (usado por `ng build --configuration production`)
 
 ```ts
-type AppEnv = 'local' | 'server';
-
-const CURRENT_ENV: AppEnv = 'local';
-
-export const CONFIG = {
-  local: {
-    API_URL: 'http://localhost:<PUERTO>/api-alarma',
-    SOCKET_URL: 'http://localhost:<PUERTO>'
-  },
-  server: {
-    API_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>/api-alarma',
-    SOCKET_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>'
-  }
+export const ENV = {
+  API_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>/api-alarma',
+  SOCKET_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>',
+  WEB_APP_URL: 'https://<TU_DOMINIO>'
 };
 ```
+
+Las constantes que no dependen del entorno (ruta del socket, eventos WebSocket, etc.) viven en `src/app/shared/constants.ts`.
 
 ## Integración con Backend
 

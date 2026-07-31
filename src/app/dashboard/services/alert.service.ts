@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { AlarmArming, TriggeredAlarm, Warning } from '../interfaces';
 import { SocketService } from './web-socket.service';
 import { Subscription } from 'rxjs';
-import { WS_ALARM_ARMING, WS_TRIGGER_ALARM, WS_WARNING } from '../../env';
+import { WS_ALARM_ARMING, WS_TRIGGER_ALARM, WS_WARNING } from '../../shared/constants';
 
 /** Servicio que gestiona notificaciones en tiempo real para alarmas, usando WebSocket y estados reactivos. */
 @Injectable({

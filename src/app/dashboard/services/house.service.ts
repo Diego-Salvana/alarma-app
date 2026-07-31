@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable, tap, throwError } from 'rxjs';
 import { HouseResponse, HouseUpdate, NewCode, AlarmCodeUpdateDTO, HouseUpdateDTO, AddressResponse, House, ApiResponse } from '../../shared/interfaces';
-import { API_URL } from '../../env';
+import { ENV } from '../../env';
 import { HttpHeaders } from '@capacitor/core';
 import { mapHouseResponseToDomain } from '../../shared/utils';
 
@@ -14,7 +14,7 @@ import { mapHouseResponseToDomain } from '../../shared/utils';
 export class HouseService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private baseUrl = `${API_URL}/houses`;
+  private baseUrl = `${ENV.API_URL}/houses`;
   private houseID: string | null = null; // Id de una casa para ver y modificar sus datos.
 
   setHouseInfoID (id: string) {
@@ -68,7 +68,7 @@ export class HouseService {
       nuevoCodigo: newCodeNumber
     };
 
-    return this.http.patch<void>(`${API_URL}/central/code/${this.houseID}`, info);
+    return this.http.patch<void>(`${ENV.API_URL}/central/code/${this.houseID}`, info);
   }
 
   updateHouseInfo (data: HouseUpdate): Observable<House> {

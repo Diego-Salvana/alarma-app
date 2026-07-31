@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { ApiResponse, DeviceResponse, Sensor, SensorNameDTO } from '../../shared/interfaces';
-import { API_URL } from '../../env';
+import { ENV } from '../../env';
 import { mapDeviceResponseToSensor } from '../../shared/utils';
 
 /** Provee acceso a la API para realizar operaciones relacionadas a los sensores. */
@@ -11,7 +11,7 @@ import { mapDeviceResponseToSensor } from '../../shared/utils';
 })
 export class SensorService {
   private http = inject(HttpClient);
-  private baseUrl = `${API_URL}/sensors`;
+  private baseUrl = `${ENV.API_URL}/sensors`;
 
   /** Obtiene un sensor por su número. */
   getOne (sensorNumber: string): Observable<Sensor> {

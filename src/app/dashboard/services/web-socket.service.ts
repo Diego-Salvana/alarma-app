@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { io } from 'socket.io-client';
-import { SOCKET_URL, SOCKET_PATH } from '../../env';
+import { ENV } from '../../env';
+import { SOCKET_PATH } from '../../shared/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketService {
-  private socket = io(SOCKET_URL, {
+  private socket = io(ENV.SOCKET_URL, {
     path: SOCKET_PATH,
     auth: {
       token: localStorage.getItem('token')
