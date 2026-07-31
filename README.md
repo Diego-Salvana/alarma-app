@@ -139,8 +139,6 @@ cd alarm-frontend
 ### 2. Instalar dependencias
 
 ```bash
-bun install
-# o
 npm install
 ```
 
