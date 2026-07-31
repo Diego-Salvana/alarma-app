@@ -1,5 +1,14 @@
 apply plugin: 'com.android.application'
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("app/keystore.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+def signingStorePassword = keystoreProperties['storePassword'] ?: System.getenv('***REDACTED***') ?: ''
+def signingKeyAlias = keystoreProperties['keyAlias'] ?: System.getenv('***REDACTED***') ?: ''
+def signingKeyPassword = keystoreProperties['keyPassword'] ?: System.getenv('***REDACTED***') ?: ''
+
 android {
     namespace "com.alarma.dev"
     compileSdk rootProject.ext.compileSdkVersion
@@ -20,9 +29,9 @@ android {
     signingConfigs {
         release {
             storeFile file(System.getProperty("user.home") + "/.android/keystores/alarmas-release.jks")
-            storePassword ***REDACTED***
-            keyAlias ***REDACTED***
-            keyPassword ***REDACTED***
+            storePassword signingStorePassword
+            keyAlias signingKeyAlias
+            keyPassword signingKeyPassword
         }
     }
 
