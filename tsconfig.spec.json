@@ -4,10 +4,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
+    "rootDir": "./src",
     "types": [
-      "jasmine"
+      "vitest/globals"
     ]
   },
+  "files": [
+    "src/test-setup.ts"
+  ],
   "include": [
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
