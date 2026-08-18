@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
+
 import { CurrentHouseService } from '../../services';
 import { House, State } from '../../../shared/interfaces';
 

@@ -40,8 +40,8 @@
         type="profile"
         icon="pi pi-envelope"
         title="Email"
-        [description]="_user?.email ?? ''"
-        [initialPropValue]="_user?.firstName ?? ''"
+        [description]="_user.email"
+        [initialPropValue]="_user.firstName"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
@@ -52,10 +52,10 @@
         type="profile"
         icon="pi pi-user"
         title="Nombre"
-        [description]="_user?.firstName ?? ''"
+        [description]="_user?.firstName"
         profileField="name"
         [editable]="true"
-        [initialPropValue]="_user?.firstName ?? ''"
+        [initialPropValue]="_user?.firstName"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
@@ -66,10 +66,10 @@
         type="profile"
         icon="pi pi-user"
         title="Apellido"
-        [description]="_user?.lastName ?? ''"
+        [description]="_user?.lastName"
         profileField="lastname"
         [editable]="true"
-        [initialPropValue]="_user?.lastName ?? ''"
+        [initialPropValue]="_user?.lastName"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
@@ -80,10 +80,10 @@
         type="profile"
         icon="pi pi-phone"
         title="Teléfono"
-        [description]="_user?.phone ?? ''"
+        [description]="_user.phone"
         profileField="phone"
         [editable]="true"
-        [initialPropValue]="_user?.phone ?? ''"
+        [initialPropValue]="_user.phone"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
