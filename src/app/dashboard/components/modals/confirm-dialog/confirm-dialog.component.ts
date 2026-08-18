@@ -14,10 +14,10 @@ import { DialogModule } from 'primeng/dialog';
 export class ConfirmDialogComponent {
   visible = input.required<boolean>();
   submitted = input.required<boolean>();
-  onCloseDialog = output<boolean>();
   title = input.required<string>();
   description = input.required<string>();
   acceptLabel = input.required<string>();
+  onCloseDialog = output<boolean>();
 
   onAccept () {
     this.onCloseDialog.emit(true);

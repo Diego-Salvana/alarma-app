@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, input, output, signal } from '@angu
 import { NgClass } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+
 import { PasswordModalComponent, CodeModalComponent } from '../modals';
 import { NewCode, NewPassword } from '../../../shared/interfaces';
 

@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { Card } from 'primeng/card';
+import { Button } from 'primeng/button';
+
 import { BtnEditCardComponent, ProfileModalComponent, HouseModalComponent } from '..';
 import { CardType, ProfileModalField, ProfileUpdate, HouseUpdate, HouseModalField } from '../../../shared/interfaces';
-import { Button } from 'primeng/button';
-import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-details-card',
