@@ -2,15 +2,16 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { SecurityCardComponent } from '../../components';
 import { ProfileService } from '../../services/profile.service';
 import { NewPassword, ProfileUpdate, User } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { CurrentHouseService, HouseService } from '../../services';
 import { LogoutModalComponent } from '../../../shared/components';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 import { DetailsCardComponent } from '../../components/details-card/details-card.component';
 
 @Component({

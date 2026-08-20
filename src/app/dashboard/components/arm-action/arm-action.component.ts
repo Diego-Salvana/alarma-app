@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, output, signal } from '@angular/core';
-import { ExclusionModalComponent } from '../modals';
 import { Button } from 'primeng/button';
+
+import { ExclusionModalComponent } from '../modals';
 import { ExclusionFormValues, Sensor } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 

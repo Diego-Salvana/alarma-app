@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal, input, output, effect } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+
 import { ConfirmDialogComponent } from '../modals';
 
 @Component({
