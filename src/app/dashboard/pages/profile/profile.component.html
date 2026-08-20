@@ -25,8 +25,8 @@
       <i class="pi pi-user text-3xl"></i>
     </div>
     <div class="header-info">
-      <h2 class="header-title">{{ _user?.firstName }} {{ _user?.lastName }}</h2>
-      <p class="header-subtitle">{{ _user?.email }}</p>
+      <h2 class="header-title">{{ _user.firstName }} {{ _user.lastName }}</h2>
+      <p class="header-subtitle">{{ _user.email }}</p>
     </div>
   </div>
 
@@ -52,10 +52,10 @@
         type="profile"
         icon="pi pi-user"
         title="Nombre"
-        [description]="_user?.firstName"
+        [description]="_user.firstName"
         profileField="name"
         [editable]="true"
-        [initialPropValue]="_user?.firstName"
+        [initialPropValue]="_user.firstName"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
@@ -66,10 +66,10 @@
         type="profile"
         icon="pi pi-user"
         title="Apellido"
-        [description]="_user?.lastName"
+        [description]="_user.lastName"
         profileField="lastname"
         [editable]="true"
-        [initialPropValue]="_user?.lastName"
+        [initialPropValue]="_user.lastName"
         [isSubmitted]="_submitted"
         (onSaveProfile)="updateProfile($event)" />
     </div>
