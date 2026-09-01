@@ -20,6 +20,17 @@ La aplicación permite a los usuarios **monitorear, controlar y configurar** sus
   <img src="./src/assets/images/sensor-dark.png" width="180px"/>
 </div>
 
+## Acceso de demostración
+
+URL: [alarmstech.vercel.app](https://alarmstech.vercel.app)
+
+| Campo | Valor |
+| --- | --- |
+| Usuario | `demouser@example.com` |
+| Contraseña | `Demouser` |
+
+> *Algunas funcionalidades están restringidas para el usuario demo. Para probar todas las funcionalidades de la aplicación, podés crear y validar una cuenta propia.*
+
 ## Descripción General
 
 Este proyecto forma parte de un **ecosistema full stack de alarmas inteligentes**, donde:
@@ -127,41 +138,6 @@ Estas reglas garantizan que el código:
 * Evite anti-patrones
 * Sea escalable
 
-## Puesta en Marcha
-
-### 1. Clonar el repositorio
-
-```bash
-git clone https://github.com/tu-usuario/alarm-frontend.git
-cd alarm-frontend
-```
-
-### 2. Instalar dependencias
-
-```bash
-npm install
-```
-
-### 3. Ejecutar la aplicación
-
-```bash
-ng serve
-```
-
-Disponible en:
-
-```
-http://localhost:4200
-```
-
-## Build Mobile (Capacitor)
-
-```bash
-ng build
-npx cap sync
-npx cap open android
-```
-
 ## Configuración de Entorno
 
 La aplicación maneja los entornos mediante `fileReplacements` de Angular:
@@ -171,9 +147,9 @@ La aplicación maneja los entornos mediante `fileReplacements` de Angular:
 
 ```ts
 export const ENV = {
-  API_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>/api-alarma',
-  SOCKET_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>',
-  WEB_APP_URL: 'https://<TU_DOMINIO>'
+  API_URL: 'https://<DOMINIO>:<PUERTO>/api-alarma',
+  SOCKET_URL: 'https://<DOMINIO>:<PUERTO>',
+  WEB_APP_URL: 'https://<DOMINIO>'
 };
 ```
 
