@@ -147,9 +147,9 @@ La aplicación maneja los entornos mediante `fileReplacements` de Angular:
 
 ```ts
 export const ENV = {
-  API_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>/api-alarma',
-  SOCKET_URL: 'https://<TU_DOMINIO_O_IP>:<PUERTO>',
-  WEB_APP_URL: 'https://<TU_DOMINIO>'
+  API_URL: 'https://<DOMINIO>:<PUERTO>/api-alarma',
+  SOCKET_URL: 'https://<DOMINIO>:<PUERTO>',
+  WEB_APP_URL: 'https://<DOMINIO>'
 };
 ```
 
