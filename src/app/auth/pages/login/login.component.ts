@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
     const values = this.loginForm.getRawValue();
     const loginBody: Login = {
       email: values.username?.trim() ?? '',
-      contrasena: values.password?.trim() ?? ''
+      password: values.password?.trim() ?? ''
     };
     
     this.authService

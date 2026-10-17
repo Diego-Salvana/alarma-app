@@ -23,8 +23,8 @@ export class SensorService {
   /** Modifica el nombre de un sensor. */
   modifyName (sensorNumber: number, newName: string): Observable<Sensor> {
     const body: SensorNameDTO = {
-      numeroSensor: isNaN(sensorNumber) ? 0 : sensorNumber,
-      nombre: newName
+      number: isNaN(sensorNumber) ? 0 : sensorNumber,
+      name: newName
     };
 
     return this.http

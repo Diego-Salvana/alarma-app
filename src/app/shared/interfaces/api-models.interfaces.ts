@@ -1,9 +1,13 @@
-import { DeviceType, EventLog, State } from './domain.interfaces';
+import { DeviceType, State } from './domain.interfaces';
 
 /* Estructura general de respuesta */
 export interface ApiResponse<T> {
   message: string;
   data: T;
+}
+
+export interface PendingResponse {
+  status: 'pending';
 }
 
 // -------------------
@@ -20,13 +24,13 @@ export interface InfoProfileResponse {
 
 export interface ProfileResponse {
   _id: string;
-  nombre: string;
-  apellido: string;
-  nombreUsuario: string;
+  firstName: string;
+  lastName: string;
+  username: string;
   email: string;
-  telefono: string;
-  habilitado: boolean;
-  casas: HouseResponse[];
+  phone: string;
+  enabled: boolean;
+  houses: HouseResponse[];
 }
 
 export interface TokenResponse {
@@ -43,19 +47,27 @@ export interface InfoHouseResponse {
 
 export interface HouseResponse {
   _id: string;
-  nombre: string;
-  nombreCasa: string;
-  direccion: AddressResponse;
-  alarmaEncendida: State;
-  sonando?: boolean;
-  sensores?: DeviceResponse[];
+  name: string;
+  houseName: string;
+  address: AddressResponse;
+  alarmState: State;
+  ringing?: boolean;
+  sensors?: DeviceResponse[];
+  cameras?: CameraResponse[];
   token?: string;
 }
 
 export interface AddressResponse {
-  calle: string;
-  numero: string;
-  ciudad: string;
+  street: string;
+  number: string;
+  city: string;
+  country: string;
+}
+
+export interface CameraResponse {
+  model: string;
+  number: number;
+  name: string;
 }
 
 export interface CentralHistoryResponse {
@@ -63,20 +75,22 @@ export interface CentralHistoryResponse {
 }
 
 export interface CentralEventResponse {
-  fechaHora: Date;
-  nombreDispositivo: string;
+  date: Date;
+  type?: string;
+  deviceName?: string;
+  sensorNumber?: number;
+  userId?: string;
 }
 
 // -------------------
 // Devices
 // -------------------
 export interface DeviceResponse {
-  dispositivoId: string;
-  numeroSensor: number;
-  nombre: string;
-  tipo: DeviceType;
-  estado: State;
-  historial: EventLog[];
+  model: string;
+  number: number;
+  name: string;
+  type: DeviceType;
+  state: State;
 }
 
 // -------------------

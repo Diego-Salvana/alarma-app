@@ -19,6 +19,12 @@ export enum HouseAction {
   SET_LIGHTS = 'SET_LIGHTS',
 }
 
+export enum ControlPanelEventType {
+  ALARM_TRIGGERED = 'ALARM_TRIGGERED',
+  ARMED = 'ARMED',
+  DISARMED = 'DISARMED',
+}
+
 export type ProfileModalField = 'name' | 'lastname' | 'phone';
 export type HouseModalField = 'sensorName' | 'houseName' | 'addressStreet' | 'addressNumber' | 'city';
 
@@ -27,12 +33,19 @@ export type HouseModalField = 'sensorName' | 'houseName' | 'addressStreet' | 'ad
 // -------------------
 
 export interface EventLog {
-  fechaHora: Date;
+  date: Date;
+  type?: ControlPanelEventType | 'SENSOR';
+  deviceName?: string;
+  sensorNumber?: number;
+  userId?: string;
 }
 
 export interface CentralEvent {
-  timestamp: Date;
-  deviceName: string;
+  date: Date;
+  type?: ControlPanelEventType | 'SENSOR';
+  deviceName?: string;
+  sensorNumber?: number;
+  userId?: string;
 }
 
 // -------------------
@@ -57,12 +70,20 @@ export interface House {
   alarmState: State;
   isRinging: boolean;
   sensors: Sensor[];
+  cameras?: Camera[];
 }
 
 export interface Address {
   street: string;
   number: string;
   city: string;
+  country?: string;
+}
+
+export interface Camera {
+  model: string;
+  number: number;
+  name: string;
 }
 
 export interface Sensor {

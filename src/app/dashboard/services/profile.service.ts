@@ -23,9 +23,9 @@ export class ProfileService {
   /** Modifica los datos del perfil del usuario. */
   modifyUserData (data: ProfileUpdate): Observable<User> {
     const body: ProfileUpdateDTO = {
-      ...(data.name && { nombre: data.name }),
-      ...(data.lastname && { apellido: data.lastname }),
-      ...(data.phone && { telefono: data.phone })
+      ...(data.name && { firstName: data.name }),
+      ...(data.lastname && { lastName: data.lastname }),
+      ...(data.phone && { phone: data.phone })
     };
 
     return this.http
@@ -36,8 +36,8 @@ export class ProfileService {
   /** Cambia la contraseña del usuario. */
   updateUserPassword (data: NewPassword): Observable<User> {
     const body: PasswordBodyDTO = {
-      contrasenaActual: data.currentPassword,
-      nuevaContrasena: data.newPassword
+      currentPassword: data.currentPassword,
+      newPassword: data.newPassword
     };
 
     return this.http

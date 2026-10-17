@@ -4,14 +4,14 @@ import { DeviceResponse, HouseResponse, ProfileResponse } from '.';
 // Usuario
 // ---------------
 export interface ProfileUpdateDTO {
-  nombre?: ProfileResponse['nombre'];
-  apellido?: ProfileResponse['apellido'];
-  telefono?: ProfileResponse['telefono'];
+  firstName?: ProfileResponse['firstName'];
+  lastName?: ProfileResponse['lastName'];
+  phone?: ProfileResponse['phone'];
 }
 
 export interface PasswordBodyDTO {
-  contrasenaActual: string;
-  nuevaContrasena: string;
+  currentPassword: string;
+  newPassword: string;
 }
 
 // ---------------
@@ -19,27 +19,27 @@ export interface PasswordBodyDTO {
 // ---------------
 
 export interface HouseUpdateDTO {
-  nombre?: HouseResponse['nombre'];
-  direccion?: Partial<HouseResponse['direccion']>;
+  name?: HouseResponse['name'];
+  address?: Partial<HouseResponse['address']>;
 }
 
 export interface SensorNameDTO {
-  numeroSensor: DeviceResponse['numeroSensor'];
-  nombre: DeviceResponse['nombre'];
+  number: DeviceResponse['number'];
+  name: DeviceResponse['name'];
 }
 
 export interface TriggerDTO {
-  sonando: HouseResponse['sonando'],
-  numeroSensor?: DeviceResponse['numeroSensor']
+  ringing: HouseResponse['ringing'],
+  number?: DeviceResponse['number']
 }
 
 export interface SensorArmConfigDTO {
-  numeroSensor: DeviceResponse['numeroSensor'];
-  estado: DeviceResponse['estado'];
+  number: DeviceResponse['number'];
+  state: DeviceResponse['state'];
 };
 
 export interface AlarmCodeUpdateDTO {
-  contrasena: string;
-  codigoActual: number;
-  nuevoCodigo: number;
+  password: string;
+  currentCode: string;
+  newCode: string;
 }

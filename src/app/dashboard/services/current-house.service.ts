@@ -69,8 +69,8 @@ export class CurrentHouseService {
   armAlarm (excludedSensors: ExclusionFormValues): Observable<StatusRequest> {
     const sensorsConfig: SensorArmConfigDTO[] = Object
       .entries(excludedSensors)
-      .map(([numeroSensor, estado]) => {
-        return { numeroSensor: parseInt(numeroSensor), estado: estado ?? State.ON };
+      .map(([sensorNumber, state]) => {
+        return { number: parseInt(sensorNumber), state: state ?? State.ON };
       });
 
     return this.http.post<StatusRequest>(`${this.baseUrl}/arm`, { sensors: sensorsConfig });
@@ -78,7 +78,7 @@ export class CurrentHouseService {
 
   /** Envía solicitud para `desactivar` la alarma de la casa almacenada en el token. La respuesta de desactivación se recibe por `websocket`. */
   disarmAlarm (): Observable<StatusRequest> {
-    return this.http.post<StatusRequest>(`${this.baseUrl}/disarm`, {});
+    return this.http.post<StatusRequest>(`${this.baseUrl}/disarm`, null);
   }
 
   /** Envía solicitud para `activar/desactivar` la sirena de la alarma actual. */
