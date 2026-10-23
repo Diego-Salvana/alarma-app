@@ -53,11 +53,11 @@
           <div class="event-card">
             <div class="event-content">
               <div class="event-icon">
-                <i class="pi pi-exclamation-triangle"></i>
+                <i [class]="eventIcon(event)"></i>
               </div>
               <div class="event-info">
-                <h5 class="event-title">{{ event.deviceName }}</h5>
-                <p class="event-time">Disparo de alarma</p>
+                <h5 class="event-title">{{ eventTitle(event) }}</h5>
+                <p class="event-time">{{ eventLabel(event) }}</p>
               </div>
             </div>
           </div>

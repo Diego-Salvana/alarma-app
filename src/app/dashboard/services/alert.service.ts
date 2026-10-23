@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { AlarmArming, TriggeredAlarm, Warning } from '../interfaces';
-import { SocketService } from './web-socket.service';
+import { SocketService } from '../../shared/services';
 import { Subscription } from 'rxjs';
 import { WS_ALARM_ARMING, WS_TRIGGER_ALARM, WS_WARNING } from '../../shared/constants';
 

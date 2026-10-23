@@ -2,7 +2,7 @@ import { computed, effect, inject, Injectable, signal, untracked } from '@angula
 import { SensorArmConfigDTO, TriggerDTO, State, ExclusionFormValues, House } from '../../shared/interfaces';
 import { HouseService } from './house.service';
 import { finalize, Observable } from 'rxjs';
-import { StatusRequest, Lights, AlarmArming, TriggeredAlarm } from '../interfaces';
+import { StatusRequest, AlarmArming, TriggeredAlarm } from '../interfaces';
 import { ENV } from '../../env';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../shared/services';
@@ -84,11 +84,6 @@ export class CurrentHouseService {
   /** Envía solicitud para `activar/desactivar` la sirena de la alarma actual. */
   toggleRinging (body: TriggerDTO): Observable<StatusRequest> {
     return this.http.post<StatusRequest>(`${this.baseUrl}/trigger`, body);
-  }
-
-  // Luces
-  setLights (body: Lights): Observable<StatusRequest> {
-    return this.http.post<StatusRequest>(`${this.baseUrl}/lights`, body);
   }
 
   // ---------------

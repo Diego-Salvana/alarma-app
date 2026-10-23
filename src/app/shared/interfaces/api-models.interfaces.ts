@@ -1,4 +1,4 @@
-import { DeviceType, State } from './domain.interfaces';
+import { SensorType, State } from './domain.interfaces';
 
 /* Estructura general de respuesta */
 export interface ApiResponse<T> {
@@ -6,20 +6,15 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-export interface PendingResponse {
-  status: 'pending';
-}
-
 // -------------------
 // Login
 // -------------------
-export interface LoginResponse extends ProfileResponse {
+export interface LoginResponse {
+  firstName: string;
+  email: string;
+  enabled: boolean;
   token: string;
-}
-
-export interface InfoProfileResponse {
-  message: string;
-  data: ProfileResponse;
+  houses: HouseResponse[];
 }
 
 export interface ProfileResponse {
@@ -40,11 +35,6 @@ export interface TokenResponse {
 // -------------------
 // Houses
 // -------------------
-export interface InfoHouseResponse {
-  message: string;
-  data: HouseResponse;
-}
-
 export interface HouseResponse {
   _id: string;
   name: string;
@@ -52,7 +42,7 @@ export interface HouseResponse {
   address: AddressResponse;
   alarmState: State;
   ringing?: boolean;
-  sensors?: DeviceResponse[];
+  sensors?: SensorResponse[];
   cameras?: CameraResponse[];
   token?: string;
 }
@@ -85,12 +75,17 @@ export interface CentralEventResponse {
 // -------------------
 // Devices
 // -------------------
-export interface DeviceResponse {
+export interface SensorEventDateResponse {
+  date: Date;
+}
+
+export interface SensorResponse {
   model: string;
   number: number;
   name: string;
-  type: DeviceType;
+  type: SensorType;
   state: State;
+  history?: SensorEventDateResponse[];
 }
 
 // -------------------

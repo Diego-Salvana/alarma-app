@@ -6,4 +6,3 @@ export * from './current-user.service';
 export * from './house.service';
 export * from './profile.service';
 export * from './sensor.service';
-export * from './web-socket.service';

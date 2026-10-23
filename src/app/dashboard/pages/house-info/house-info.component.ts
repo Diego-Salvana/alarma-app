@@ -8,6 +8,7 @@ import { House, HouseUpdate, NewCode, State } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize } from 'rxjs';
+import { getErrorMessage } from '../../../shared/utils';
 
 @Component({
   selector: 'app-house-info',
@@ -48,7 +49,7 @@ export class HouseInfoComponent {
       .pipe(finalize(() => this.isSubmitted.set(true)))
       .subscribe({
         next: _ => this.toastService.info('Código actualizado'),
-        error: err => this.toastService.error(err.error.message)
+        error: err => this.toastService.error(getErrorMessage(err))
       });
   }
 
@@ -64,7 +65,7 @@ export class HouseInfoComponent {
           this.currentUserService.syncHouseInfo(houseResponse);
           this.currentHouseService.syncHouseInfo(houseResponse);
         },
-        error: err => this.toastService.error(err.error.message)
+        error: err => this.toastService.error(getErrorMessage(err))
       });
   }
 }

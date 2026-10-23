@@ -1,4 +1,4 @@
-import { DeviceResponse, HouseResponse, ProfileResponse } from '.';
+import { SensorResponse, HouseResponse, ProfileResponse } from '.';
 
 // ---------------
 // Usuario
@@ -24,18 +24,18 @@ export interface HouseUpdateDTO {
 }
 
 export interface SensorNameDTO {
-  number: DeviceResponse['number'];
-  name: DeviceResponse['name'];
+  number: SensorResponse['number'];
+  name: SensorResponse['name'];
 }
 
 export interface TriggerDTO {
   ringing: HouseResponse['ringing'],
-  number?: DeviceResponse['number']
+  number?: SensorResponse['number']
 }
 
 export interface SensorArmConfigDTO {
-  number: DeviceResponse['number'];
-  state: DeviceResponse['state'];
+  number: SensorResponse['number'];
+  state: SensorResponse['state'];
 };
 
 export interface AlarmCodeUpdateDTO {

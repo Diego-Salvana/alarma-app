@@ -1,26 +1,26 @@
-import { Address, AddressResponse, Camera, CameraResponse, CentralEvent, CentralEventResponse, DeviceResponse, House, HouseResponse, LoginResponse, ProfileResponse, Sensor, User } from '../interfaces';
+import { Address, AddressResponse, Camera, CameraResponse, CentralEvent, CentralEventResponse, House, HouseResponse, LoginResponse, ProfileResponse, Sensor, SensorResponse, User } from '../interfaces';
 
 export function mapLoginResponseToUser (response: LoginResponse): User {
   return {
-    id: response._id,
+    id: '',
     firstName: response.firstName,
-    lastName: response.lastName,
-    username: response.username,
+    lastName: '',
+    username: '',
     email: response.email,
-    phone: response.phone,
+    phone: '',
     isEnabled: response.enabled,
     houses: response.houses.map(mapHouseResponseToDomain)
   };
 }
 
-export function mapDeviceResponseToSensor (device: DeviceResponse): Sensor {
+export function mapSensorResponseToDomain (sensor: SensorResponse): Sensor {
   return {
-    id: `${device.model}-${device.number}`,
-    number: device.number,
-    name: device.name,
-    type: device.type,
-    state: device.state,
-    history: []
+    id: `${sensor.model}-${sensor.number}`,
+    number: sensor.number,
+    name: sensor.name,
+    type: sensor.type,
+    state: sensor.state,
+    history: sensor.history ?? []
   };
 }
 
@@ -59,7 +59,7 @@ export function mapHouseResponseToDomain (house: HouseResponse): House {
     address: mapAddressResponseToDomain(house.address),
     alarmState: house.alarmState,
     isRinging: house.ringing ?? false,
-    sensors: house.sensors?.map(mapDeviceResponseToSensor) ?? [],
+    sensors: house.sensors?.map(mapSensorResponseToDomain) ?? [],
     cameras: house.cameras?.map(mapCameraResponseToDomain) ?? []
   };
 }

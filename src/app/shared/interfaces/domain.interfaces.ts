@@ -6,23 +6,17 @@ export enum State {
   OFF = 'Off'
 }
 
-export enum DeviceType {
+export enum SensorType {
   MOVEMENT = 'Movimiento',
   WINDOW = 'Ventana',
-  SMOKE = 'Humo',
-  CAMERA = 'Camara'
-}
-
-export enum HouseAction {
-  SET_ARMED_STATE = 'SET_ARMED_STATE',
-  TRIGGER_ALARM = 'TRIGGER_ALARM',
-  SET_LIGHTS = 'SET_LIGHTS',
+  SMOKE = 'Humo'
 }
 
 export enum ControlPanelEventType {
-  ALARM_TRIGGERED = 'ALARM_TRIGGERED',
   ARMED = 'ARMED',
   DISARMED = 'DISARMED',
+  SIREN_ON = 'SIREN_ON',
+  SIREN_OFF = 'SIREN_OFF'
 }
 
 export type ProfileModalField = 'name' | 'lastname' | 'phone';
@@ -90,7 +84,7 @@ export interface Sensor {
   id: string;
   number: number;
   name: string;
-  type: DeviceType;
+  type: SensorType;
   state: State;
   history: EventLog[];
 }
