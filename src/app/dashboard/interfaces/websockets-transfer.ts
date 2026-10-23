@@ -9,20 +9,14 @@ export interface AlarmArming extends WebSocketTransferBase {
   excludedSensors: string[];
 }
 
-export interface Lights {
-  sector: string;
-  state: State
-}
-
 export interface TriggeredAlarm extends WebSocketTransferBase {
   ringing: boolean;
-  sensorNumber: number | null;
+  sensorNumber?: number;
 }
 
-export enum HouseAction {
-  SET_ARMED_STATE = 'SET_ARMED_STATE',
-  TRIGGER_ALARM = 'TRIGGER_ALARM',
-  SET_LIGHTS = 'SET_LIGHTS',
+export interface Lights extends WebSocketTransferBase {
+  sector: string;
+  state: State;
 }
 
 export enum WarningType {

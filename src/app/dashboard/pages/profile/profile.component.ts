@@ -13,6 +13,7 @@ import { CurrentHouseService, HouseService } from '../../services';
 import { LogoutModalComponent } from '../../../shared/components';
 import { finalize } from 'rxjs';
 import { DetailsCardComponent } from '../../components/details-card/details-card.component';
+import { getErrorMessage } from '../../../shared/utils';
 
 @Component({
   selector: 'app-profile',
@@ -55,7 +56,7 @@ export class ProfileComponent {
       .pipe(finalize(() => this.submitted.set(true)))
       .subscribe({
         next: userResponse => this.user.set(userResponse),
-        error: err => this.toastService.error(err.error.message)
+        error: err => this.toastService.error(getErrorMessage(err))
       });
   }
 
@@ -68,7 +69,7 @@ export class ProfileComponent {
       .pipe(finalize(() => this.submitted.set(true)))
       .subscribe({
         next: _ => this.toastService.info('Contraseña actualizada correctamente'),
-        error: err => this.toastService.error(err.error.message)
+        error: err => this.toastService.error(getErrorMessage(err))
       });
   }
 

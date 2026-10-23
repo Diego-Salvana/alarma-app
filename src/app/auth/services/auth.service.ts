@@ -13,8 +13,8 @@ export class AuthService {
   private http = inject(HttpClient);
   private baseUrl = `${ENV.API_URL}/users`;
 
-  register (userBody: Register): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/register`, userBody);
+  register (userBody: Register): Observable<ApiResponse<null>> {
+    return this.http.post<ApiResponse<null>>(`${this.baseUrl}/register`, userBody);
   }
 
   login (loginBody: Login, rememberMe: boolean): Observable<User> {
@@ -22,7 +22,7 @@ export class AuthService {
       .post<ApiResponse<LoginResponse>>(`${this.baseUrl}/login`, loginBody)
       .pipe(
         tap(({ data }) => {
-          if (data.habilitado) localStorage.setItem('token', data.token);
+          if (data.enabled) localStorage.setItem('token', data.token);
           
           rememberMe
             ? localStorage.setItem('username', data.email)
@@ -33,8 +33,8 @@ export class AuthService {
   }
 
   /** Solicita envío de correo de verificación de cuenta */
-  sendVerificationEmail (email: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/send-verification-email`, { email });
+  sendVerificationEmail (email: string): Observable<ApiResponse<null>> {
+    return this.http.post<ApiResponse<null>>(`${this.baseUrl}/send-verification-email`, { email });
   }
 
   /** Realiza la verificacion del email, y guarda el sesión token del usuario */
@@ -45,8 +45,8 @@ export class AuthService {
   }
 
   /** Solicita envío de correo para restablecer contraseña */
-  forgotPassword (email: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/forgot-password`, { email });
+  forgotPassword (email: string): Observable<ApiResponse<null>> {
+    return this.http.post<ApiResponse<null>>(`${this.baseUrl}/forgot-password`, { email });
   }
 
   /** Restablece la contraseña del usuario y guarda el sesión token del usuario */

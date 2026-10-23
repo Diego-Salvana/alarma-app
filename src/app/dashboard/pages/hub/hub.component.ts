@@ -92,7 +92,7 @@ export class HubComponent {
     this.isRingingSubmitted.set(false);
     
     this.currentHouseService
-      .toggleRinging({ sonando: nextState })
+      .toggleRinging({ ringing: nextState })
       .subscribe({
         next: _ => {
           this.actionTimeOut = setTimeout(() => {

@@ -6,14 +6,15 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputMaskModule } from 'primeng/inputmask';
+import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
+
 import { markAllAsDirtyAndTouched, passwordMatchValidator } from '../../utils';
 import { AuthService } from '../../services';
 import { Register } from '../../interfaces';
 import { LogoComponent } from '../../components';
 import { ToastService } from '../../../shared/services';
-import { finalize } from 'rxjs';
 import { emailRexExp } from '../../../shared/utils';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -54,11 +55,11 @@ export class RegisterComponent implements OnInit {
     
     const values = this.registerForm.getRawValue();
     const userBody: Register = {
-      nombre: values.name ?? '',
-      apellido: values.lastname?.trim() ?? '',
+      firstName: values.name?.trim() ?? '',
+      lastName: values.lastname?.trim() ?? '',
       email: values.email?.trim() ?? '',
-      telefono: values.phone?.trim() ?? '',
-      contrasena: values.password?.trim() ?? ''
+      phone: values.phone?.trim() ?? '',
+      password: values.password?.trim() ?? ''
     };
     
     this.authService

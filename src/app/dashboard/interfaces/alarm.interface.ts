@@ -1,6 +1,3 @@
-type RequestState = 'success' | 'pending' | 'error';
+import { ApiResponse } from '../../shared/interfaces';
 
-export interface StatusRequest {
-  message: string;
-  state: RequestState;
-}
+export type StatusRequest = ApiResponse<{ status: 'pending' }>;

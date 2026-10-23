@@ -1,13 +1,15 @@
 import { DatePipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CardModule } from 'primeng/card';
 import { TimelineModule } from 'primeng/timeline';
+import { finalize } from 'rxjs';
+
 import { CurrentHouseService, SensorService } from '../../services';
 import { HouseUpdate, Sensor } from '../../../shared/interfaces';
 import { ToastService } from '../../../shared/services';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize } from 'rxjs';
 import { DetailsCardComponent } from '../../components';
+import { getErrorMessage } from '../../../shared/utils';
 
 @Component({
   selector: 'app-sensor',
@@ -41,7 +43,6 @@ export class SensorComponent implements OnInit {
       });
   }
 
-  /** Cambia el nombre del sensor. */
   updateName (data: HouseUpdate) {
     this.submitted.set(false);
 
@@ -61,7 +62,7 @@ export class SensorComponent implements OnInit {
           this.sensor.set(sensor);
           this.currentHouseService.syncSensorName(sensorInt, sensor.name);
         },
-        error: err => this.toastService.error(err.error.message)
+        error: err => this.toastService.error(getErrorMessage(err))
       });
   }
 }

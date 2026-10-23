@@ -21,13 +21,11 @@ export const dashboardRoutes: Routes = [
     path: 'profile/house',
     loadComponent: () => import('./pages/house-info/house-info.component')
       .then(c => c.HouseInfoComponent)
-  },
-  {
+  }, {
     path: 'preferences',
     loadComponent: () => import('./pages/preferences/preferences.component')
       .then(c => c.PreferencesComponent)
-  },
-  {
+  }, {
     path: '**',
     redirectTo: 'home'
   }

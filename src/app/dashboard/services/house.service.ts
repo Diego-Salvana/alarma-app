@@ -1,13 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { map, Observable, tap, throwError } from 'rxjs';
+
 import { HouseResponse, HouseUpdate, NewCode, AlarmCodeUpdateDTO, HouseUpdateDTO, AddressResponse, House, ApiResponse } from '../../shared/interfaces';
 import { ENV } from '../../env';
-import { HttpHeaders } from '@capacitor/core';
 import { mapHouseResponseToDomain } from '../../shared/utils';
 
-/** Provee acceso a la API para realizar operaciones relacionadas a las casas. */
 @Injectable({
   providedIn: 'root'
 })
@@ -23,10 +22,10 @@ export class HouseService {
 
   /** Obtiene información de la casa que será utilizada como `currentHouse` y actualiza el `token`. */
   getOne (houseId: string, setCurrent = false): Observable<House> {
-    const headers: HttpHeaders = { 'set-house': setCurrent.toString() };
-    
+    const headers = setCurrent ? new HttpHeaders({ 'set-house': 'true' }) : undefined;
+
     return this.http
-      .get<ApiResponse<HouseResponse>>(`${this.baseUrl}/${houseId}`, { headers })
+      .get<ApiResponse<HouseResponse>>(`${this.baseUrl}/${houseId}`, headers ? { headers } : {})
       .pipe(
         tap(({ data }) => {
           if (data.token) localStorage.setItem('token', data.token);
@@ -55,34 +54,27 @@ export class HouseService {
   }
 
   /** Modifica código de activación de la casa con id `houseInfoID`. */
-  updateAlarmCode (data: NewCode): Observable<void> {
+  updateAlarmCode (data: NewCode): Observable<ApiResponse<null>> {
     if (!this.houseID) return throwError(() => new Error('No se encontró la casa.'));
 
     const { password, currentCode, newCode } = data;
-    const currentCodeNumber = parseInt(currentCode);
-    const newCodeNumber = parseInt(newCode);
+    const dto: AlarmCodeUpdateDTO = { password, currentCode, newCode };
 
-    const info: AlarmCodeUpdateDTO = {
-      contrasena: password,
-      codigoActual: currentCodeNumber,
-      nuevoCodigo: newCodeNumber
-    };
-
-    return this.http.patch<void>(`${ENV.API_URL}/central/code/${this.houseID}`, info);
+    return this.http.patch<ApiResponse<null>>(`${ENV.API_URL}/central/code/${this.houseID}`, dto);
   }
 
   updateHouseInfo (data: HouseUpdate): Observable<House> {
     if (!this.houseID) return throwError(() => new Error('No se encontró la casa.'));
 
     const address: Partial<AddressResponse> = {
-      ...(data.addressStreet && { calle: data.addressStreet }),
-      ...(data.addressNumber && { numero: data.addressNumber }),
-      ...(data.city && { ciudad: data.city })
+      ...(data.addressStreet && { street: data.addressStreet }),
+      ...(data.addressNumber && { number: data.addressNumber }),
+      ...(data.city && { city: data.city })
     };
 
     const body: HouseUpdateDTO = {
-      ...(data.houseName && { nombre: data.houseName }),
-      ...(Object.keys(address).length && { direccion: address })
+      ...(data.houseName && { name: data.houseName }),
+      ...(Object.keys(address).length && { address })
     };
 
     return this.http

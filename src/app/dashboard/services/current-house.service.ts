@@ -2,7 +2,7 @@ import { computed, effect, inject, Injectable, signal, untracked } from '@angula
 import { SensorArmConfigDTO, TriggerDTO, State, ExclusionFormValues, House } from '../../shared/interfaces';
 import { HouseService } from './house.service';
 import { finalize, Observable } from 'rxjs';
-import { StatusRequest, Lights, AlarmArming, TriggeredAlarm } from '../interfaces';
+import { StatusRequest, AlarmArming, TriggeredAlarm } from '../interfaces';
 import { ENV } from '../../env';
 import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../../shared/services';
@@ -69,8 +69,8 @@ export class CurrentHouseService {
   armAlarm (excludedSensors: ExclusionFormValues): Observable<StatusRequest> {
     const sensorsConfig: SensorArmConfigDTO[] = Object
       .entries(excludedSensors)
-      .map(([numeroSensor, estado]) => {
-        return { numeroSensor: parseInt(numeroSensor), estado: estado ?? State.ON };
+      .map(([sensorNumber, state]) => {
+        return { number: parseInt(sensorNumber), state: state ?? State.ON };
       });
 
     return this.http.post<StatusRequest>(`${this.baseUrl}/arm`, { sensors: sensorsConfig });
@@ -78,17 +78,12 @@ export class CurrentHouseService {
 
   /** Envía solicitud para `desactivar` la alarma de la casa almacenada en el token. La respuesta de desactivación se recibe por `websocket`. */
   disarmAlarm (): Observable<StatusRequest> {
-    return this.http.post<StatusRequest>(`${this.baseUrl}/disarm`, {});
+    return this.http.post<StatusRequest>(`${this.baseUrl}/disarm`, null);
   }
 
   /** Envía solicitud para `activar/desactivar` la sirena de la alarma actual. */
   toggleRinging (body: TriggerDTO): Observable<StatusRequest> {
     return this.http.post<StatusRequest>(`${this.baseUrl}/trigger`, body);
-  }
-
-  // Luces
-  setLights (body: Lights): Observable<StatusRequest> {
-    return this.http.post<StatusRequest>(`${this.baseUrl}/lights`, body);
   }
 
   // ---------------

@@ -1,10 +1,10 @@
 export interface Login {
   email: string;
-  contrasena: string;
+  password: string;
 }
 
 export interface Register extends Login {
-  nombre: string;
-  apellido: string;
-  telefono: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
 }

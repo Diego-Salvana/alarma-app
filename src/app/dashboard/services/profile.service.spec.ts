@@ -13,18 +13,18 @@ describe('ProfileService', () => {
   const apiUrl = 'http://localhost:5200/api-alarma/users';
   const profileResponse: ProfileResponse = {
     _id: 'user-1',
-    nombre: 'Ana',
-    apellido: 'Perez',
-    nombreUsuario: 'ana.perez',
+    firstName: 'Ana',
+    lastName: 'Perez',
+    username: 'ana.perez',
     email: 'ana@example.com',
-    telefono: '1122334455',
-    habilitado: true,
-    casas: [{
+    phone: '1122334455',
+    enabled: true,
+    houses: [{
       _id: 'house-1',
-      nombre: 'Casa principal',
-      nombreCasa: 'Mi hogar',
-      direccion: { calle: 'Siempre Viva', numero: '742', ciudad: 'Springfield' },
-      alarmaEncendida: State.OFF
+      name: 'Casa principal',
+      houseName: 'Mi hogar',
+      address: { street: 'Siempre Viva', number: '742', city: 'Springfield', country: 'Argentina' },
+      alarmState: State.OFF
     }]
   };
   const expectedUser: User = {
@@ -39,10 +39,11 @@ describe('ProfileService', () => {
       id: 'house-1',
       displayName: 'Casa principal',
       houseName: 'Mi hogar',
-      address: { street: 'Siempre Viva', number: '742', city: 'Springfield' },
+      address: { street: 'Siempre Viva', number: '742', city: 'Springfield', country: 'Argentina' },
       alarmState: State.OFF,
       isRinging: false,
-      sensors: []
+      sensors: [],
+      cameras: []
     }]
   };
 
@@ -98,7 +99,7 @@ describe('ProfileService', () => {
 
   it('debería actualizar los datos del perfil con los campos traducidos', () => {
     const dataMock = { name: 'Ana', lastname: 'Perez', phone: '1122334455' };
-    const bodyMock = { nombre: 'Ana', apellido: 'Perez', telefono: '1122334455' };
+    const bodyMock = { firstName: 'Ana', lastName: 'Perez', phone: '1122334455' };
     let user: User | undefined;
 
     service.modifyUserData(dataMock).subscribe(response => {
@@ -117,7 +118,7 @@ describe('ProfileService', () => {
 
   it('debería actualizar la contraseña con el cuerpo esperado', () => {
     const dataPasswordMock = { currentPassword: 'actual123', newPassword: 'nueva456' };
-    const bodyPasswordMock = { contrasenaActual: 'actual123', nuevaContrasena: 'nueva456' };
+    const bodyPasswordMock = { currentPassword: 'actual123', newPassword: 'nueva456' };
     let user: User | undefined;
 
     service.updateUserPassword(dataPasswordMock).subscribe(response => {

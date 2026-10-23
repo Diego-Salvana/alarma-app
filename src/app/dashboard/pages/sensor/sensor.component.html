@@ -95,10 +95,10 @@
         <p-timeline [value]="_sensor?.history" styleClass="custom-timeline">
           <ng-template #opposite let-event let-i="index">
             <div class="timeline-date-card">
-              <div class="date-main">{{ event.fechaHora | date:'dd' }}</div>
+              <div class="date-main">{{ event.date | date:'dd' }}</div>
               <div class="date-details">
-                <div class="date-month">{{ event.fechaHora | date:'MMM' | uppercase }}</div>
-                <div class="date-year">{{ event.fechaHora | date:'yyyy' }}</div>
+                <div class="date-month">{{ event.date | date:'MMM' | uppercase }}</div>
+                <div class="date-year">{{ event.date | date:'yyyy' }}</div>
               </div>
             </div>
           </ng-template>
@@ -107,10 +107,10 @@
             <div class="timeline-event-card">
               <div class="event-header">
                 <div class="event-icon">
-                  <i class="pi pi-bell"></i>
+                  <i class="pi pi-exclamation-triangle"></i>
                 </div>
                 <div class="event-info">
-                  <div class="event-time">{{ event.fechaHora | date:'HH:mm' }}hs</div>
+                  <div class="event-time">{{ event.date | date:'HH:mm' }}hs</div>
                   <div class="event-type">Disparo de Sensor</div>
                 </div>
               </div>

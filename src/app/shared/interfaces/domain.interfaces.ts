@@ -6,17 +6,17 @@ export enum State {
   OFF = 'Off'
 }
 
-export enum DeviceType {
+export enum SensorType {
   MOVEMENT = 'Movimiento',
   WINDOW = 'Ventana',
-  SMOKE = 'Humo',
-  CAMERA = 'Camara'
+  SMOKE = 'Humo'
 }
 
-export enum HouseAction {
-  SET_ARMED_STATE = 'SET_ARMED_STATE',
-  TRIGGER_ALARM = 'TRIGGER_ALARM',
-  SET_LIGHTS = 'SET_LIGHTS',
+export enum ControlPanelEventType {
+  ARMED = 'ARMED',
+  DISARMED = 'DISARMED',
+  SIREN_ON = 'SIREN_ON',
+  SIREN_OFF = 'SIREN_OFF'
 }
 
 export type ProfileModalField = 'name' | 'lastname' | 'phone';
@@ -27,12 +27,19 @@ export type HouseModalField = 'sensorName' | 'houseName' | 'addressStreet' | 'ad
 // -------------------
 
 export interface EventLog {
-  fechaHora: Date;
+  date: Date;
+  type?: ControlPanelEventType | 'SENSOR';
+  deviceName?: string;
+  sensorNumber?: number;
+  userId?: string;
 }
 
 export interface CentralEvent {
-  timestamp: Date;
-  deviceName: string;
+  date: Date;
+  type?: ControlPanelEventType | 'SENSOR';
+  deviceName?: string;
+  sensorNumber?: number;
+  userId?: string;
 }
 
 // -------------------
@@ -57,19 +64,27 @@ export interface House {
   alarmState: State;
   isRinging: boolean;
   sensors: Sensor[];
+  cameras?: Camera[];
 }
 
 export interface Address {
   street: string;
   number: string;
   city: string;
+  country?: string;
+}
+
+export interface Camera {
+  model: string;
+  number: number;
+  name: string;
 }
 
 export interface Sensor {
   id: string;
   number: number;
   name: string;
-  type: DeviceType;
+  type: SensorType;
   state: State;
   history: EventLog[];
 }

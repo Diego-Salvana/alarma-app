@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { ApiResponse, DeviceResponse, Sensor, SensorNameDTO } from '../../shared/interfaces';
+
+import { ApiResponse, Sensor, SensorNameDTO, SensorResponse } from '../../shared/interfaces';
 import { ENV } from '../../env';
-import { mapDeviceResponseToSensor } from '../../shared/utils';
+import { mapSensorResponseToDomain } from '../../shared/utils';
 
 /** Provee acceso a la API para realizar operaciones relacionadas a los sensores. */
 @Injectable({
@@ -16,19 +17,19 @@ export class SensorService {
   /** Obtiene un sensor por su número. */
   getOne (sensorNumber: string): Observable<Sensor> {
     return this.http
-      .get<ApiResponse<DeviceResponse>>(`${this.baseUrl}/${sensorNumber}`)
-      .pipe(map(({ data }) => mapDeviceResponseToSensor(data)));
+      .get<ApiResponse<SensorResponse>>(`${this.baseUrl}/${sensorNumber}`)
+      .pipe(map(({ data }) => mapSensorResponseToDomain(data)));
   }
 
   /** Modifica el nombre de un sensor. */
   modifyName (sensorNumber: number, newName: string): Observable<Sensor> {
     const body: SensorNameDTO = {
-      numeroSensor: isNaN(sensorNumber) ? 0 : sensorNumber,
-      nombre: newName
+      number: isNaN(sensorNumber) ? 0 : sensorNumber,
+      name: newName
     };
 
     return this.http
-      .patch<ApiResponse<DeviceResponse>>(`${this.baseUrl}/sensor-name`, body)
-      .pipe(map(({ data }) => mapDeviceResponseToSensor(data)));
+      .patch<ApiResponse<SensorResponse>>(`${this.baseUrl}/sensor-name`, body)
+      .pipe(map(({ data }) => mapSensorResponseToDomain(data)));
   }
 }
